@@ -46,8 +46,13 @@ export default function App() {
     "alloy",
     "ash", 
     "ballad",
+    "breeze",
     "coral",
     "echo",
+    "ember",
+    "fable",
+    "juniper",
+    "nova",
     "sage",
     "shimmer",
     "verse"
