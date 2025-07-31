@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, Terminal } from "react-feather";
+import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, Terminal, MessageSquare, RefreshCw } from "react-feather";
 import Button from "./Button";
+import groqService from "../services/groq";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
@@ -44,6 +45,7 @@ export default function SetupScreen({
   VOICE_OPTIONS 
 }) {
   const [isStarting, setIsStarting] = useState(false);
+  const [isGeneratingInstructions, setIsGeneratingInstructions] = useState(false);
 
   const handleStartSession = async () => {
     setIsStarting(true);
@@ -53,6 +55,51 @@ export default function SetupScreen({
       console.error('Failed to start session:', error);
     } finally {
       setIsStarting(false);
+    }
+  };
+
+  const handleGenerateInstructions = async () => {
+    if (isGeneratingInstructions) return;
+    
+    setIsGeneratingInstructions(true);
+    try {
+      // Build context from persona and scene settings
+      const contextParts = [];
+      
+      // Add persona context
+      const personaInfo = [];
+      if (personaSettings.age) personaInfo.push(`年齢: ${personaSettings.age}`);
+      if (personaSettings.gender) personaInfo.push(`性別: ${personaSettings.gender}`);
+      if (personaSettings.occupation) personaInfo.push(`職業: ${personaSettings.occupation}`);
+      if (personaSettings.personality) personaInfo.push(`パーソナリティ: ${personaSettings.personality}`);
+      if (personaSettings.additionalInfo) personaInfo.push(`追加情報: ${personaSettings.additionalInfo}`);
+      
+      if (personaInfo.length > 0) {
+        contextParts.push(`ペルソナ設定: ${personaInfo.join(', ')}`);
+      }
+      
+      // Add scene context  
+      const sceneInfo = [];
+      if (sceneSettings.appointmentBackground) sceneInfo.push(`背景: ${sceneSettings.appointmentBackground}`);
+      if (sceneSettings.relationship) sceneInfo.push(`関係性: ${sceneSettings.relationship}`);
+      if (sceneSettings.timeOfDay) sceneInfo.push(`時間帯: ${sceneSettings.timeOfDay}`);
+      if (sceneSettings.location) sceneInfo.push(`場所: ${sceneSettings.location}`);
+      if (sceneSettings.additionalInfo) sceneInfo.push(`追加情報: ${sceneSettings.additionalInfo}`);
+      
+      if (sceneInfo.length > 0) {
+        contextParts.push(`シーン設定: ${sceneInfo.join(', ')}`);
+      }
+      
+      const context = contextParts.join('\n');
+      const generatedInstructions = await groqService.generateDetailedInstructions(context);
+      
+      if (setInstructions) {
+        setInstructions(generatedInstructions);
+      }
+    } catch (error) {
+      alert(`指示文の生成に失敗しました: ${error.message}`);
+    } finally {
+      setIsGeneratingInstructions(false);
     }
   };
 
@@ -278,10 +325,34 @@ export default function SetupScreen({
           defaultExpanded={false}
           icon={Terminal}
         >
-          <div className="pt-3">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              カスタム指示（オプション）
-            </label>
+          <div className="pt-3 space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-medium text-gray-700">
+                カスタム指示（オプション）
+              </label>
+              <button
+                onClick={handleGenerateInstructions}
+                disabled={isGeneratingInstructions}
+                className={`flex items-center gap-2 px-3 py-2 text-white text-sm rounded-md transition-colors ${
+                  isGeneratingInstructions
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-purple-600 hover:bg-purple-700'
+                }`}
+              >
+                {isGeneratingInstructions ? (
+                  <>
+                    <RefreshCw size={14} className="animate-spin" />
+                    生成中...
+                  </>
+                ) : (
+                  <>
+                    <MessageSquare size={14} />
+                    プロンプトを生成
+                  </>
+                )}
+              </button>
+            </div>
+            
             <textarea
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
@@ -289,8 +360,8 @@ export default function SetupScreen({
               className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={4}
             />
-            <p className="text-xs text-gray-500 mt-2">
-              これらの指示はセッション中のAIの動作をガイドします。
+            <p className="text-xs text-gray-500">
+              これらの指示はセッション中のAIの動作をガイドします。上記のペルソナやシーン設定に基づいて自動生成することもできます。
             </p>
           </div>
         </ExpandableSection>
