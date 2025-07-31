@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { X, Play } from "react-feather";
 import Button from "./Button";
 
@@ -7,6 +8,13 @@ export default function PromptModal({
   promptText, 
   onStartSession 
 }) {
+  const [editedPrompt, setEditedPrompt] = useState("");
+
+  // Update edited prompt when promptText changes
+  useEffect(() => {
+    setEditedPrompt(promptText);
+  }, [promptText]);
+
   if (!isOpen) return null;
 
   return (
@@ -28,13 +36,16 @@ export default function PromptModal({
         {/* Content */}
         <div className="p-4">
           <p className="text-sm text-gray-600 mb-4">
-            このプロンプトで会話を始めます
+            プロンプトを確認・編集して会話を始めます
           </p>
           
-          <div className="bg-gray-50 rounded-lg p-4 mb-6 max-h-60 overflow-y-auto">
-            <pre className="text-sm text-gray-800 whitespace-pre-wrap font-mono">
-              {promptText}
-            </pre>
+          <div className="mb-6">
+            <textarea
+              value={editedPrompt}
+              onChange={(e) => setEditedPrompt(e.target.value)}
+              className="w-full h-60 p-4 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+              placeholder="プロンプトを入力してください..."
+            />
           </div>
 
           {/* Action Buttons */}
@@ -46,7 +57,7 @@ export default function PromptModal({
               キャンセル
             </button>
             <Button
-              onClick={onStartSession}
+              onClick={() => onStartSession(editedPrompt)}
               className="flex-1 bg-green-600 hover:bg-green-700"
               icon={<Play size={16} />}
             >

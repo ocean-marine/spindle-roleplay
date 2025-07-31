@@ -107,8 +107,12 @@ export default function SetupScreen({
     }
   };
 
-  const handleStartSession = async () => {
+  const handleStartSession = async (editedPrompt) => {
     try {
+      // Update instructions with the edited prompt before starting session
+      if (editedPrompt !== undefined) {
+        setInstructions(editedPrompt);
+      }
       await startSession();
       setShowPromptModal(false);
     } catch (error) {
