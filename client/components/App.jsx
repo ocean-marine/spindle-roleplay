@@ -16,7 +16,7 @@ export default function App() {
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
   const [selectedVoice, setSelectedVoice] = useState("alloy");
-  const [instructions, setInstructions] = useState("");
+  const [instructions, setInstructions] = useState("自然な日本語で応対します。");
   const [activeTab, setActiveTab] = useState("setup");
   
   // Persona settings
