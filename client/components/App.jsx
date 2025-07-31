@@ -18,6 +18,24 @@ export default function App() {
   const [selectedVoice, setSelectedVoice] = useState("alloy");
   const [instructions, setInstructions] = useState("");
   const [activeTab, setActiveTab] = useState("setup");
+  
+  // Persona settings
+  const [personaSettings, setPersonaSettings] = useState({
+    age: "",
+    gender: "",
+    occupation: "",
+    personality: "",
+    additionalInfo: ""
+  });
+  
+  // Scene settings
+  const [sceneSettings, setSceneSettings] = useState({
+    appointmentBackground: "",
+    relationship: "",
+    timeOfDay: "",
+    location: "",
+    additionalInfo: ""
+  });
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
@@ -146,6 +164,42 @@ export default function App() {
     sendClientEvent({ type: "response.create" });
   }
 
+  // Build combined instructions from persona and scene settings
+  function buildCombinedInstructions() {
+    let combined = [];
+
+    // Add custom instructions if provided
+    if (instructions.trim()) {
+      combined.push(instructions.trim());
+    }
+
+    // Add persona settings
+    const personaInstructions = [];
+    if (personaSettings.age) personaInstructions.push(`年齢: ${personaSettings.age}`);
+    if (personaSettings.gender) personaInstructions.push(`性別: ${personaSettings.gender}`);
+    if (personaSettings.occupation) personaInstructions.push(`職業: ${personaSettings.occupation}`);
+    if (personaSettings.personality) personaInstructions.push(`パーソナリティ: ${personaSettings.personality}`);
+    if (personaSettings.additionalInfo) personaInstructions.push(`追加情報: ${personaSettings.additionalInfo}`);
+
+    if (personaInstructions.length > 0) {
+      combined.push(`あなたのペルソナ設定:\n${personaInstructions.join('\n')}`);
+    }
+
+    // Add scene settings
+    const sceneInstructions = [];
+    if (sceneSettings.appointmentBackground) sceneInstructions.push(`アポイントメントの背景: ${sceneSettings.appointmentBackground}`);
+    if (sceneSettings.relationship) sceneInstructions.push(`相手との関係性: ${sceneSettings.relationship}`);
+    if (sceneSettings.timeOfDay) sceneInstructions.push(`時間帯: ${sceneSettings.timeOfDay}`);
+    if (sceneSettings.location) sceneInstructions.push(`場所: ${sceneSettings.location}`);
+    if (sceneSettings.additionalInfo) sceneInstructions.push(`追加情報: ${sceneSettings.additionalInfo}`);
+
+    if (sceneInstructions.length > 0) {
+      combined.push(`シーン設定:\n${sceneInstructions.join('\n')}`);
+    }
+
+    return combined.join('\n\n');
+  }
+
   // Attach event listeners to the data channel when a new one is created
   useEffect(() => {
     if (dataChannel) {
@@ -180,7 +234,8 @@ export default function App() {
         setActiveTab("chat"); // Switch to chat tab when session starts
         
         // Send initial instructions if provided
-        if (instructions.trim()) {
+        const combinedInstructions = buildCombinedInstructions();
+        if (combinedInstructions.trim()) {
           setTimeout(() => {
             sendClientEvent({
               type: "conversation.item.create",
@@ -189,7 +244,7 @@ export default function App() {
                 role: "system",
                 content: [{
                   type: "input_text",
-                  text: instructions
+                  text: combinedInstructions
                 }]
               }
             });
@@ -197,7 +252,7 @@ export default function App() {
         }
       });
     }
-  }, [dataChannel, instructions]);
+  }, [dataChannel, instructions, personaSettings, sceneSettings]);
 
   // Handle tab switching with swipe gestures
   const handleSwipeLeft = () => {
@@ -247,6 +302,10 @@ export default function App() {
             setSelectedVoice={setSelectedVoice}
             instructions={instructions}
             setInstructions={setInstructions}
+            personaSettings={personaSettings}
+            setPersonaSettings={setPersonaSettings}
+            sceneSettings={sceneSettings}
+            setSceneSettings={setSceneSettings}
             startSession={startSession}
             VOICE_OPTIONS={VOICE_OPTIONS}
           />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings } from "react-feather";
+import { ChevronDown, ChevronUp, Play, Settings, User, MapPin } from "react-feather";
 import Button from "./Button";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
@@ -36,6 +36,10 @@ export default function SetupScreen({
   setSelectedVoice, 
   instructions, 
   setInstructions,
+  personaSettings,
+  setPersonaSettings,
+  sceneSettings,
+  setSceneSettings,
   startSession,
   VOICE_OPTIONS 
 }) {
@@ -92,6 +96,169 @@ export default function SetupScreen({
             <p className="text-xs text-gray-500 mt-2">
               選択済み: <span className="font-medium">{selectedVoice}</span>
             </p>
+          </div>
+        </ExpandableSection>
+
+        {/* Persona Settings */}
+        <ExpandableSection 
+          title="AIペルソナ設定" 
+          defaultExpanded={false}
+          icon={User}
+        >
+          <div className="pt-3 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                年齢
+              </label>
+              <input
+                type="text"
+                value={personaSettings.age}
+                onChange={(e) => setPersonaSettings({...personaSettings, age: e.target.value})}
+                placeholder="例: 25歳"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                性別
+              </label>
+              <select
+                value={personaSettings.gender}
+                onChange={(e) => setPersonaSettings({...personaSettings, gender: e.target.value})}
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">選択してください</option>
+                <option value="男性">男性</option>
+                <option value="女性">女性</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                職業
+              </label>
+              <input
+                type="text"
+                value={personaSettings.occupation}
+                onChange={(e) => setPersonaSettings({...personaSettings, occupation: e.target.value})}
+                placeholder="例: エンジニア、医師、教師など"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                パーソナリティ
+              </label>
+              <textarea
+                value={personaSettings.personality}
+                onChange={(e) => setPersonaSettings({...personaSettings, personality: e.target.value})}
+                placeholder="例: 明るく親しみやすい、論理的で分析的、優しく思いやりがあるなど"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                追加情報
+              </label>
+              <textarea
+                value={personaSettings.additionalInfo}
+                onChange={(e) => setPersonaSettings({...personaSettings, additionalInfo: e.target.value})}
+                placeholder="その他の特徴や詳細情報があれば入力してください"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={2}
+              />
+            </div>
+          </div>
+        </ExpandableSection>
+
+        {/* Scene Settings */}
+        <ExpandableSection 
+          title="シーン設定" 
+          defaultExpanded={false}
+          icon={MapPin}
+        >
+          <div className="pt-3 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                アポイントメントの背景
+              </label>
+              <textarea
+                value={sceneSettings.appointmentBackground}
+                onChange={(e) => setSceneSettings({...sceneSettings, appointmentBackground: e.target.value})}
+                placeholder="例: 新商品の打ち合わせ、健康診断、面接など"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={2}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                相手との関係性
+              </label>
+              <input
+                type="text"
+                value={sceneSettings.relationship}
+                onChange={(e) => setSceneSettings({...sceneSettings, relationship: e.target.value})}
+                placeholder="例: 同僚、友人、初対面、上司など"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                時間帯
+              </label>
+              <select
+                value={sceneSettings.timeOfDay}
+                onChange={(e) => setSceneSettings({...sceneSettings, timeOfDay: e.target.value})}
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">選択してください</option>
+                <option value="朝">朝</option>
+                <option value="午前">午前</option>
+                <option value="昼">昼</option>
+                <option value="午後">午後</option>
+                <option value="夕方">夕方</option>
+                <option value="夜">夜</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                場所
+              </label>
+              <input
+                type="text"
+                value={sceneSettings.location}
+                onChange={(e) => setSceneSettings({...sceneSettings, location: e.target.value})}
+                placeholder="例: オフィス、カフェ、病院、自宅など"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                追加情報
+              </label>
+              <textarea
+                value={sceneSettings.additionalInfo}
+                onChange={(e) => setSceneSettings({...sceneSettings, additionalInfo: e.target.value})}
+                placeholder="シーンに関する追加情報があれば入力してください"
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows={2}
+              />
+            </div>
+
+            <div className="bg-blue-50 rounded-lg p-3">
+              <p className="text-sm text-blue-700">
+                これらの設定は会話の文脈を作り出し、より自然な対話を可能にします。
+              </p>
+            </div>
           </div>
         </ExpandableSection>
 
