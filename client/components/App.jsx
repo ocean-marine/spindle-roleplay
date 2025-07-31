@@ -253,37 +253,14 @@ export default function App() {
         );
       
       case 'chat':
-        if (isSessionActive) {
-          return (
-            <>
-              <VoiceInterface
-                isSessionActive={isSessionActive}
-                isListening={isListening}
-                isSpeaking={isSpeaking}
-                audioLevel={audioLevel}
-              />
-              <div className="absolute bottom-20 left-0 right-0 p-4">
-                <SessionControls
-                  startSession={startSession}
-                  stopSession={handleStopSession}
-                  sendClientEvent={sendClientEvent}
-                  sendTextMessage={sendTextMessage}
-                  events={events}
-                  isSessionActive={isSessionActive}
-                />
-              </div>
-            </>
-          );
-        } else {
-          return (
-            <ChatInterface
-              events={events}
-              sendTextMessage={sendTextMessage}
-              isSessionActive={isSessionActive}
-              isTyping={isSpeaking}
-            />
-          );
-        }
+        return (
+          <ChatInterface
+            events={events}
+            sendTextMessage={sendTextMessage}
+            isSessionActive={isSessionActive}
+            isTyping={isSpeaking}
+          />
+        );
       
       case 'history':
         return (

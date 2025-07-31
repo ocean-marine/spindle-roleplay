@@ -140,20 +140,24 @@ export default function ChatInterface({
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Chat header */}
-      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+            isSessionActive ? 'bg-green-500' : 'bg-gray-400'
+          }`}>
             <MessageCircle size={16} className="text-white" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-800">AIアシスタント</h3>
-            <p className="text-xs text-green-600">オンライン</p>
+            <p className={`text-xs ${isSessionActive ? 'text-green-600' : 'text-gray-500'}`}>
+              {isSessionActive ? 'オンライン' : 'オフライン'}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Messages area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 pb-20">
         {messages.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 mb-2">まだメッセージがありません</p>
@@ -174,8 +178,8 @@ export default function ChatInterface({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
-      <div className="border-t border-gray-200 p-4 bg-white safe-area-bottom">
+      {/* Input area - Fixed at bottom */}
+      <div className="fixed bottom-16 left-0 right-0 border-t border-gray-200 p-4 bg-white safe-area-bottom z-10">
         <div className="flex gap-2 items-end">
           <div className="flex-1 min-w-0">
             <textarea
