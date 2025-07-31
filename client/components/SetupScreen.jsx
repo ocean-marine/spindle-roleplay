@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, Terminal, MessageSquare, RefreshCw } from "react-feather";
+import { ChevronDown, ChevronUp, Play, Settings, User, MapPin } from "react-feather";
 import Button from "./Button";
 import groqService from "../services/groq";
+import PromptModal from "./PromptModal";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
@@ -45,63 +46,87 @@ export default function SetupScreen({
   VOICE_OPTIONS 
 }) {
   const [isStarting, setIsStarting] = useState(false);
-  const [isGeneratingInstructions, setIsGeneratingInstructions] = useState(false);
+  const [showPromptModal, setShowPromptModal] = useState(false);
+  const [generatedPrompt, setGeneratedPrompt] = useState("");
 
-  const handleStartSession = async () => {
+  // Check if persona and scene settings have been changed from defaults
+  const hasPersonaChanges = () => {
+    return personaSettings.age || personaSettings.gender || personaSettings.occupation || 
+           personaSettings.personality || personaSettings.additionalInfo;
+  };
+
+  const hasSceneChanges = () => {
+    return sceneSettings.appointmentBackground || sceneSettings.relationship || 
+           sceneSettings.timeOfDay || sceneSettings.location || sceneSettings.additionalInfo;
+  };
+
+  const handleGeneratePrompt = async () => {
     setIsStarting(true);
     try {
-      await startSession();
+      let promptToUse = "";
+      const hasChanges = hasPersonaChanges() || hasSceneChanges();
+      
+      if (hasChanges) {
+        // If persona/scene settings have changes, generate from settings
+        const contextParts = [];
+        
+        // Add persona context
+        const personaInfo = [];
+        if (personaSettings.age) personaInfo.push(`年齢: ${personaSettings.age}`);
+        if (personaSettings.gender) personaInfo.push(`性別: ${personaSettings.gender}`);
+        if (personaSettings.occupation) personaInfo.push(`職業: ${personaSettings.occupation}`);
+        if (personaSettings.personality) personaInfo.push(`パーソナリティ: ${personaSettings.personality}`);
+        if (personaSettings.additionalInfo) personaInfo.push(`追加情報: ${personaSettings.additionalInfo}`);
+        
+        if (personaInfo.length > 0) {
+          contextParts.push(`ペルソナ設定: ${personaInfo.join(', ')}`);
+        }
+        
+        // Add scene context  
+        const sceneInfo = [];
+        if (sceneSettings.appointmentBackground) sceneInfo.push(`背景: ${sceneSettings.appointmentBackground}`);
+        if (sceneSettings.relationship) sceneInfo.push(`関係性: ${sceneSettings.relationship}`);
+        if (sceneSettings.timeOfDay) sceneInfo.push(`時間帯: ${sceneSettings.timeOfDay}`);
+        if (sceneSettings.location) sceneInfo.push(`場所: ${sceneSettings.location}`);
+        if (sceneSettings.additionalInfo) sceneInfo.push(`追加情報: ${sceneSettings.additionalInfo}`);
+        
+        if (sceneInfo.length > 0) {
+          contextParts.push(`シーン設定: ${sceneInfo.join(', ')}`);
+        }
+        
+        const context = contextParts.join('\n');
+        
+        if (context.trim()) {
+          // Generate prompt using Groq service
+          promptToUse = await groqService.generateDetailedInstructions(context);
+        }
+      }
+      // If no changes, promptToUse remains empty and modal will show custom input
+      
+      setGeneratedPrompt(promptToUse);
+      setShowPromptModal(true);
     } catch (error) {
-      console.error('Failed to start session:', error);
+      console.error('Failed to generate prompt:', error);
+      alert(`プロンプトの生成に失敗しました: ${error.message}`);
     } finally {
       setIsStarting(false);
     }
   };
 
-  const handleGenerateInstructions = async () => {
-    if (isGeneratingInstructions) return;
-    
-    setIsGeneratingInstructions(true);
+  const handleStartSession = async (editedPrompt) => {
     try {
-      // Build context from persona and scene settings
-      const contextParts = [];
-      
-      // Add persona context
-      const personaInfo = [];
-      if (personaSettings.age) personaInfo.push(`年齢: ${personaSettings.age}`);
-      if (personaSettings.gender) personaInfo.push(`性別: ${personaSettings.gender}`);
-      if (personaSettings.occupation) personaInfo.push(`職業: ${personaSettings.occupation}`);
-      if (personaSettings.personality) personaInfo.push(`パーソナリティ: ${personaSettings.personality}`);
-      if (personaSettings.additionalInfo) personaInfo.push(`追加情報: ${personaSettings.additionalInfo}`);
-      
-      if (personaInfo.length > 0) {
-        contextParts.push(`ペルソナ設定: ${personaInfo.join(', ')}`);
+      // Update instructions with the edited prompt before starting session
+      if (editedPrompt !== undefined) {
+        setInstructions(editedPrompt);
       }
-      
-      // Add scene context  
-      const sceneInfo = [];
-      if (sceneSettings.appointmentBackground) sceneInfo.push(`背景: ${sceneSettings.appointmentBackground}`);
-      if (sceneSettings.relationship) sceneInfo.push(`関係性: ${sceneSettings.relationship}`);
-      if (sceneSettings.timeOfDay) sceneInfo.push(`時間帯: ${sceneSettings.timeOfDay}`);
-      if (sceneSettings.location) sceneInfo.push(`場所: ${sceneSettings.location}`);
-      if (sceneSettings.additionalInfo) sceneInfo.push(`追加情報: ${sceneSettings.additionalInfo}`);
-      
-      if (sceneInfo.length > 0) {
-        contextParts.push(`シーン設定: ${sceneInfo.join(', ')}`);
-      }
-      
-      const context = contextParts.join('\n');
-      const generatedInstructions = await groqService.generateDetailedInstructions(context);
-      
-      if (setInstructions) {
-        setInstructions(generatedInstructions);
-      }
+      await startSession();
+      setShowPromptModal(false);
     } catch (error) {
-      alert(`指示文の生成に失敗しました: ${error.message}`);
-    } finally {
-      setIsGeneratingInstructions(false);
+      console.error('Failed to start session:', error);
+      alert('セッションの開始に失敗しました');
     }
   };
+
 
   return (
     <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
@@ -319,57 +344,11 @@ export default function SetupScreen({
           </div>
         </ExpandableSection>
 
-        {/* Instructions */}
-        <ExpandableSection 
-          title="システム指示" 
-          defaultExpanded={false}
-          icon={Terminal}
-        >
-          <div className="pt-3 space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="block text-sm font-medium text-gray-700">
-                カスタム指示（オプション）
-              </label>
-              <button
-                onClick={handleGenerateInstructions}
-                disabled={isGeneratingInstructions}
-                className={`flex items-center gap-2 px-3 py-2 text-white text-sm rounded-md transition-colors ${
-                  isGeneratingInstructions
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-purple-600 hover:bg-purple-700'
-                }`}
-              >
-                {isGeneratingInstructions ? (
-                  <>
-                    <RefreshCw size={14} className="animate-spin" />
-                    生成中...
-                  </>
-                ) : (
-                  <>
-                    <MessageSquare size={14} />
-                    プロンプトを生成
-                  </>
-                )}
-              </button>
-            </div>
-            
-            <textarea
-              value={instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-              placeholder="AIアシスタントへの指示を入力..."
-              className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows={4}
-            />
-            <p className="text-xs text-gray-500">
-              これらの指示はセッション中のAIの動作をガイドします。上記のペルソナやシーン設定に基づいて自動生成することもできます。
-            </p>
-          </div>
-        </ExpandableSection>
 
-        {/* Start Session Button */}
+        {/* Generate Prompt Button */}
         <div className="pt-6">
           <Button
-            onClick={handleStartSession}
+            onClick={handleGeneratePrompt}
             disabled={isStarting}
             className={`w-full py-4 text-base font-semibold ${
               isStarting 
@@ -378,13 +357,22 @@ export default function SetupScreen({
             }`}
             icon={<Play size={20} />}
           >
-            {isStarting ? 'セッション開始中...' : '音声セッション開始'}
+            {isStarting ? 'プロンプト生成中...' : 'プロンプト生成'}
           </Button>
           
           <p className="text-center text-xs text-gray-500 mt-3">
             セッションを開始することで、OpenAIのRealtime APIと音声データを共有することに同意します
           </p>
         </div>
+
+        {/* Prompt Modal */}
+        <PromptModal
+          isOpen={showPromptModal}
+          onClose={() => setShowPromptModal(false)}
+          promptText={generatedPrompt}
+          onStartSession={handleStartSession}
+          hasSettingsChanges={hasPersonaChanges() || hasSceneChanges()}
+        />
       </div>
     </div>
   );
