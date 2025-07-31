@@ -1,9 +1,9 @@
-import { Settings, MessageCircle, History, Sliders } from "react-feather";
+import { Settings, MessageCircle, Clock, Sliders } from "react-feather";
 
 const TABS = [
   { id: 'setup', label: 'Setup', icon: Sliders },
   { id: 'chat', label: 'Chat', icon: MessageCircle },
-  { id: 'history', label: 'History', icon: History },
+  { id: 'history', label: 'History', icon: Clock },
   { id: 'settings', label: 'Settings', icon: Settings }
 ];
 
