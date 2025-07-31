@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, User, Bot } from "react-feather";
+import { Send, User, MessageCircle } from "react-feather";
 
 function MessageBubble({ message, isUser, timestamp }) {
   return (
@@ -8,7 +8,7 @@ function MessageBubble({ message, isUser, timestamp }) {
       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
         isUser ? 'bg-blue-500' : 'bg-gray-500'
       }`}>
-        {isUser ? <User size={16} className="text-white" /> : <Bot size={16} className="text-white" />}
+        {isUser ? <User size={16} className="text-white" /> : <MessageCircle size={16} className="text-white" />}
       </div>
       
       {/* Message bubble */}
@@ -36,7 +36,7 @@ function TypingIndicator() {
   return (
     <div className="flex gap-3 mb-4">
       <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center flex-shrink-0">
-        <Bot size={16} className="text-white" />
+        <MessageCircle size={16} className="text-white" />
       </div>
       <div className="bg-gray-200 rounded-2xl rounded-bl-md px-4 py-3">
         <div className="flex gap-1">
@@ -129,7 +129,7 @@ export default function ChatInterface({
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
         <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mb-6">
-          <Bot size={48} className="text-gray-400" />
+          <MessageCircle size={48} className="text-gray-400" />
         </div>
         <h2 className="text-2xl font-bold text-gray-800 mb-2">Chat Inactive</h2>
         <p className="text-gray-600">Start a session to begin chatting</p>
@@ -143,7 +143,7 @@ export default function ChatInterface({
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
-            <Bot size={16} className="text-white" />
+            <MessageCircle size={16} className="text-white" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-800">AI Assistant</h3>
