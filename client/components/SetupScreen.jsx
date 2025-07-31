@@ -79,7 +79,7 @@ export default function SetupScreen({
         if (personaSettings.additionalInfo) personaInfo.push(`追加情報: ${personaSettings.additionalInfo}`);
         
         if (personaInfo.length > 0) {
-          contextParts.push(`ペルソナ設定: ${personaInfo.join(', ')}`);
+          contextParts.push(`ペルソナ: ${personaInfo.join(', ')}`);
         }
         
         // Add scene context  
@@ -91,7 +91,7 @@ export default function SetupScreen({
         if (sceneSettings.additionalInfo) sceneInfo.push(`追加情報: ${sceneSettings.additionalInfo}`);
         
         if (sceneInfo.length > 0) {
-          contextParts.push(`シーン設定: ${sceneInfo.join(', ')}`);
+          contextParts.push(`シーン: ${sceneInfo.join(', ')}`);
         }
         
         const context = contextParts.join('\n');
