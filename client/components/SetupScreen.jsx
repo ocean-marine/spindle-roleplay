@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, Terminal, MessageSquare, RefreshCw } from "react-feather";
 import Button from "./Button";
 import groqService from "../services/groq";
+import PromptModal from "./PromptModal";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
@@ -46,15 +47,73 @@ export default function SetupScreen({
 }) {
   const [isStarting, setIsStarting] = useState(false);
   const [isGeneratingInstructions, setIsGeneratingInstructions] = useState(false);
+  const [showPromptModal, setShowPromptModal] = useState(false);
+  const [generatedPrompt, setGeneratedPrompt] = useState("");
 
-  const handleStartSession = async () => {
+  const handleGeneratePrompt = async () => {
     setIsStarting(true);
     try {
-      await startSession();
+      let promptToUse = "";
+      
+      // Check if system instructions are provided
+      if (instructions.trim()) {
+        // If system instructions exist, use them directly
+        promptToUse = instructions.trim();
+      } else {
+        // If no system instructions, generate from persona and scene settings
+        const contextParts = [];
+        
+        // Add persona context
+        const personaInfo = [];
+        if (personaSettings.age) personaInfo.push(`年齢: ${personaSettings.age}`);
+        if (personaSettings.gender) personaInfo.push(`性別: ${personaSettings.gender}`);
+        if (personaSettings.occupation) personaInfo.push(`職業: ${personaSettings.occupation}`);
+        if (personaSettings.personality) personaInfo.push(`パーソナリティ: ${personaSettings.personality}`);
+        if (personaSettings.additionalInfo) personaInfo.push(`追加情報: ${personaSettings.additionalInfo}`);
+        
+        if (personaInfo.length > 0) {
+          contextParts.push(`ペルソナ設定: ${personaInfo.join(', ')}`);
+        }
+        
+        // Add scene context  
+        const sceneInfo = [];
+        if (sceneSettings.appointmentBackground) sceneInfo.push(`背景: ${sceneSettings.appointmentBackground}`);
+        if (sceneSettings.relationship) sceneInfo.push(`関係性: ${sceneSettings.relationship}`);
+        if (sceneSettings.timeOfDay) sceneInfo.push(`時間帯: ${sceneSettings.timeOfDay}`);
+        if (sceneSettings.location) sceneInfo.push(`場所: ${sceneSettings.location}`);
+        if (sceneSettings.additionalInfo) sceneInfo.push(`追加情報: ${sceneSettings.additionalInfo}`);
+        
+        if (sceneInfo.length > 0) {
+          contextParts.push(`シーン設定: ${sceneInfo.join(', ')}`);
+        }
+        
+        const context = contextParts.join('\n');
+        
+        if (context.trim()) {
+          // Generate prompt using Groq service
+          promptToUse = await groqService.generateDetailedInstructions(context);
+        } else {
+          promptToUse = "自然な日本語で応対します。";
+        }
+      }
+      
+      setGeneratedPrompt(promptToUse);
+      setShowPromptModal(true);
     } catch (error) {
-      console.error('Failed to start session:', error);
+      console.error('Failed to generate prompt:', error);
+      alert(`プロンプトの生成に失敗しました: ${error.message}`);
     } finally {
       setIsStarting(false);
+    }
+  };
+
+  const handleStartSession = async () => {
+    try {
+      await startSession();
+      setShowPromptModal(false);
+    } catch (error) {
+      console.error('Failed to start session:', error);
+      alert('セッションの開始に失敗しました');
     }
   };
 
@@ -366,10 +425,10 @@ export default function SetupScreen({
           </div>
         </ExpandableSection>
 
-        {/* Start Session Button */}
+        {/* Generate Prompt Button */}
         <div className="pt-6">
           <Button
-            onClick={handleStartSession}
+            onClick={handleGeneratePrompt}
             disabled={isStarting}
             className={`w-full py-4 text-base font-semibold ${
               isStarting 
@@ -378,13 +437,21 @@ export default function SetupScreen({
             }`}
             icon={<Play size={20} />}
           >
-            {isStarting ? 'セッション開始中...' : '音声セッション開始'}
+            {isStarting ? 'プロンプト生成中...' : 'プロンプト生成'}
           </Button>
           
           <p className="text-center text-xs text-gray-500 mt-3">
             セッションを開始することで、OpenAIのRealtime APIと音声データを共有することに同意します
           </p>
         </div>
+
+        {/* Prompt Modal */}
+        <PromptModal
+          isOpen={showPromptModal}
+          onClose={() => setShowPromptModal(false)}
+          promptText={generatedPrompt}
+          onStartSession={handleStartSession}
+        />
       </div>
     </div>
   );
