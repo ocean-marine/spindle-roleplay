@@ -1,7 +1,18 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:client",
-  "outputDirectory": "dist/client",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/client"
+      }
+    },
+    {
+      "src": "api/server.js",
+      "use": "@vercel/node"
+    }
+  ],
   "routes": [
     {
       "src": "/token",
