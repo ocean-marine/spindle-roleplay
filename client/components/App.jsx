@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "../assets/openai-logomark.svg";
+import TabNavigation from "./TabNavigation";
+import SetupScreen from "./SetupScreen";
+import VoiceInterface from "./VoiceInterface";
+import ChatInterface from "./ChatInterface";
+import HistoryScreen from "./HistoryScreen";
+import SettingsScreen from "./SettingsScreen";
+import SwipeHandler from "./SwipeHandler";
+import PullToRefresh from "./PullToRefresh";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 
@@ -7,9 +15,12 @@ export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState("alloy");
   const [instructions, setInstructions] = useState("");
+  const [activeTab, setActiveTab] = useState("setup");
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -145,6 +156,20 @@ export default function App() {
           event.timestamp = new Date().toLocaleTimeString();
         }
 
+        // Update UI states based on events
+        if (event.type === 'input_audio_buffer.speech_started') {
+          setIsListening(true);
+          setIsSpeaking(false);
+        } else if (event.type === 'input_audio_buffer.speech_stopped') {
+          setIsListening(false);
+        } else if (event.type === 'response.audio.delta' || event.type === 'response.audio_transcript.delta') {
+          setIsSpeaking(true);
+          setIsListening(false);
+        } else if (event.type === 'response.done') {
+          setIsSpeaking(false);
+          setIsListening(false);
+        }
+
         setEvents((prev) => [event, ...prev]);
       });
 
@@ -152,6 +177,7 @@ export default function App() {
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
         setEvents([]);
+        setActiveTab("chat"); // Switch to chat tab when session starts
         
         // Send initial instructions if provided
         if (instructions.trim()) {
@@ -173,128 +199,144 @@ export default function App() {
     }
   }, [dataChannel, instructions]);
 
+  // Handle tab switching with swipe gestures
+  const handleSwipeLeft = () => {
+    const tabs = ['setup', 'chat', 'history', 'settings'];
+    const currentIndex = tabs.indexOf(activeTab);
+    if (currentIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentIndex + 1]);
+    }
+  };
+
+  const handleSwipeRight = () => {
+    const tabs = ['setup', 'chat', 'history', 'settings'];
+    const currentIndex = tabs.indexOf(activeTab);
+    if (currentIndex > 0) {
+      setActiveTab(tabs[currentIndex - 1]);
+    }
+  };
+
+  // Handle pull to refresh for session management
+  const handleRefresh = async () => {
+    if (isSessionActive) {
+      stopSession();
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await startSession();
+    }
+    return Promise.resolve();
+  };
+
+  // Clear history function
+  const handleClearHistory = () => {
+    setEvents([]);
+  };
+
+  // Stop session and switch to setup tab
+  const handleStopSession = () => {
+    stopSession();
+    setActiveTab("setup");
+  };
+
+  // Render current tab content
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'setup':
+        return (
+          <SetupScreen
+            selectedVoice={selectedVoice}
+            setSelectedVoice={setSelectedVoice}
+            instructions={instructions}
+            setInstructions={setInstructions}
+            startSession={startSession}
+            VOICE_OPTIONS={VOICE_OPTIONS}
+          />
+        );
+      
+      case 'chat':
+        return (
+          <ChatInterface
+            events={events}
+            sendTextMessage={sendTextMessage}
+            isSessionActive={isSessionActive}
+            isTyping={isSpeaking}
+          />
+        );
+      
+      case 'history':
+        return (
+          <HistoryScreen
+            events={events}
+            onClearHistory={handleClearHistory}
+          />
+        );
+      
+      case 'settings':
+        return (
+          <SettingsScreen
+            selectedVoice={selectedVoice}
+            setSelectedVoice={setSelectedVoice}
+            VOICE_OPTIONS={VOICE_OPTIONS}
+          />
+        );
+      
+      default:
+        return null;
+    }
+  };
+
   return (
-    <>
-      <nav className="absolute top-0 left-0 right-0 h-16 flex items-center z-20">
-        <div className="flex items-center justify-between w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
-          <div className="flex items-center gap-4">
-            <img style={{ width: "24px" }} src={logo} />
-            <h1 className="text-sm md:text-base">realtime console</h1>
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+      {/* Header */}
+      <nav className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 z-20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img style={{ width: "24px" }} src={logo} alt="OpenAI Logo" />
+            <div>
+              <h1 className="text-base font-semibold text-gray-800">Realtime Console</h1>
+              <p className="text-xs text-gray-500">Mobile Edition</p>
+            </div>
           </div>
-          <button
-            className="md:hidden p-2 rounded-md bg-gray-100 hover:bg-gray-200"
-            onClick={() => setShowSidebar(!showSidebar)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <line x1="3" y1="12" x2="21" y2="12"/>
-              <line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
-          </button>
+          
+          {/* Session status indicator */}
+          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+            isSessionActive 
+              ? 'bg-green-100 text-green-700' 
+              : 'bg-gray-100 text-gray-600'
+          }`}>
+            {isSessionActive ? 'Connected' : 'Disconnected'}
+          </div>
         </div>
       </nav>
-      <main className="absolute top-16 left-0 right-0 bottom-0">
-        {/* Main conversation area */}
-        <section className={`absolute top-0 left-0 bottom-0 flex ${showSidebar ? 'right-0 hidden md:right-[380px] md:flex' : 'right-0 md:right-[380px]'}`}>
-          {!isSessionActive ? (
-            <section className="absolute top-0 left-0 right-0 bottom-0 p-4 md:p-8 overflow-y-auto">
-              <div className="max-w-2xl mx-auto">
-                <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center">Session Settings</h1>
-                
-                <div className="space-y-6">
-                  <div className="bg-gray-50 rounded-lg p-6">
-                    <h2 className="text-lg font-semibold mb-4">Voice Options</h2>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium mb-2">Select Voice</label>
-                      <select
-                        value={selectedVoice}
-                        onChange={(e) => setSelectedVoice(e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-md text-sm"
-                      >
-                        {VOICE_OPTIONS.map((voice) => (
-                          <option key={voice} value={voice}>
-                            {voice}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-gray-50 rounded-lg p-6">
-                    <h2 className="text-lg font-semibold mb-4">Instructions</h2>
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium mb-2">System Instructions (Optional)</label>
-                      <textarea
-                        value={instructions}
-                        onChange={(e) => setInstructions(e.target.value)}
-                        placeholder="Enter system instructions for the AI assistant..."
-                        className="w-full p-3 border border-gray-300 rounded-md text-sm resize-vertical"
-                        rows={4}
-                      />
-                      <p className="text-xs text-gray-500 mt-1">
-                        These instructions will be sent to the AI when the session starts.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          ) : (
-            <section className="absolute top-0 left-0 right-0 bottom-0 p-4 md:p-8 overflow-y-auto">
-              <div className="max-w-2xl mx-auto text-center py-16">
-                <h1 className="text-2xl md:text-3xl font-bold mb-4">Session Active</h1>
-                <p className="text-gray-600 mb-8">Use voice to communicate with the AI assistant.</p>
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <p className="text-green-800">🎤 Listening... Speak to interact with the AI</p>
-                </div>
-              </div>
-            </section>
-          )}
-          <section className="absolute h-20 md:h-32 left-0 right-0 bottom-0 p-2 md:p-4">
-            <SessionControls
-              startSession={startSession}
-              stopSession={stopSession}
-              sendClientEvent={sendClientEvent}
-              sendTextMessage={sendTextMessage}
-              events={events}
-              isSessionActive={isSessionActive}
-            />
-          </section>
-        </section>
-        
-        {/* Mobile sidebar overlay */}
-        {showSidebar && (
-          <div className="md:hidden absolute inset-0 z-10">
-            <div 
-              className="absolute inset-0 bg-black bg-opacity-50"
-              onClick={() => setShowSidebar(false)}
-            />
-            <section className="absolute top-0 right-0 bottom-0 w-80 bg-white p-4 pt-0 overflow-y-auto shadow-lg">
-              <div className="sticky top-0 bg-white pb-2 mb-4 border-b">
-                <button
-                  className="p-2 rounded-md hover:bg-gray-100 float-right"
-                  onClick={() => setShowSidebar(false)}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                  </svg>
-                </button>
-                <div className="clear-both"></div>
-              </div>
-              <ToolPanel
-                sendClientEvent={sendClientEvent}
-                sendTextMessage={sendTextMessage}
-                events={events}
-                isSessionActive={isSessionActive}
-                selectedVoice={selectedVoice}
-              />
-            </section>
+
+      {/* Main content area with swipe support */}
+      <PullToRefresh
+        onRefresh={isSessionActive ? handleRefresh : undefined}
+        className="flex-1 relative"
+      >
+        <SwipeHandler
+          onSwipeLeft={handleSwipeLeft}
+          onSwipeRight={handleSwipeRight}
+          className="h-full"
+        >
+          <div className="h-full flex flex-col">
+            {renderTabContent()}
           </div>
-        )}
-        
-        {/* Desktop sidebar */}
-        <section className="hidden md:block absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
+        </SwipeHandler>
+      </PullToRefresh>
+
+      {/* Tab Navigation */}
+      <TabNavigation
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        className="flex-shrink-0"
+      />
+      
+      {/* Desktop tool panel (hidden on mobile) */}
+      <div className="hidden lg:block fixed top-16 right-4 bottom-16 w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="font-semibold text-gray-800">Tools & Events</h3>
+        </div>
+        <div className="flex-1 overflow-y-auto">
           <ToolPanel
             sendClientEvent={sendClientEvent}
             sendTextMessage={sendTextMessage}
@@ -302,8 +344,8 @@ export default function App() {
             isSessionActive={isSessionActive}
             selectedVoice={selectedVoice}
           />
-        </section>
-      </main>
-    </>
+        </div>
+      </div>
+    </div>
   );
 }
