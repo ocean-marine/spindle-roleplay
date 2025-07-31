@@ -110,13 +110,23 @@ export default function SetupScreen({
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 年齢
               </label>
-              <input
-                type="text"
+              <select
                 value={personaSettings.age}
                 onChange={(e) => setPersonaSettings({...personaSettings, age: e.target.value})}
-                placeholder="例: 25歳"
                 className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+              >
+                <option value="">選択してください</option>
+                <option value="20代前半">20代前半</option>
+                <option value="20代後半">20代後半</option>
+                <option value="30代前半">30代前半</option>
+                <option value="30代後半">30代後半</option>
+                <option value="40代前半">40代前半</option>
+                <option value="40代後半">40代後半</option>
+                <option value="50代前半">50代前半</option>
+                <option value="50代後半">50代後半</option>
+                <option value="60代前半">60代前半</option>
+                <option value="60代後半">60代後半</option>
+              </select>
             </div>
 
             <div>
