@@ -66,23 +66,12 @@ function FunctionCallOutput({ functionCallOutput }) {
   );
 }
 
-const VOICE_OPTIONS = [
-  "alloy",
-  "ash", 
-  "ballad",
-  "coral",
-  "echo",
-  "sage",
-  "shimmer",
-  "verse"
-];
 
 export default function ToolPanel({
   isSessionActive,
   sendClientEvent,
   events,
   selectedVoice,
-  setSelectedVoice,
 }) {
   const [functionAdded, setFunctionAdded] = useState(false);
   const [functionCallOutput, setFunctionCallOutput] = useState(null);
@@ -132,29 +121,6 @@ export default function ToolPanel({
 
   return (
     <section className="h-full w-full flex flex-col gap-4">
-      <div className="bg-gray-50 rounded-md p-4">
-        <h2 className="text-lg font-bold mb-4">Voice Settings</h2>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Select Voice</label>
-          <select
-            value={selectedVoice}
-            onChange={(e) => setSelectedVoice(e.target.value)}
-            disabled={isSessionActive}
-            className="w-full p-2 border border-gray-300 rounded-md text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
-          >
-            {VOICE_OPTIONS.map((voice) => (
-              <option key={voice} value={voice}>
-                {voice}
-              </option>
-            ))}
-          </select>
-          {isSessionActive && (
-            <p className="text-xs text-gray-500 mt-1">
-              Voice cannot be changed during an active session
-            </p>
-          )}
-        </div>
-      </div>
       <div className="flex-1 bg-gray-50 rounded-md p-4">
         <h2 className="text-lg font-bold">Color Palette Tool</h2>
         {isSessionActive ? (

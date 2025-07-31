@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import logo from "../assets/openai-logomark.svg";
-import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 
@@ -10,8 +9,20 @@ export default function App() {
   const [dataChannel, setDataChannel] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedVoice, setSelectedVoice] = useState("alloy");
+  const [instructions, setInstructions] = useState("");
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
+
+  const VOICE_OPTIONS = [
+    "alloy",
+    "ash", 
+    "ballad",
+    "coral",
+    "echo",
+    "sage",
+    "shimmer",
+    "verse"
+  ];
 
   async function startSession() {
     // Get a session token for OpenAI Realtime API
@@ -141,9 +152,26 @@ export default function App() {
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
         setEvents([]);
+        
+        // Send initial instructions if provided
+        if (instructions.trim()) {
+          setTimeout(() => {
+            sendClientEvent({
+              type: "conversation.item.create",
+              item: {
+                type: "message",
+                role: "system",
+                content: [{
+                  type: "input_text",
+                  text: instructions
+                }]
+              }
+            });
+          }, 500);
+        }
       });
     }
-  }, [dataChannel]);
+  }, [dataChannel, instructions]);
 
   return (
     <>
@@ -168,9 +196,60 @@ export default function App() {
       <main className="absolute top-16 left-0 right-0 bottom-0">
         {/* Main conversation area */}
         <section className={`absolute top-0 left-0 bottom-0 flex ${showSidebar ? 'right-0 hidden md:right-[380px] md:flex' : 'right-0 md:right-[380px]'}`}>
-          <section className="absolute top-0 left-0 right-0 bottom-20 md:bottom-32 px-2 md:px-4 overflow-y-auto">
-            <EventLog events={events} />
-          </section>
+          {!isSessionActive ? (
+            <section className="absolute top-0 left-0 right-0 bottom-0 p-4 md:p-8 overflow-y-auto">
+              <div className="max-w-2xl mx-auto">
+                <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center">Session Settings</h1>
+                
+                <div className="space-y-6">
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h2 className="text-lg font-semibold mb-4">Voice Options</h2>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium mb-2">Select Voice</label>
+                      <select
+                        value={selectedVoice}
+                        onChange={(e) => setSelectedVoice(e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded-md text-sm"
+                      >
+                        {VOICE_OPTIONS.map((voice) => (
+                          <option key={voice} value={voice}>
+                            {voice}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h2 className="text-lg font-semibold mb-4">Instructions</h2>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium mb-2">System Instructions (Optional)</label>
+                      <textarea
+                        value={instructions}
+                        onChange={(e) => setInstructions(e.target.value)}
+                        placeholder="Enter system instructions for the AI assistant..."
+                        className="w-full p-3 border border-gray-300 rounded-md text-sm resize-vertical"
+                        rows={4}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        These instructions will be sent to the AI when the session starts.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          ) : (
+            <section className="absolute top-0 left-0 right-0 bottom-0 p-4 md:p-8 overflow-y-auto">
+              <div className="max-w-2xl mx-auto text-center py-16">
+                <h1 className="text-2xl md:text-3xl font-bold mb-4">Session Active</h1>
+                <p className="text-gray-600 mb-8">Use voice to communicate with the AI assistant.</p>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <p className="text-green-800">🎤 Listening... Speak to interact with the AI</p>
+                </div>
+              </div>
+            </section>
+          )}
           <section className="absolute h-20 md:h-32 left-0 right-0 bottom-0 p-2 md:p-4">
             <SessionControls
               startSession={startSession}
@@ -209,7 +288,6 @@ export default function App() {
                 events={events}
                 isSessionActive={isSessionActive}
                 selectedVoice={selectedVoice}
-                setSelectedVoice={setSelectedVoice}
               />
             </section>
           </div>
@@ -223,7 +301,6 @@ export default function App() {
             events={events}
             isSessionActive={isSessionActive}
             selectedVoice={selectedVoice}
-            setSelectedVoice={setSelectedVoice}
           />
         </section>
       </main>
