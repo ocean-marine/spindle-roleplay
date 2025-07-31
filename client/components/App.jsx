@@ -8,6 +8,7 @@ export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(false);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -145,18 +146,31 @@ export default function App() {
 
   return (
     <>
-      <nav className="absolute top-0 left-0 right-0 h-16 flex items-center">
-        <div className="flex items-center gap-4 w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
-          <img style={{ width: "24px" }} src={logo} />
-          <h1>realtime console</h1>
+      <nav className="absolute top-0 left-0 right-0 h-16 flex items-center z-20">
+        <div className="flex items-center justify-between w-full m-4 pb-2 border-0 border-b border-solid border-gray-200">
+          <div className="flex items-center gap-4">
+            <img style={{ width: "24px" }} src={logo} />
+            <h1 className="text-sm md:text-base">realtime console</h1>
+          </div>
+          <button
+            className="md:hidden p-2 rounded-md bg-gray-100 hover:bg-gray-200"
+            onClick={() => setShowSidebar(!showSidebar)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
         </div>
       </nav>
       <main className="absolute top-16 left-0 right-0 bottom-0">
-        <section className="absolute top-0 left-0 right-[380px] bottom-0 flex">
-          <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
+        {/* Main conversation area */}
+        <section className={`absolute top-0 left-0 bottom-0 flex ${showSidebar ? 'right-0 hidden md:right-[380px] md:flex' : 'right-0 md:right-[380px]'}`}>
+          <section className="absolute top-0 left-0 right-0 bottom-20 md:bottom-32 px-2 md:px-4 overflow-y-auto">
             <EventLog events={events} />
           </section>
-          <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
+          <section className="absolute h-20 md:h-32 left-0 right-0 bottom-0 p-2 md:p-4">
             <SessionControls
               startSession={startSession}
               stopSession={stopSession}
@@ -167,7 +181,39 @@ export default function App() {
             />
           </section>
         </section>
-        <section className="absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
+        
+        {/* Mobile sidebar overlay */}
+        {showSidebar && (
+          <div className="md:hidden absolute inset-0 z-10">
+            <div 
+              className="absolute inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowSidebar(false)}
+            />
+            <section className="absolute top-0 right-0 bottom-0 w-80 bg-white p-4 pt-0 overflow-y-auto shadow-lg">
+              <div className="sticky top-0 bg-white pb-2 mb-4 border-b">
+                <button
+                  className="p-2 rounded-md hover:bg-gray-100 float-right"
+                  onClick={() => setShowSidebar(false)}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+                <div className="clear-both"></div>
+              </div>
+              <ToolPanel
+                sendClientEvent={sendClientEvent}
+                sendTextMessage={sendTextMessage}
+                events={events}
+                isSessionActive={isSessionActive}
+              />
+            </section>
+          </div>
+        )}
+        
+        {/* Desktop sidebar */}
+        <section className="hidden md:block absolute top-0 w-[380px] right-0 bottom-0 p-4 pt-0 overflow-y-auto">
           <ToolPanel
             sendClientEvent={sendClientEvent}
             sendTextMessage={sendTextMessage}

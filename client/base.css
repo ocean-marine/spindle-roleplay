@@ -21,4 +21,17 @@ body {
   font-family: "Consolas", "Andale Mono", monospace;
   font-size: 0.9rem;
   background-color: var(--color-base);
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+
+/* Improve mobile touch targets and scrolling */
+@media (max-width: 768px) {
+  html, body {
+    font-size: 0.85rem;
+  }
+  
+  input, button {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
 }
