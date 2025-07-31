@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings, User, MapPin } from "react-feather";
+import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, Terminal } from "react-feather";
 import Button from "./Button";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
@@ -266,6 +266,7 @@ export default function SetupScreen({
         <ExpandableSection 
           title="システム指示" 
           defaultExpanded={false}
+          icon={Terminal}
         >
           <div className="pt-3">
             <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -281,33 +282,6 @@ export default function SetupScreen({
             <p className="text-xs text-gray-500 mt-2">
               これらの指示はセッション中のAIの動作をガイドします。
             </p>
-          </div>
-        </ExpandableSection>
-
-        {/* Session Info */}
-        <ExpandableSection 
-          title="セッション情報" 
-          defaultExpanded={false}
-        >
-          <div className="pt-3 space-y-3">
-            <div className="bg-blue-50 rounded-lg p-3">
-              <h4 className="font-medium text-blue-800 mb-1">機能</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
-                <li>• リアルタイム音声会話</li>
-                <li>• テキストメッセージサポート</li>
-                <li>• カラーパレット生成ツール</li>
-                <li>• セッションイベントログ</li>
-              </ul>
-            </div>
-            
-            <div className="bg-amber-50 rounded-lg p-3">
-              <h4 className="font-medium text-amber-800 mb-1">要件</h4>
-              <ul className="text-sm text-amber-700 space-y-1">
-                <li>• マイクアクセスが必要</li>
-                <li>• 安定したインターネット接続</li>
-                <li>• WebRTCサポートのモダンブラウザ</li>
-              </ul>
-            </div>
           </div>
         </ExpandableSection>
 
