@@ -4,13 +4,13 @@
   "outputDirectory": "dist/client",
   "functions": {
     "api/server.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs20.x"
     }
   },
   "routes": [
     {
       "src": "/token",
-      "dest": "/api/server.js"
+      "dest": "/api/server"
     },
     {
       "src": "/(.*)",
