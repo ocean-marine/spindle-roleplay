@@ -9,8 +9,11 @@ import {
   HelpCircle,
   Download,
   RefreshCw,
-  Shield
+  Shield,
+  Zap,
+  MessageSquare
 } from "react-feather";
+import groqService from "../services/groq";
 
 function SettingSection({ title, children, icon: Icon }) {
   return (
@@ -69,7 +72,9 @@ function ToggleSwitch({ enabled, onChange, disabled = false }) {
 export default function SettingsScreen({ 
   selectedVoice, 
   setSelectedVoice, 
-  VOICE_OPTIONS 
+  VOICE_OPTIONS,
+  instructions,
+  setInstructions
 }) {
   // Local settings state
   const [settings, setSettings] = useState({
@@ -82,6 +87,10 @@ export default function SettingsScreen({
     reducedMotion: false,
     highContrast: false
   });
+
+  // Kimi K2 state
+  const [isGeneratingInstructions, setIsGeneratingInstructions] = useState(false);
+  const [instructionContext, setInstructionContext] = useState("");
 
   const updateSetting = (key, value) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -118,6 +127,22 @@ export default function SettingsScreen({
         highContrast: false
       });
       setSelectedVoice('alloy');
+    }
+  };
+
+  const handleGenerateInstructions = async () => {
+    if (isGeneratingInstructions) return;
+    
+    setIsGeneratingInstructions(true);
+    try {
+      const generatedInstructions = await groqService.generateDetailedInstructions(instructionContext);
+      if (setInstructions) {
+        setInstructions(generatedInstructions);
+      }
+    } catch (error) {
+      alert(`指示文の生成に失敗しました: ${error.message}`);
+    } finally {
+      setIsGeneratingInstructions(false);
     }
   };
 
@@ -268,6 +293,60 @@ export default function SettingsScreen({
 リセット
             </button>
           </SettingItem>
+        </SettingSection>
+
+        {/* Kimi K2 Instruction Generation */}
+        <SettingSection title="Kimi K2 指示文生成" icon={Zap}>
+          <SettingItem 
+            label="文脈入力"
+            description="指示文生成のための追加情報を入力"
+          >
+            <textarea
+              value={instructionContext}
+              onChange={(e) => setInstructionContext(e.target.value)}
+              placeholder="例: ビジネス会話、カジュアルな対話、技術相談など..."
+              className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              rows={3}
+            />
+          </SettingItem>
+
+          <SettingItem 
+            label="指示文を生成"
+            description="Kimi K2が詳細な指示文を自動生成"
+          >
+            <button
+              onClick={handleGenerateInstructions}
+              disabled={isGeneratingInstructions}
+              className={`flex items-center gap-2 px-4 py-2 text-white text-sm rounded-md transition-colors ${
+                isGeneratingInstructions
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-purple-600 hover:bg-purple-700'
+              }`}
+            >
+              {isGeneratingInstructions ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" />
+                  生成中...
+                </>
+              ) : (
+                <>
+                  <MessageSquare size={14} />
+                  生成する
+                </>
+              )}
+            </button>
+          </SettingItem>
+
+          {instructions && (
+            <SettingItem 
+              label="生成された指示文"
+              description="現在の指示文 (セットアップページでも編集可能)"
+            >
+              <div className="w-full max-h-32 overflow-y-auto text-xs bg-gray-50 border border-gray-200 rounded-md p-2 text-gray-700">
+                {instructions}
+              </div>
+            </SettingItem>
+          )}
         </SettingSection>
 
         {/* App Information */}
