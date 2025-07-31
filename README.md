@@ -1,38 +1,62 @@
 # OpenAI Realtime Console
 
-This is an example application showing how to use the [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime) with [WebRTC](https://platform.openai.com/docs/guides/realtime-webrtc).
+A modern, interactive console application demonstrating the power of the [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime) with [WebRTC](https://platform.openai.com/docs/guides/realtime-webrtc) for real-time AI conversations.
 
-## Installation and usage
+## Quick Start
 
-Before you begin, you'll need an OpenAI API key - [create one in the dashboard here](https://platform.openai.com/settings/api-keys). Create a `.env` file from the example file and set your API key in there:
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (version 18 or higher)
+- OpenAI API key - [create one in the dashboard here](https://platform.openai.com/settings/api-keys)
+
+### Setup
+
+First, configure your environment by creating a `.env` file from the example file and setting your API key:
 
 ```bash
 cp .env.example .env
 ```
 
-Running this application locally requires [Node.js](https://nodejs.org/) to be installed. Install dependencies for the application with:
+### Installation
+
+Install the required dependencies:
 
 ```bash
 npm install
 ```
 
-Start the application server with:
+### Running the Application
+
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-This should start the console application on [http://localhost:3000](http://localhost:3000).
+The console application will be available at [http://localhost:3000](http://localhost:3000).
 
-This application is a minimal template that uses [express](https://expressjs.com/) to serve the React frontend contained in the [`/client`](./client) folder. The server is configured to use [vite](https://vitejs.dev/) to build the React frontend.
+## Features
 
-This application shows how to send and receive Realtime API events over the WebRTC data channel and configure client-side function calling. You can also view the JSON payloads for client and server events using the logging panel in the UI.
+- 🚀 **Real-time AI Conversations**: Powered by OpenAI's Realtime API with WebRTC
+- 🔧 **Function Calling**: Client-side function calling capabilities
+- 📊 **Event Logging**: JSON payload viewer for debugging client and server events
+- ⚡ **Modern Stack**: Built with Express.js, React, and Vite for optimal performance
+- 🎯 **Minimal Template**: Clean, extensible architecture for your own implementations
 
-For a more comprehensive example, see the [OpenAI Realtime Agents](https://github.com/openai/openai-realtime-agents) demo built with Next.js, using an agentic architecture inspired by [OpenAI Swarm](https://github.com/openai/swarm).
+## Architecture
 
-## Previous WebSockets version
+This application uses a modern web stack:
+- **Backend**: [Express.js](https://expressjs.com/) server for API endpoints
+- **Frontend**: React application with [Vite](https://vitejs.dev/) for fast development and building
+- **Real-time Communication**: WebRTC data channels for low-latency AI interactions
 
-The previous version of this application that used WebSockets on the client (not recommended in browsers) [can be found here](https://github.com/openai/openai-realtime-console/tree/websockets).
+## Related Projects
+
+For a more comprehensive example with advanced features, check out the [OpenAI Realtime Agents](https://github.com/openai/openai-realtime-agents) demo. It's built with Next.js and uses an agentic architecture inspired by [OpenAI Swarm](https://github.com/openai/swarm).
+
+## Migration Notes
+
+**WebSockets Version**: The previous version of this application used WebSockets (not recommended for browser environments). You can find it in the [websockets branch](https://github.com/openai/openai-realtime-console/tree/websockets) if needed for reference.
 
 ## License
 
