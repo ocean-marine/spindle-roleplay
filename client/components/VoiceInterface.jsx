@@ -99,8 +99,8 @@ export default function VoiceInterface({
         <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mb-6">
           <MicOff size={48} className="text-gray-400" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Session Inactive</h2>
-        <p className="text-gray-600">Start a session to begin voice interaction</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">セッション停止中</h2>
+        <p className="text-gray-600">音声インタラクションを開始するにはセッションを開始してください</p>
       </div>
     );
   }
@@ -113,12 +113,12 @@ export default function VoiceInterface({
           {isListening ? (
             <>
               <Mic size={16} className="text-green-600" />
-              <span className="text-sm font-medium text-green-600">Listening</span>
+              <span className="text-sm font-medium text-green-600">リスニング中</span>
             </>
           ) : (
             <>
               <MicOff size={16} className="text-gray-400" />
-              <span className="text-sm font-medium text-gray-500">Standby</span>
+              <span className="text-sm font-medium text-gray-500">スタンバイ</span>
             </>
           )}
         </div>
@@ -127,12 +127,12 @@ export default function VoiceInterface({
           {isSpeaking ? (
             <>
               <Volume2 size={16} className="text-blue-600" />
-              <span className="text-sm font-medium text-blue-600">Speaking</span>
+              <span className="text-sm font-medium text-blue-600">音声出力中</span>
             </>
           ) : (
             <>
               <VolumeX size={16} className="text-gray-400" />
-              <span className="text-sm font-medium text-gray-500">Silent</span>
+              <span className="text-sm font-medium text-gray-500">無音"
             </>
           )}
         </div>
@@ -179,10 +179,10 @@ export default function VoiceInterface({
       {/* Instruction text */}
       <div className="mt-8 text-center">
         <p className="text-lg font-medium text-gray-800 mb-2">
-          {isListening ? "I'm listening..." : isSpeaking ? "AI is responding..." : "Tap to speak"}
+          {isListening ? "聞いています..." : isSpeaking ? "AIが応答中..." : "タップして話してください"}
         </p>
         <p className="text-sm text-gray-600">
-          Voice conversation is active. Speak naturally to interact.
+          音声会話がアクティブです。自然に話しかけてください。
         </p>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import { Settings, MessageCircle, Clock, Sliders } from "react-feather";
 
 const TABS = [
-  { id: 'setup', label: 'Setup', icon: Sliders },
-  { id: 'chat', label: 'Chat', icon: MessageCircle },
-  { id: 'history', label: 'History', icon: Clock },
-  { id: 'settings', label: 'Settings', icon: Settings }
+  { id: 'setup', label: 'セットアップ', icon: Sliders },
+  { id: 'chat', label: 'チャット', icon: MessageCircle },
+  { id: 'history', label: '履歴', icon: Clock },
+  { id: 'settings', label: '設定', icon: Settings }
 ];
 
 export default function TabNavigation({ activeTab, onTabChange, className = "" }) {

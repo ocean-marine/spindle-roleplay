@@ -28,16 +28,16 @@ function EventCard({ event, onClick }) {
         if (event.item?.content?.[0]?.text) {
           return event.item.content[0].text.substring(0, 60) + '...';
         }
-        return 'Message created';
+        return 'メッセージ作成';
       case 'response.done':
         if (event.response?.output?.[0]?.content?.[0]?.text) {
           return event.response.output[0].content[0].text.substring(0, 60) + '...';
         }
-        return 'AI response completed';
+        return 'AI応答完了';
       case 'session.created':
-        return 'Session started';
+        return 'セッション開始';
       case 'session.updated':
-        return 'Session configuration updated';
+        return 'セッション設定更新';
       default:
         return event.type.replace(/[._]/g, ' ');
     }
@@ -78,7 +78,7 @@ function EventDetailModal({ event, onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-lg w-full max-h-[80vh] overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">Event Details</h2>
+          <h2 className="text-lg font-semibold text-gray-800">イベント詳細</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full"
@@ -90,24 +90,24 @@ function EventDetailModal({ event, onClose }) {
         <div className="p-4 overflow-y-auto max-h-[60vh]">
           <div className="space-y-3">
             <div>
-              <label className="text-sm font-medium text-gray-600">Type</label>
+              <label className="text-sm font-medium text-gray-600">タイプ</label>
               <p className="text-gray-800">{event.type}</p>
             </div>
             
             <div>
-              <label className="text-sm font-medium text-gray-600">Timestamp</label>
+              <label className="text-sm font-medium text-gray-600">タイムスタンプ</label>
               <p className="text-gray-800">{event.timestamp}</p>
             </div>
             
             {event.event_id && (
               <div>
-                <label className="text-sm font-medium text-gray-600">Event ID</label>
+                <label className="text-sm font-medium text-gray-600">イベントID</label>
                 <p className="text-gray-800 text-xs font-mono">{event.event_id}</p>
               </div>
             )}
             
             <div>
-              <label className="text-sm font-medium text-gray-600">Raw Data</label>
+              <label className="text-sm font-medium text-gray-600">生データ</label>
               <pre className="text-xs bg-gray-100 p-3 rounded-md overflow-x-auto mt-1">
                 {JSON.stringify(event, null, 2)}
               </pre>
@@ -120,7 +120,7 @@ function EventDetailModal({ event, onClose }) {
             onClick={onClose}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
           >
-            Close
+閉じる
           </button>
         </div>
       </div>
@@ -148,7 +148,7 @@ export default function HistoryScreen({ events = [], onClearHistory }) {
   });
 
   const handleClearHistory = () => {
-    if (window.confirm('Are you sure you want to clear all event history? This cannot be undone.')) {
+    if (window.confirm('すべてのイベント履歴をクリアしてよろしいですか？この操作は元に戻せません。')) {
       onClearHistory?.();
     }
   };
@@ -158,14 +158,14 @@ export default function HistoryScreen({ events = [], onClearHistory }) {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-bold text-gray-800">Event History</h1>
+          <h1 className="text-xl font-bold text-gray-800">イベント履歴</h1>
           {events.length > 0 && (
             <button
               onClick={handleClearHistory}
               className="flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
             >
               <Trash2 size={16} />
-              <span className="text-sm">Clear</span>
+              <span className="text-sm">クリア</span>
             </button>
           )}
         </div>
@@ -176,7 +176,7 @@ export default function HistoryScreen({ events = [], onClearHistory }) {
             <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search events..."
+              placeholder="イベントを検索..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -192,7 +192,7 @@ export default function HistoryScreen({ events = [], onClearHistory }) {
             >
               {eventTypes.map(type => (
                 <option key={type} value={type}>
-                  {type === 'all' ? 'All Types' : type.replace(/[._]/g, ' ')}
+                  {type === 'all' ? 'すべてのタイプ' : type.replace(/[._]/g, ' ')}
                 </option>
               ))}
             </select>
@@ -207,11 +207,11 @@ export default function HistoryScreen({ events = [], onClearHistory }) {
             <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mb-4">
               <Clock size={32} className="text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-800 mb-2">No Events Found</h3>
+            <h3 className="text-lg font-medium text-gray-800 mb-2">イベントが見つかりません</h3>
             <p className="text-gray-600 mb-4">
               {events.length === 0 
-                ? "Start a session to see event history" 
-                : "Try adjusting your search or filter criteria"
+                ? "イベント履歴を見るにはセッションを開始してください" 
+                : "検索やフィルター条件を調整してみてください"
               }
             </p>
           </div>
@@ -219,7 +219,7 @@ export default function HistoryScreen({ events = [], onClearHistory }) {
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-4">
               <p className="text-sm text-gray-600">
-                {filteredEvents.length} events found
+                {filteredEvents.length} 件のイベントが見つかりました
               </p>
             </div>
             

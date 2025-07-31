@@ -12,13 +12,13 @@ function MessageBubble({ message, isUser, timestamp }) {
       </div>
       
       {/* Message bubble */}
-      <div className={`max-w-[75%] ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
-        <div className={`rounded-2xl px-4 py-2 break-words ${
+      <div className={`max-w-[70%] min-w-0 ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
+        <div className={`rounded-2xl px-4 py-2 break-words word-wrap overflow-wrap-anywhere ${
           isUser 
             ? 'bg-blue-500 text-white rounded-br-md' 
             : 'bg-gray-200 text-gray-800 rounded-bl-md'
         }`}>
-          <p className="text-sm leading-relaxed">{message}</p>
+          <p className="text-sm leading-relaxed break-words">{message}</p>
         </div>
         
         {/* Timestamp */}
@@ -131,8 +131,8 @@ export default function ChatInterface({
         <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mb-6">
           <MessageCircle size={48} className="text-gray-400" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Chat Inactive</h2>
-        <p className="text-gray-600">Start a session to begin chatting</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">チャット停止中</h2>
+        <p className="text-gray-600">セッションを開始してチャットを始めましょう</p>
       </div>
     );
   }
@@ -146,8 +146,8 @@ export default function ChatInterface({
             <MessageCircle size={16} className="text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-800">AI Assistant</h3>
-            <p className="text-xs text-green-600">Online</p>
+            <h3 className="font-semibold text-gray-800">AIアシスタント</h3>
+            <p className="text-xs text-green-600">オンライン</p>
           </div>
         </div>
       </div>
@@ -156,8 +156,8 @@ export default function ChatInterface({
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {messages.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-gray-500 mb-2">No messages yet</p>
-            <p className="text-sm text-gray-400">Send a message to start the conversation</p>
+            <p className="text-gray-500 mb-2">まだメッセージがありません</p>
+            <p className="text-sm text-gray-400">メッセージを送信して会話を始めましょう</p>
           </div>
         ) : (
           messages.map((msg) => (
@@ -175,7 +175,7 @@ export default function ChatInterface({
       </div>
 
       {/* Input area */}
-      <div className="border-t border-gray-200 p-4 bg-white">
+      <div className="border-t border-gray-200 p-4 bg-white safe-area-bottom">
         <div className="flex gap-2 items-end">
           <div className="flex-1 min-w-0">
             <textarea
@@ -183,16 +183,22 @@ export default function ChatInterface({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Type a message..."
-              className="w-full p-3 border border-gray-300 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              placeholder="メッセージを入力..."
+              className="w-full p-3 border border-gray-300 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm overflow-hidden"
               rows={1}
-              style={{ minHeight: '44px', maxHeight: '120px' }}
+              style={{ 
+                minHeight: '44px', 
+                maxHeight: '120px',
+                lineHeight: '1.5',
+                wordWrap: 'break-word',
+                overflowWrap: 'break-word'
+              }}
             />
           </div>
           <button
             onClick={handleSendMessage}
             disabled={!message.trim()}
-            className={`p-3 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors ${
+            className={`p-3 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors flex-shrink-0 ${
               message.trim()
                 ? 'bg-blue-500 hover:bg-blue-600 text-white'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'

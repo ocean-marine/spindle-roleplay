@@ -106,7 +106,7 @@ export default function SettingsScreen({
   };
 
   const handleResetSettings = () => {
-    if (window.confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.')) {
+    if (window.confirm('すべての設定をデフォルトにリセットしてよろしいですか？この操作は元に戻せません。')) {
       setSettings({
         audioEnabled: true,
         microphoneEnabled: true,
@@ -129,15 +129,15 @@ export default function SettingsScreen({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Settings size={32} className="text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Settings</h1>
-          <p className="text-gray-600">Customize your experience</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">設定</h1>
+          <p className="text-gray-600">あなたの体験をカスタマイズ</p>
         </div>
 
         {/* Audio Settings */}
-        <SettingSection title="Audio & Voice" icon={Volume2}>
+        <SettingSection title="オーディオと音声" icon={Volume2}>
           <SettingItem 
             label="Voice Model"
-            description="Select the AI voice for conversation"
+            description="会話用のAI音声を選択"
           >
             <select
               value={selectedVoice}
@@ -153,8 +153,8 @@ export default function SettingsScreen({
           </SettingItem>
 
           <SettingItem 
-            label="Audio Output"
-            description="Enable sound from AI responses"
+            label="オーディオ出力"
+            description="AI応答からの音声を有効化"
           >
             <ToggleSwitch
               enabled={settings.audioEnabled}
@@ -163,8 +163,8 @@ export default function SettingsScreen({
           </SettingItem>
 
           <SettingItem 
-            label="Microphone Access"
-            description="Allow voice input during sessions"
+            label="マイクアクセス"
+            description="セッション中の音声入力を許可"
           >
             <ToggleSwitch
               enabled={settings.microphoneEnabled}
@@ -174,10 +174,10 @@ export default function SettingsScreen({
         </SettingSection>
 
         {/* Interface Settings */}
-        <SettingSection title="Interface" icon={Smartphone}>
+        <SettingSection title="インターフェース" icon={Smartphone}>
           <SettingItem 
-            label="Auto-scroll Messages"
-            description="Automatically scroll to new messages"
+            label="メッセージ自動スクロール"
+            description="新しいメッセージに自動でスクロール"
           >
             <ToggleSwitch
               enabled={settings.autoScroll}
@@ -186,8 +186,8 @@ export default function SettingsScreen({
           </SettingItem>
 
           <SettingItem 
-            label="Dark Mode"
-            description="Use dark color scheme"
+            label="ダークモード"
+            description="ダークカラースキームを使用"
             disabled={true}
           >
             <ToggleSwitch
@@ -198,8 +198,8 @@ export default function SettingsScreen({
           </SettingItem>
 
           <SettingItem 
-            label="Reduced Motion"
-            description="Minimize animations and transitions"
+            label="モーション減少"
+            description="アニメーションとトランジションを最小化"
           >
             <ToggleSwitch
               enabled={settings.reducedMotion}
@@ -208,8 +208,8 @@ export default function SettingsScreen({
           </SettingItem>
 
           <SettingItem 
-            label="High Contrast"
-            description="Increase color contrast for better visibility"
+            label="高コントラスト"
+            description="視認性向上のため色のコントラストを強化"
           >
             <ToggleSwitch
               enabled={settings.highContrast}
@@ -219,10 +219,10 @@ export default function SettingsScreen({
         </SettingSection>
 
         {/* Notifications */}
-        <SettingSection title="Notifications" icon={Bell}>
+        <SettingSection title="通知" icon={Bell}>
           <SettingItem 
-            label="Push Notifications"
-            description="Receive notifications for important events"
+            label="プッシュ通知"
+            description="重要なイベントの通知を受信"
           >
             <ToggleSwitch
               enabled={settings.notificationsEnabled}
@@ -231,8 +231,8 @@ export default function SettingsScreen({
           </SettingItem>
 
           <SettingItem 
-            label="Vibration"
-            description="Vibrate on mobile devices for alerts"
+            label="バイブレーション"
+            description="アラート時にモバイルデバイスを振動"
           >
             <ToggleSwitch
               enabled={settings.vibrationEnabled}
@@ -242,43 +242,43 @@ export default function SettingsScreen({
         </SettingSection>
 
         {/* Data & Privacy */}
-        <SettingSection title="Data & Privacy" icon={Shield}>
+        <SettingSection title="データとプライバシー" icon={Shield}>
           <SettingItem 
-            label="Export Settings"
-            description="Download your settings as a JSON file"
+            label="設定のエクスポート"
+            description="設定をJSONファイルとしてダウンロード"
           >
             <button
               onClick={handleExportData}
               className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors"
             >
               <Download size={14} />
-              Export
+エクスポート
             </button>
           </SettingItem>
 
           <SettingItem 
-            label="Reset Settings"
-            description="Restore all settings to defaults"
+            label="設定をリセット"
+            description="すべての設定をデフォルトに復元"
           >
             <button
               onClick={handleResetSettings}
               className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors"
             >
               <RefreshCw size={14} />
-              Reset
+リセット
             </button>
           </SettingItem>
         </SettingSection>
 
         {/* App Information */}
-        <SettingSection title="About" icon={Info}>
+        <SettingSection title="アケウト" icon={Info}>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Version</span>
+              <span className="text-gray-600">バージョン</span>
               <span className="font-medium">2.0.0 Mobile</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Build</span>
+              <span className="text-gray-600">ビルド</span>
               <span className="font-medium">Mobile-First Redesign</span>
             </div>
             <div className="flex justify-between">
@@ -290,7 +290,7 @@ export default function SettingsScreen({
           <div className="pt-4 border-t border-gray-200">
             <button className="flex items-center gap-2 text-blue-600 hover:text-blue-700">
               <HelpCircle size={16} />
-              <span className="text-sm">Help & Support</span>
+              <span className="text-sm">ヘルプとサポート</span>
             </button>
           </div>
         </SettingSection>

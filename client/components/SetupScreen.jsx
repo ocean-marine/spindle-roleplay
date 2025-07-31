@@ -60,19 +60,19 @@ export default function SetupScreen({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Settings size={32} className="text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Session Setup</h1>
-          <p className="text-gray-600">Configure your AI voice assistant</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">セッションセットアップ</h1>
+          <p className="text-gray-600">AI音声アシスタントを設定してください</p>
         </div>
 
         {/* Voice Selection */}
         <ExpandableSection 
-          title="Voice Selection" 
+          title="音声選択" 
           defaultExpanded={true}
           icon={Settings}
         >
           <div className="pt-3">
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Choose AI Voice
+              AI音声を選択
             </label>
             <div className="grid grid-cols-2 gap-2">
               {VOICE_OPTIONS.map((voice) => (
@@ -90,55 +90,55 @@ export default function SetupScreen({
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-2">
-              Selected: <span className="font-medium">{selectedVoice}</span>
+              選択済み: <span className="font-medium">{selectedVoice}</span>
             </p>
           </div>
         </ExpandableSection>
 
         {/* Instructions */}
         <ExpandableSection 
-          title="System Instructions" 
+          title="システム指示" 
           defaultExpanded={false}
         >
           <div className="pt-3">
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Custom Instructions (Optional)
+              カスタム指示（オプション）
             </label>
             <textarea
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
-              placeholder="Enter instructions for the AI assistant..."
+              placeholder="AIアシスタントへの指示を入力..."
               className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows={4}
             />
             <p className="text-xs text-gray-500 mt-2">
-              These instructions will guide the AI's behavior during the session.
+              これらの指示はセッション中のAIの動作をガイドします。
             </p>
           </div>
         </ExpandableSection>
 
         {/* Session Info */}
         <ExpandableSection 
-          title="Session Information" 
+          title="セッション情報" 
           defaultExpanded={false}
         >
           <div className="pt-3 space-y-3">
             <div className="bg-blue-50 rounded-lg p-3">
-              <h4 className="font-medium text-blue-800 mb-1">Features</h4>
+              <h4 className="font-medium text-blue-800 mb-1">機能</h4>
               <ul className="text-sm text-blue-700 space-y-1">
-                <li>• Real-time voice conversation</li>
-                <li>• Text messaging support</li>
-                <li>• Color palette generation tool</li>
-                <li>• Session event logging</li>
+                <li>• リアルタイム音声会話</li>
+                <li>• テキストメッセージサポート</li>
+                <li>• カラーパレット生成ツール</li>
+                <li>• セッションイベントログ</li>
               </ul>
             </div>
             
             <div className="bg-amber-50 rounded-lg p-3">
-              <h4 className="font-medium text-amber-800 mb-1">Requirements</h4>
+              <h4 className="font-medium text-amber-800 mb-1">要件</h4>
               <ul className="text-sm text-amber-700 space-y-1">
-                <li>• Microphone access required</li>
-                <li>• Stable internet connection</li>
-                <li>• Modern browser with WebRTC support</li>
+                <li>• マイクアクセスが必要</li>
+                <li>• 安定したインターネット接続</li>
+                <li>• WebRTCサポートのモダンブラウザ</li>
               </ul>
             </div>
           </div>
@@ -156,11 +156,11 @@ export default function SetupScreen({
             }`}
             icon={<Play size={20} />}
           >
-            {isStarting ? 'Starting Session...' : 'Start Voice Session'}
+            {isStarting ? 'セッション開始中...' : '音声セッション開始'}
           </Button>
           
           <p className="text-center text-xs text-gray-500 mt-3">
-            By starting a session, you agree to share audio data with OpenAI's Realtime API
+            セッションを開始することで、OpenAIのRealtime APIと音声データを共有することに同意します
           </p>
         </div>
       </div>
