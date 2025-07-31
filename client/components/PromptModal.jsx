@@ -6,7 +6,8 @@ export default function PromptModal({
   isOpen, 
   onClose, 
   promptText, 
-  onStartSession 
+  onStartSession,
+  hasSettingsChanges = true
 }) {
   const [editedPrompt, setEditedPrompt] = useState("");
 
@@ -23,7 +24,7 @@ export default function PromptModal({
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800">
-            生成されたプロンプト
+            {hasSettingsChanges ? '生成されたプロンプト' : 'カスタム指示入力'}
           </h2>
           <button
             onClick={onClose}
@@ -36,7 +37,10 @@ export default function PromptModal({
         {/* Content */}
         <div className="p-4">
           <p className="text-sm text-gray-600 mb-4">
-            プロンプトを確認・編集して会話を始めます
+            {hasSettingsChanges 
+              ? 'プロンプトを確認・編集して会話を始めます' 
+              : 'カスタム指示を入力して会話を始めます'
+            }
           </p>
           
           <div className="mb-6">
@@ -44,7 +48,10 @@ export default function PromptModal({
               value={editedPrompt}
               onChange={(e) => setEditedPrompt(e.target.value)}
               className="w-full h-60 p-4 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
-              placeholder="プロンプトを入力してください..."
+              placeholder={hasSettingsChanges 
+                ? 'プロンプトを入力してください...' 
+                : 'AIアシスタントへのカスタム指示を入力してください...'
+              }
             />
           </div>
 
