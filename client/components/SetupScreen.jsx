@@ -93,7 +93,7 @@ export default function SetupScreen({
           // Generate prompt using Groq service
           promptToUse = await groqService.generateDetailedInstructions(context);
         } else {
-          promptToUse = "自然な日本語で応対します。";
+          promptToUse = "";
         }
       }
       
