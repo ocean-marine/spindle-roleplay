@@ -132,7 +132,7 @@ export default function VoiceInterface({
           ) : (
             <>
               <VolumeX size={16} className="text-gray-400" />
-              <span className="text-sm font-medium text-gray-500">無音"
+              <span className="text-sm font-medium text-gray-500">無音</span>
             </>
           )}
         </div>
