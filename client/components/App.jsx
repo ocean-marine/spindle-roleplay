@@ -9,6 +9,7 @@ export default function App() {
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState("alloy");
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -42,7 +43,7 @@ export default function App() {
 
     const baseUrl = "https://api.openai.com/v1/realtime";
     const model = "gpt-4o-realtime-preview-2024-12-17";
-    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+    const sdpResponse = await fetch(`${baseUrl}?model=${model}&voice=${selectedVoice}`, {
       method: "POST",
       body: offer.sdp,
       headers: {
@@ -207,6 +208,8 @@ export default function App() {
                 sendTextMessage={sendTextMessage}
                 events={events}
                 isSessionActive={isSessionActive}
+                selectedVoice={selectedVoice}
+                setSelectedVoice={setSelectedVoice}
               />
             </section>
           </div>
@@ -219,6 +222,8 @@ export default function App() {
             sendTextMessage={sendTextMessage}
             events={events}
             isSessionActive={isSessionActive}
+            selectedVoice={selectedVoice}
+            setSelectedVoice={setSelectedVoice}
           />
         </section>
       </main>
