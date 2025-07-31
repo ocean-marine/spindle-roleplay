@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:client && mv dist/client client",
-  "outputDirectory": "client",
+  "buildCommand": "npm run build:client",
+  "outputDirectory": "dist/client",
   "functions": {
     "api/server.js": {
       "maxDuration": 10
