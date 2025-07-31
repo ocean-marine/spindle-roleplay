@@ -16,7 +16,7 @@ function SessionStopped({ startSession }) {
     <div className="flex items-center justify-center w-full h-full">
       <Button
         onClick={handleStartSession}
-        className={isActivating ? "bg-gray-600" : "bg-red-600"}
+        className={`text-sm md:text-base px-4 md:px-6 py-3 md:py-4 ${isActivating ? "bg-gray-600" : "bg-red-600"}`}
         icon={<CloudLightning height={16} />}
       >
         {isActivating ? "starting session..." : "start session"}
@@ -34,7 +34,7 @@ function SessionActive({ stopSession, sendTextMessage }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full gap-4">
+    <div className="flex flex-col md:flex-row items-center justify-center w-full h-full gap-2 md:gap-4">
       <input
         onKeyDown={(e) => {
           if (e.key === "Enter" && message.trim()) {
@@ -43,24 +43,32 @@ function SessionActive({ stopSession, sendTextMessage }) {
         }}
         type="text"
         placeholder="send a text message..."
-        className="border border-gray-200 rounded-full p-4 flex-1"
+        className="border border-gray-200 rounded-full p-3 md:p-4 flex-1 w-full md:w-auto text-sm md:text-base min-h-[44px]"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <Button
-        onClick={() => {
-          if (message.trim()) {
-            handleSendClientEvent();
-          }
-        }}
-        icon={<MessageSquare height={16} />}
-        className="bg-blue-400"
-      >
-        send text
-      </Button>
-      <Button onClick={stopSession} icon={<CloudOff height={16} />}>
-        disconnect
-      </Button>
+      <div className="flex gap-2 w-full md:w-auto">
+        <Button
+          onClick={() => {
+            if (message.trim()) {
+              handleSendClientEvent();
+            }
+          }}
+          icon={<MessageSquare height={16} />}
+          className="bg-blue-400 flex-1 md:flex-none px-3 md:px-4 py-3 text-sm md:text-base min-h-[44px]"
+        >
+          <span className="hidden md:inline">send text</span>
+          <span className="md:hidden">send</span>
+        </Button>
+        <Button 
+          onClick={stopSession} 
+          icon={<CloudOff height={16} />}
+          className="flex-1 md:flex-none px-3 md:px-4 py-3 text-sm md:text-base min-h-[44px]"
+        >
+          <span className="hidden md:inline">disconnect</span>
+          <span className="md:hidden">end</span>
+        </Button>
+      </div>
     </div>
   );
 }
