@@ -335,6 +335,8 @@ export default function App() {
             selectedVoice={selectedVoice}
             setSelectedVoice={setSelectedVoice}
             VOICE_OPTIONS={VOICE_OPTIONS}
+            instructions={instructions}
+            setInstructions={setInstructions}
           />
         );
       
