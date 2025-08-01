@@ -154,16 +154,12 @@ export default function SetupScreen({
             <Settings size={32} className="text-blue-600" />
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">AIロールプレイング</h1>
-          <p className="text-gray-600">AI音声アシスタントを設定してください</p>
         </div>
 
         {/* Purpose Setting */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 text-sm font-semibold">🎯</span>
-            </div>
-            <h3 className="font-semibold text-gray-800">ロープレの目的</h3>
+            <h2 className="font-semibold text-gray-800">ロープレの目的</h2>
           </div>
           <textarea
             value={purpose}
@@ -172,9 +168,6 @@ export default function SetupScreen({
             className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={2}
           />
-          <p className="text-xs text-gray-500 mt-2">
-            この目的はAIの行動や反応に影響しますが、生成されるプロンプトには直接含まれません
-          </p>
         </div>
 
         {/* Persona Settings */}
