@@ -159,7 +159,7 @@ export default function SetupScreen({
         {/* Purpose Setting */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <div className="flex items-center gap-3 mb-3">
-            <h2 className="font-semibold text-gray-800">目的</h2>
+            <h2 className="text-lg font-semibold text-gray-800">目的</h2>
           </div>
           <textarea
             value={purpose}
