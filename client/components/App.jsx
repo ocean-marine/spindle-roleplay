@@ -19,6 +19,9 @@ export default function App() {
   const [instructions, setInstructions] = useState("自然な日本語で応対します。");
   const [activeTab, setActiveTab] = useState("setup");
   
+  // Purpose setting
+  const [purpose, setPurpose] = useState("");
+  
   // Persona settings
   const [personaSettings, setPersonaSettings] = useState({
     age: "",
@@ -250,7 +253,7 @@ export default function App() {
         }
       });
     }
-  }, [dataChannel, instructions, personaSettings, sceneSettings]);
+  }, [dataChannel, instructions, personaSettings, sceneSettings, purpose]);
 
   // Handle tab switching with swipe gestures
   const handleSwipeLeft = () => {
@@ -300,6 +303,8 @@ export default function App() {
             setSelectedVoice={setSelectedVoice}
             instructions={instructions}
             setInstructions={setInstructions}
+            purpose={purpose}
+            setPurpose={setPurpose}
             personaSettings={personaSettings}
             setPersonaSettings={setPersonaSettings}
             sceneSettings={sceneSettings}

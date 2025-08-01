@@ -59,26 +59,32 @@ class GroqService {
    * 高度なロールプレイング用プロンプトを生成
    * 心理的没入感を最大化するメタプロンプトシステム
    */
-  async generateImmersiveRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high') {
-    const roleplayContext = this._buildImmersiveContext(personaSettings, sceneSettings, intensity);
+  async generateImmersiveRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+    const roleplayContext = this._buildImmersiveContext(personaSettings, sceneSettings, intensity, purpose);
     return this.generateDetailedInstructions(roleplayContext);
   }
 
   /**
    * 没入感を高めるコンテキストを構築
    */
-  _buildImmersiveContext(personaSettings, sceneSettings, intensity) {
+  _buildImmersiveContext(personaSettings, sceneSettings, intensity, purpose) {
     const contextParts = [];
+    
+    // 目的に基づく行動指針（プロンプトには直接含めず、内部的に使用）
+    if (purpose && purpose.trim()) {
+      const purposeGuidance = this._createPurposeGuidance(purpose, intensity);
+      contextParts.push(`【目的に基づく行動指針】\n${purposeGuidance}`);
+    }
     
     // ペルソナの深層心理構築
     if (personaSettings) {
-      const personaDepth = this._createPersonaDepth(personaSettings, intensity);
+      const personaDepth = this._createPersonaDepth(personaSettings, intensity, purpose);
       contextParts.push(`【ペルソナの深層設定】\n${personaDepth}`);
     }
     
     // シーンの立体的構築
     if (sceneSettings) {
-      const sceneImmersion = this._createSceneImmersion(sceneSettings, intensity);
+      const sceneImmersion = this._createSceneImmersion(sceneSettings, intensity, purpose);
       contextParts.push(`【シーンの没入設定】\n${sceneImmersion}`);
     }
     
@@ -89,9 +95,37 @@ class GroqService {
   }
 
   /**
+   * 目的に基づく行動指針を生成
+   */
+  _createPurposeGuidance(purpose, intensity) {
+    const parts = [];
+    
+    parts.push(`実際の目的: ${purpose}`);
+    
+    // 目的に応じた行動パターンの調整指針
+    if (purpose.includes('契約') || purpose.includes('購入') || purpose.includes('営業')) {
+      parts.push('慎重さを示し、リアリティを高めるために適度な抵抗感や検討時間を表現する');
+      parts.push('専門的な質問や懸念点を自然に提起し、現実的な交渉の雰囲気を作り出す');
+    } else if (purpose.includes('雑談') || purpose.includes('会話') || purpose.includes('談笑')) {
+      parts.push('リラックスした雰囲気で、相手との距離感を自然に縮める話題を選ぶ');
+      parts.push('日常的な話題や共通点を見つけて、親近感のある対話を展開する');
+    } else if (purpose.includes('練習') || purpose.includes('訓練') || purpose.includes('スキル')) {
+      parts.push('学習者の成長を促すような適度な挑戦や建設的なフィードバックを含める');
+      parts.push('現実的な状況設定で、実践的な経験値を高められる環境を作る');
+    } else if (purpose.includes('面接') || purpose.includes('プレゼン')) {
+      parts.push('適度な緊張感を維持しながら、相手の能力を引き出す質問を投げかける');
+      parts.push('プロフェッショナルな態度を保ちつつ、人間味のある反応も織り交ぜる');
+    }
+    
+    parts.push('重要: 目的そのものは明示せず、自然な行動パターンとして表現すること');
+    
+    return parts.join('\n');
+  }
+
+  /**
    * ペルソナの深層心理を構築
    */
-  _createPersonaDepth(persona, intensity) {
+  _createPersonaDepth(persona, intensity, purpose = '') {
     const parts = [];
     
     if (persona.age) {
@@ -125,7 +159,7 @@ class GroqService {
   /**
    * シーンの立体的没入感を構築
    */
-  _createSceneImmersion(scene, intensity) {
+  _createSceneImmersion(scene, intensity, purpose = '') {
     const parts = [];
     
     if (scene.appointmentBackground) {
