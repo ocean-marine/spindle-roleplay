@@ -44,18 +44,11 @@ export default function App() {
 
   const VOICE_OPTIONS = [
     "alloy",
-    "ash", 
-    "ballad",
-    "breeze",
-    "coral",
-    "echo",
-    "ember",
-    "fable",
-    "juniper",
     "nova",
-    "sage",
-    "shimmer",
-    "verse"
+    "echo",
+    "fable",
+    "onyx",
+    "shimmer"
   ];
 
   async function startSession() {
