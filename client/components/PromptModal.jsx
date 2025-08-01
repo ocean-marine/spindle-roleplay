@@ -99,7 +99,7 @@ export default function PromptModal({
         <div className="p-4 max-h-[calc(85vh-80px)] overflow-y-auto">
           <p className="text-sm text-gray-600 mb-4">
             {hasSettingsChanges 
-              ? 'プロンプトを確認・編集して会話を始めます' 
+              ? '生成されたロールプレイング用プロンプトを確認・編集して会話を始めます。このプロンプトはAIが完全にペルソナになりきるよう設計されています。' 
               : 'カスタム指示を入力して会話を始めます'
             }
           </p>
