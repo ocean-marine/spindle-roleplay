@@ -3,6 +3,7 @@ import { ChevronDown, ChevronUp, Play, Settings, User, MapPin } from "react-feat
 import Button from "./Button";
 import groqService from "../services/groq";
 import PromptModal from "./PromptModal";
+import { selectVoiceByRules } from "../utils/voiceSelection";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
@@ -63,6 +64,14 @@ export default function SetupScreen({
   const handleGeneratePrompt = async () => {
     setIsStarting(true);
     try {
+      // Auto-select voice based on persona settings
+      const autoSelectedVoice = selectVoiceByRules(
+        personaSettings.age, 
+        personaSettings.gender, 
+        VOICE_OPTIONS
+      );
+      setSelectedVoice(autoSelectedVoice);
+      
       let promptToUse = "";
       const hasChanges = hasPersonaChanges() || hasSceneChanges();
       
@@ -140,41 +149,11 @@ export default function SetupScreen({
           <p className="text-gray-600">AI音声アシスタントを設定してください</p>
         </div>
 
-        {/* Voice Selection */}
-        <ExpandableSection 
-          title="音声選択" 
-          defaultExpanded={true}
-          icon={Settings}
-        >
-          <div className="pt-3">
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              AI音声を選択
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              {VOICE_OPTIONS.map((voice) => (
-                <button
-                  key={voice}
-                  onClick={() => setSelectedVoice(voice)}
-                  className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                    selectedVoice === voice
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  {voice}
-                </button>
-              ))}
-            </div>
-            <p className="text-xs text-gray-500 mt-2">
-              選択済み: <span className="font-medium">{selectedVoice}</span>
-            </p>
-          </div>
-        </ExpandableSection>
 
         {/* Persona Settings */}
         <ExpandableSection 
           title="AIペルソナ設定" 
-          defaultExpanded={false}
+          defaultExpanded={true}
           icon={User}
         >
           <div className="pt-3 space-y-4">
@@ -372,6 +351,9 @@ export default function SetupScreen({
           promptText={generatedPrompt}
           onStartSession={handleStartSession}
           hasSettingsChanges={hasPersonaChanges() || hasSceneChanges()}
+          selectedVoice={selectedVoice}
+          setSelectedVoice={setSelectedVoice}
+          VOICE_OPTIONS={VOICE_OPTIONS}
         />
       </div>
     </div>
