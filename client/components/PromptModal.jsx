@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Play, Volume2 } from "react-feather";
+import { X, Play, Volume2, Headphones } from "react-feather";
 import Button from "./Button";
 import { getVoiceDescription } from "../utils/voiceSelection";
 
@@ -14,11 +14,68 @@ export default function PromptModal({
   VOICE_OPTIONS = []
 }) {
   const [editedPrompt, setEditedPrompt] = useState("");
+  const [isTestingVoice, setIsTestingVoice] = useState(false);
+  const [testAudio, setTestAudio] = useState(null);
 
   // Update edited prompt when promptText changes
   useEffect(() => {
     setEditedPrompt(promptText);
   }, [promptText]);
+
+  // Clean up audio when modal closes
+  useEffect(() => {
+    if (!isOpen && testAudio) {
+      testAudio.pause();
+      setTestAudio(null);
+    }
+  }, [isOpen, testAudio]);
+
+  // Function to test voice
+  const testVoice = async () => {
+    if (!selectedVoice) return;
+    
+    setIsTestingVoice(true);
+    
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          voice: selectedVoice,
+          text: 'こんにちは。この音声でAIアシスタントが話します。'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('音声生成に失敗しました');
+      }
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      
+      setTestAudio(audio);
+      
+      audio.onended = () => {
+        setIsTestingVoice(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.onerror = () => {
+        setIsTestingVoice(false);
+        URL.revokeObjectURL(audioUrl);
+        alert('音声の再生に失敗しました');
+      };
+
+      await audio.play();
+    } catch (error) {
+      console.error('Voice test error:', error);
+      setIsTestingVoice(false);
+      alert('音声テストに失敗しました: ' + error.message);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -68,9 +125,19 @@ export default function PromptModal({
                   ))}
                 </select>
               </div>
-              <p className="text-xs text-blue-600">
-                {getVoiceDescription(selectedVoice)} | ペルソナ設定に基づいて自動選択されました
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-xs text-blue-600">
+                  {getVoiceDescription(selectedVoice)} | ペルソナ設定に基づいて自動選択されました
+                </p>
+                <button
+                  onClick={testVoice}
+                  disabled={isTestingVoice}
+                  className="flex items-center gap-1 px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Headphones size={12} />
+                  {isTestingVoice ? '再生中...' : '音声テスト'}
+                </button>
+              </div>
             </div>
           )}
           
