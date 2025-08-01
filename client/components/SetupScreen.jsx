@@ -159,7 +159,7 @@ export default function SetupScreen({
         {/* Purpose Setting */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
           <div className="flex items-center gap-3 mb-3">
-            <h2 className="font-semibold text-gray-800">ロープレの目的</h2>
+            <h2 className="font-semibold text-gray-800">目的</h2>
           </div>
           <textarea
             value={purpose}
@@ -386,12 +386,8 @@ export default function SetupScreen({
             }`}
             icon={<Play size={20} />}
           >
-            {isStarting ? 'プロンプト生成中...' : 'プロンプト生成'}
+            {isStarting ? 'プロンプト生成中...' : 'ロープレ開始'}
           </Button>
-          
-          <p className="text-center text-xs text-gray-500 mt-3">
-            セッションを開始することで、OpenAIのRealtime APIと音声データを共有することに同意します
-          </p>
         </div>
 
         {/* Prompt Modal */}
