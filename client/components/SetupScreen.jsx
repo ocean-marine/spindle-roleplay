@@ -150,14 +150,14 @@ export default function SetupScreen({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Settings size={32} className="text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">セッションセットアップ</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">AIロールプレイング</h1>
           <p className="text-gray-600">AI音声アシスタントを設定してください</p>
         </div>
 
 
         {/* Persona Settings */}
         <ExpandableSection 
-          title="AIペルソナ設定" 
+          title="ペルソナ" 
           defaultExpanded={false}
           icon={User}
         >
@@ -244,7 +244,7 @@ export default function SetupScreen({
 
         {/* Scene Settings */}
         <ExpandableSection 
-          title="シーン設定" 
+          title="シーン" 
           defaultExpanded={false}
           icon={MapPin}
         >
