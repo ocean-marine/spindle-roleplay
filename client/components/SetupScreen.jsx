@@ -319,12 +319,6 @@ export default function SetupScreen({
                 rows={2}
               />
             </div>
-
-            <div className="bg-blue-50 rounded-lg p-3">
-              <p className="text-sm text-blue-700">
-                これらの設定は会話の文脈を作り出し、より自然な対話を可能にします。
-              </p>
-            </div>
           </div>
         </ExpandableSection>
 
