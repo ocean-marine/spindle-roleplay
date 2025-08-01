@@ -158,7 +158,7 @@ export default function SetupScreen({
         {/* Persona Settings */}
         <ExpandableSection 
           title="AIペルソナ設定" 
-          defaultExpanded={true}
+          defaultExpanded={false}
           icon={User}
         >
           <div className="pt-3 space-y-4">
@@ -325,7 +325,7 @@ export default function SetupScreen({
         {/* Immersion Level Settings */}
         <ExpandableSection 
           title="ロープレ没入度設定" 
-          defaultExpanded={true}
+          defaultExpanded={false}
           icon={Settings}
         >
           <div className="pt-3 space-y-4">
