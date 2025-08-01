@@ -49,6 +49,7 @@ export default function SetupScreen({
   const [isStarting, setIsStarting] = useState(false);
   const [showPromptModal, setShowPromptModal] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
+  const [immersionLevel, setImmersionLevel] = useState("high");
 
   // Check if persona and scene settings have been changed from defaults
   const hasPersonaChanges = () => {
@@ -106,8 +107,12 @@ export default function SetupScreen({
         const context = contextParts.join('\n');
         
         if (context.trim()) {
-          // Generate prompt using Groq service
-          promptToUse = await groqService.generateDetailedInstructions(context);
+          // Generate immersive roleplay prompt using enhanced system
+          promptToUse = await groqService.generateImmersiveRoleplayPrompt(
+            personaSettings, 
+            sceneSettings, 
+            immersionLevel
+          );
         }
       }
       // If no changes, promptToUse remains empty and modal will show custom input
@@ -323,6 +328,42 @@ export default function SetupScreen({
           </div>
         </ExpandableSection>
 
+        {/* Immersion Level Settings */}
+        <ExpandableSection 
+          title="ロープレ没入度設定" 
+          defaultExpanded={true}
+          icon={Settings}
+        >
+          <div className="pt-3 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                没入度レベル
+              </label>
+              <select
+                value={immersionLevel}
+                onChange={(e) => setImmersionLevel(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="high">最高（完全没入モード）</option>
+                <option value="medium">中程度（バランス重視）</option>
+              </select>
+              <p className="text-xs text-gray-500 mt-2">
+                {immersionLevel === 'high' 
+                  ? '五感・身体感覚・感情を詳細に設定し、AIが完全にペルソナになりきる最大没入モード'
+                  : '適度な没入感を保ちながら、実用性を重視したバランス型モード'
+                }
+              </p>
+            </div>
+            
+            <div className="bg-purple-50 rounded-lg p-3">
+              <h4 className="text-sm font-medium text-purple-800 mb-2">🎭 ロールプレイング機能について</h4>
+              <p className="text-xs text-purple-700">
+                この機能は、AIが指定されたペルソナに完全になりきるためのメタプロンプトを生成します。
+                AIは自分がAIであることを忘れ、設定されたキャラクターとして自然に振る舞います。
+              </p>
+            </div>
+          </div>
+        </ExpandableSection>
 
         {/* Generate Prompt Button */}
         <div className="pt-6">
