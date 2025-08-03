@@ -351,8 +351,24 @@ export default function App() {
 
   // 認証されていない場合は認証画面を表示
   if (!isAuthenticated) {
+    // Remove app-mode class for auth screen
+    useEffect(() => {
+      document.body.classList.remove('app-mode');
+      return () => {
+        document.body.classList.add('app-mode');
+      };
+    }, []);
+    
     return <AuthScreen onAuthenticated={handleAuthenticated} />;
   }
+
+  // Add app-mode class for main app
+  useEffect(() => {
+    document.body.classList.add('app-mode');
+    return () => {
+      document.body.classList.remove('app-mode');
+    };
+  }, []);
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">

@@ -17,12 +17,16 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   font-family: "Consolas", "Andale Mono", monospace;
   font-size: 0.9rem;
   background-color: var(--color-base);
   -webkit-text-size-adjust: 100%;
   touch-action: manipulation;
+}
+
+/* Only hide overflow for main app, not auth screen */
+body.app-mode {
+  overflow: hidden;
 }
 
 /* Improve mobile touch targets and scrolling */
