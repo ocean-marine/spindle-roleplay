@@ -97,13 +97,10 @@ class GroqService {
   }
 
   /**
-   * 目的を構築
+   * 魂の奥底に潜む目的を詩的に紡ぐ
+   * 表面的な意図を血の通った人間的動機へと昇華させる
    */
-  _buildPurpose(purpose, intensity) {
-    if (intensity === 'high') {
-      return this._weavePoeticalPurpose(purpose, intensity);
-    }
-    
+  _weavePoeticalPurpose(purpose, intensity) {
     const purposeParts = [];
     
     purposeParts.push(`目的: ${purpose}`);
@@ -126,38 +123,6 @@ class GroqService {
     purposeParts.push('この目的は直接的に表現せず、自然な会話の中で体現する');
     
     return purposeParts.join('\n');
-  }
-
-  /**
-   * 魂の奥底に潜む目的を詩的に紡ぐ
-   * 表面的な意図を血の通った人間的動機へと昇華させる
-   */
-  _weavePoeticalPurpose(purpose, intensity) {
-    const poeticVerses = [];
-    
-    poeticVerses.push(`≪ 心の深層に宿る真の目的 ≫`);
-    poeticVerses.push(`${purpose}`);
-    poeticVerses.push('');
-    
-    // 目的に応じた魂の動きを詩的に表現
-    if (purpose.includes('契約') || purpose.includes('購入') || purpose.includes('営業')) {
-      poeticVerses.push('慎重さという名の知恵が心に宿り、質問という探求の光で真実を照らす');
-      poeticVerses.push('専門的な深淵に対する畏敬と、現実的な判断への渇望が胸に燃える');
-    } else if (purpose.includes('雑談') || purpose.includes('会話') || purpose.includes('談笑')) {
-      poeticVerses.push('心の扉を開き、相手との距離を縮める温もりが魂を満たす');
-      poeticVerses.push('日常という名の宝石を磨き、共感という橋を架ける喜びに包まれる');
-    } else if (purpose.includes('練習') || purpose.includes('訓練') || purpose.includes('スキル')) {
-      poeticVerses.push('学びへの渇望が血潮に宿り、成長という光明への憧憬が心を駆動する');
-      poeticVerses.push('挑戦という試練を受け入れ、技能という翼を育む意志が燃える');
-    } else if (purpose.includes('面接') || purpose.includes('プレゼン')) {
-      poeticVerses.push('緊張という美しい震えが魂を研ぎ澄まし、相手への真摯な関心が心を照らす');
-      poeticVerses.push('対話という芸術を通じて、互いの本質を見極める智慧への憧れが宿る');
-    }
-    
-    poeticVerses.push('');
-    poeticVerses.push('この目的は言葉として表に現れることなく、存在そのものに織り込まれ、自然な対話の中で静かに息づく');
-    
-    return poeticVerses.join('\n');
   }
 
   /**
@@ -195,14 +160,11 @@ class GroqService {
   }
 
   /**
-   * シーン情報を構築
+   * 舞台という名の詩的現実の構築
+   * シーンを五感と感情が織りなす立体的な詩として創造する
    */
-  _buildScene(scene, intensity, purpose = '') {
-    if (intensity === 'high') {
-      return this._createScenePoetry(scene, intensity, purpose);
-    }
-    
-    const sceneParts = [];
+  _createScenePoetry(scene, intensity, purpose = '') {
+    const scenicVerses = [];
     
     if (scene.appointmentBackground) {
       sceneParts.push(`背景: ${scene.appointmentBackground}から生まれる状況や関係者の思惑`);
@@ -230,57 +192,6 @@ class GroqService {
     }
     
     return sceneParts.join('\n');
-  }
-
-  /**
-   * 舞台という名の詩的現実の構築
-   * シーンを五感と感情が織りなす立体的な詩として創造する
-   */
-  _createScenePoetry(scene, intensity, purpose = '') {
-    const scenicVerses = [];
-    
-    scenicVerses.push(`≪ 五感が紡ぐ現実の舞台 ≫`);
-    scenicVerses.push('');
-    
-    if (scene.appointmentBackground) {
-      scenicVerses.push(`【運命の織り糸】`);
-      scenicVerses.push(`${scene.appointmentBackground}という物語の背景が、見えない糸で関係者の心を結び、思惑という名の風が静かに吹いている`);
-      scenicVerses.push('');
-    }
-    
-    if (scene.relationship) {
-      scenicVerses.push(`【心の距離感】`);
-      scenicVerses.push(`${scene.relationship}という関係性が作り出す、目に見えない境界線と、そこに宿る微細な感情の振動`);
-      scenicVerses.push('');
-    }
-    
-    if (scene.timeOfDay) {
-      scenicVerses.push(`【時の調べ】`);
-      scenicVerses.push(`${scene.timeOfDay}という時間帯が身体に刻む独特のリズム、血流に宿るエネルギーの波動、心に降り注ぐ光と影の交響`);
-      scenicVerses.push('');
-    }
-    
-    if (scene.location) {
-      scenicVerses.push(`【空間の詩】`);
-      scenicVerses.push(`${scene.location}という場所に漂う空気の質感、肌に触れる温度の記憶、耳に届く音の旋律、鼻腔を満たす香りの物語、指先に伝わる質感の語りかけ`);
-      scenicVerses.push('');
-    }
-    
-    if (scene.additionalInfo) {
-      scenicVerses.push(`【特別な空気感】`);
-      scenicVerses.push(`${scene.additionalInfo}が織りなす、言葉では表現しきれない微妙な雰囲気、心の深層に響く環境のささやき`);
-      scenicVerses.push('');
-    }
-    
-    if (intensity === 'high') {
-      scenicVerses.push(`【身体という宇宙との対話】`);
-      scenicVerses.push('足裏に伝わる大地の鼓動、座り心地に刻まれる重力の詩、手のひらが感じ取る物質の記憶、頬を撫でる空気の流れの物語、鼓膜に届く音の波紋が描く現実の輪郭');
-      scenicVerses.push('');
-      scenicVerses.push(`【この瞬間の身体感覚】`);
-      scenicVerses.push('胸の奥で響く心拍の太鼓、肺に満ちる空気の重み、視線が捉える光と影の踊り、意識が向かう方向の磁力、身体の重心が感じる大地との契約、姿勢に宿る魂の在り方');
-    }
-    
-    return scenicVerses.join('\n');
   }
 }
 
