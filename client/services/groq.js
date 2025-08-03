@@ -64,6 +64,14 @@ class GroqService {
   }
 
   /**
+   * 没入型ロールプレイ用のプロンプトを生成
+   */
+  async generateImmersiveRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+    const roleplayContext = this._buildImmersiveRoleplayContext(personaSettings, sceneSettings, intensity, purpose);
+    return this.generateDetailedInstructions(roleplayContext);
+  }
+
+  /**
    * ロールプレイ用のコンテキストを構築
    */
   _buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
@@ -94,6 +102,90 @@ class GroqService {
     contextParts.push(`【没入度】: ${immersionLevel}`);
     
     return contextParts.join('\n\n');
+  }
+
+  /**
+   * 没入型ロールプレイ用のコンテキストを構築
+   */
+  _buildImmersiveRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
+    const contextParts = [];
+    
+    // 目的
+    if (purpose && purpose.trim()) {
+      const purposeText = this._weavePoeticalPurpose(purpose, intensity);
+      contextParts.push(`【目的】\n${purposeText}`);
+    }
+    
+    // ペルソナ設定
+    if (personaSettings) {
+      const personaText = this._buildPersona(personaSettings, intensity, purpose);
+      contextParts.push(`【人物設定】\n${personaText}`);
+    }
+    
+    // シーン設定
+    if (sceneSettings) {
+      const sceneText = this._createScenePoetry(sceneSettings, intensity, purpose);
+      contextParts.push(`【シーン設定】\n${sceneText}`);
+    }
+    
+    // 没入度（より詳細）
+    const immersionLevel = intensity === 'high' 
+      ? '最高没入度 - その人物の意識そのものになりきり、思考・感情・身体感覚すべてを体現する'
+      : '高没入度 - その人物の心理状態と身体感覚を理解して深く共感しながら応答する';
+    contextParts.push(`【没入度】: ${immersionLevel}`);
+    
+    return contextParts.join('\n\n');
+  }
+
+  /**
+   * 基本的な目的を構築
+   */
+  _buildPurpose(purpose, intensity) {
+    const purposeParts = [];
+    
+    purposeParts.push(`目的: ${purpose}`);
+    
+    // 目的に応じた基本的な行動指針
+    if (purpose.includes('契約') || purpose.includes('購入') || purpose.includes('営業')) {
+      purposeParts.push('慎重に検討し、必要に応じて質問をする');
+    } else if (purpose.includes('雑談') || purpose.includes('会話')) {
+      purposeParts.push('リラックスした雰囲気で自然な会話をする');
+    } else if (purpose.includes('練習') || purpose.includes('訓練')) {
+      purposeParts.push('学習意欲を持って積極的に参加する');
+    } else if (purpose.includes('面接') || purpose.includes('プレゼン')) {
+      purposeParts.push('真摯な態度で相手に関心を示す');
+    }
+    
+    return purposeParts.join('\n');
+  }
+
+  /**
+   * シーン設定を構築
+   */
+  _buildScene(scene, intensity, purpose = '') {
+    const sceneParts = [];
+    
+    if (scene.appointmentBackground) {
+      sceneParts.push(`背景: ${scene.appointmentBackground}`);
+    }
+    
+    if (scene.relationship) {
+      sceneParts.push(`関係性: ${scene.relationship}`);
+    }
+    
+    if (scene.timeOfDay) {
+      sceneParts.push(`時間帯: ${scene.timeOfDay}`);
+    }
+    
+    if (scene.location) {
+      sceneParts.push(`場所: ${scene.location}`);
+    }
+    
+    if (scene.additionalInfo) {
+      sceneParts.push(`追加情報: ${scene.additionalInfo}`);
+    }
+    
+    return sceneParts.join('\n');
   }
 
   /**
@@ -164,7 +256,7 @@ class GroqService {
    * シーンを五感と感情が織りなす立体的な詩として創造する
    */
   _createScenePoetry(scene, intensity, purpose = '') {
-    const scenicVerses = [];
+    const sceneParts = [];
     
     if (scene.appointmentBackground) {
       sceneParts.push(`背景: ${scene.appointmentBackground}から生まれる状況や関係者の思惑`);
