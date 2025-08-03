@@ -6,8 +6,6 @@ import VoiceInterface from "./VoiceInterface";
 import ChatInterface from "./ChatInterface";
 import HistoryScreen from "./HistoryScreen";
 import SettingsScreen from "./SettingsScreen";
-import SwipeHandler from "./SwipeHandler";
-import PullToRefresh from "./PullToRefresh";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 
@@ -255,32 +253,6 @@ export default function App() {
     }
   }, [dataChannel, instructions, personaSettings, sceneSettings, purpose]);
 
-  // Handle tab switching with swipe gestures
-  const handleSwipeLeft = () => {
-    const tabs = ['setup', 'chat', 'history', 'settings'];
-    const currentIndex = tabs.indexOf(activeTab);
-    if (currentIndex < tabs.length - 1) {
-      setActiveTab(tabs[currentIndex + 1]);
-    }
-  };
-
-  const handleSwipeRight = () => {
-    const tabs = ['setup', 'chat', 'history', 'settings'];
-    const currentIndex = tabs.indexOf(activeTab);
-    if (currentIndex > 0) {
-      setActiveTab(tabs[currentIndex - 1]);
-    }
-  };
-
-  // Handle pull to refresh for session management
-  const handleRefresh = async () => {
-    if (isSessionActive) {
-      stopSession();
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await startSession();
-    }
-    return Promise.resolve();
-  };
 
   // Clear history function
   const handleClearHistory = () => {
@@ -372,21 +344,12 @@ export default function App() {
         </div>
       </nav>
 
-      {/* Main content area with swipe support */}
-      <PullToRefresh
-        onRefresh={isSessionActive ? handleRefresh : undefined}
-        className="flex-1 relative"
-      >
-        <SwipeHandler
-          onSwipeLeft={handleSwipeLeft}
-          onSwipeRight={handleSwipeRight}
-          className="h-full"
-        >
-          <div className="h-full flex flex-col">
-            {renderTabContent()}
-          </div>
-        </SwipeHandler>
-      </PullToRefresh>
+      {/* Main content area */}
+      <div className="flex-1 relative">
+        <div className="h-full flex flex-col">
+          {renderTabContent()}
+        </div>
+      </div>
 
       {/* Tab Navigation */}
       <TabNavigation
