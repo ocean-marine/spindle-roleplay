@@ -8,14 +8,43 @@ import HistoryScreen from "./HistoryScreen";
 import SettingsScreen from "./SettingsScreen";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
+import AuthScreen from "./AuthScreen";
+import { isAuthenticated, logout } from "../services/auth";
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
   const [selectedVoice, setSelectedVoice] = useState("alloy");
   const [instructions, setInstructions] = useState("自然な日本語で応対します。");
   const [activeTab, setActiveTab] = useState("setup");
+
+  // 認証状態の初期化
+  useEffect(() => {
+    const authState = isAuthenticated();
+    setIsAuthenticated(authState);
+    if (authState) {
+      setCurrentUser(sessionStorage.getItem("currentUser"));
+    }
+  }, []);
+
+  // 認証成功時のハンドラー
+  const handleAuthenticated = (user) => {
+    setIsAuthenticated(true);
+    setCurrentUser(user.username);
+  };
+
+  // ログアウト処理
+  const handleLogout = () => {
+    logout();
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    if (isSessionActive) {
+      stopSession();
+    }
+  };
   
   // Purpose setting
   const [purpose, setPurpose] = useState("");
@@ -320,6 +349,11 @@ export default function App() {
     }
   };
 
+  // 認証されていない場合は認証画面を表示
+  if (!isAuthenticated) {
+    return <AuthScreen onAuthenticated={handleAuthenticated} />;
+  }
+
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
@@ -329,17 +363,27 @@ export default function App() {
             <img style={{ width: "24px" }} src={logo} alt="OpenAI Logo" />
             <div>
               <h1 className="text-base font-semibold text-gray-800">Realtime Console</h1>
-              <p className="text-xs text-gray-500">Mobile Edition</p>
+              <p className="text-xs text-gray-500">Mobile Edition {currentUser && `(${currentUser})`}</p>
             </div>
           </div>
           
-          {/* Session status indicator */}
-          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-            isSessionActive 
-              ? 'bg-green-100 text-green-700' 
-              : 'bg-gray-100 text-gray-600'
-          }`}>
-            {isSessionActive ? 'Connected' : 'Disconnected'}
+          <div className="flex items-center gap-2">
+            {/* Session status indicator */}
+            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+              isSessionActive 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-gray-100 text-gray-600'
+            }`}>
+              {isSessionActive ? 'Connected' : 'Disconnected'}
+            </div>
+            
+            {/* Logout button */}
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1 text-xs font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
+            >
+              ログアウト
+            </button>
           </div>
         </div>
       </nav>
