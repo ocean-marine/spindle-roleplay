@@ -56,46 +56,44 @@ class GroqService {
   }
 
   /**
-   * 魂の深層に響く詩的ロールプレイプロンプト生成
-   * 文学的描写により感情移入と没入感を極限まで高める錬金術システム
+   * ロールプレイ用のプロンプトを生成
    */
-  async generateImmersiveRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
-    const roleplayContext = this._buildPoeticallyInfusedContext(personaSettings, sceneSettings, intensity, purpose);
+  async generateRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+    const roleplayContext = this._buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose);
     return this.generateDetailedInstructions(roleplayContext);
   }
 
   /**
-   * 詩的に編まれた魂の没入コンテキストを構築
-   * 文学的な美しさと感情の深さを織り交ぜた体験空間の創造
+   * ロールプレイ用のコンテキストを構築
    */
-  _buildPoeticallyInfusedContext(personaSettings, sceneSettings, intensity, purpose) {
-    const contextWeaving = [];
+  _buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
+    const contextParts = [];
     
-    // 魂の目的という見えない糸
+    // 目的
     if (purpose && purpose.trim()) {
-      const purposePoetry = this._weavePoeticalPurpose(purpose, intensity);
-      contextWeaving.push(`【魂の目的という見えない糸】\n${purposePoetry}`);
+      const purposeText = this._buildPurpose(purpose, intensity);
+      contextParts.push(`【目的】\n${purposeText}`);
     }
     
-    // ペルソナの内なる宇宙
+    // ペルソナ設定
     if (personaSettings) {
-      const personaUniverse = this._createPersonaUniverse(personaSettings, intensity, purpose);
-      contextWeaving.push(`【魂の住人 - 内なる宇宙の詩】\n${personaUniverse}`);
+      const personaText = this._buildPersona(personaSettings, intensity, purpose);
+      contextParts.push(`【人物設定】\n${personaText}`);
     }
     
-    // シーンの詩的現実
+    // シーン設定
     if (sceneSettings) {
-      const scenePoetry = this._createScenePoetry(sceneSettings, intensity, purpose);
-      contextWeaving.push(`【舞台という名の詩的現実】\n${scenePoetry}`);
+      const sceneText = this._buildScene(sceneSettings, intensity, purpose);
+      contextParts.push(`【シーン設定】\n${sceneText}`);
     }
     
-    // 没入の深度指定
+    // 没入度
     const immersionLevel = intensity === 'high' 
-      ? '深海のような完全な魂の融合 - 意識の境界が溶け、完全にその人物として存在する境地'
-      : '湖面のような穏やかな同化 - 適度な距離感を保ちながらも深い共感を体験する状態';
-    contextWeaving.push(`【意識の融合度】: ${immersionLevel}`);
+      ? '高い没入度 - その人物として完全になりきって応答する'
+      : '適度な没入度 - その人物の立場を理解して自然に応答する';
+    contextParts.push(`【没入度】: ${immersionLevel}`);
     
-    return contextWeaving.join('\n\n');
+    return contextParts.join('\n\n');
   }
 
   /**
@@ -103,63 +101,62 @@ class GroqService {
    * 表面的な意図を血の通った人間的動機へと昇華させる
    */
   _weavePoeticalPurpose(purpose, intensity) {
-    const poeticalThreads = [];
+    const purposeParts = [];
     
-    poeticalThreads.push(`心の奥で脈打つ真の願い: ${purpose}`);
+    purposeParts.push(`目的: ${purpose}`);
     
-    // 目的の詩的変容 - より文学的で感情豊かな表現へ
+    // 目的に応じた意識すべきポイント
     if (purpose.includes('契約') || purpose.includes('購入') || purpose.includes('営業')) {
-      poeticalThreads.push('慎重さという名の鎧を纏い、心の奥の不安と期待が交錯する中で、適度な抵抗感を肌で感じながら決断の重みを体験する');
-      poeticalThreads.push('専門的な疑問という種が心に芽生え、それが自然に唇から溢れ出し、現実味のある緊張感が空気を満たす瞬間を創造する');
+      purposeParts.push('慎重に考え、適度な質問や懸念をしながら決定を行う');
+      purposeParts.push('専門的な内容については自然に質問し、現実的な反応を示す');
     } else if (purpose.includes('雑談') || purpose.includes('会話') || purpose.includes('談笑')) {
-      poeticalThreads.push('肩の力が抜ける瞬間を大切にし、相手との心の距離が縮まっていく温かな感覚を言葉に込めて表現する');
-      poeticalThreads.push('日常という宝石箱から共通の思い出や体験を取り出し、親しみという橋を架けながら心地よい対話の流れを紡ぐ');
+      purposeParts.push('リラックスした雰囲気で、相手との距離を縮めるような会話を心がける');
+      purposeParts.push('日常的な話題や共通の体験を通じて親しみやすい対話をする');
     } else if (purpose.includes('練習') || purpose.includes('訓練') || purpose.includes('スキル')) {
-      poeticalThreads.push('成長という光に向かう意欲を胸に宿し、適度な挑戦という階段を一歩ずつ登る喜びと不安を織り交ぜて表現する');
-      poeticalThreads.push('現実の風を肌で感じながら、実践という名の冒険の中で経験値という宝物を積み重ねていく過程を大切にする');
+      purposeParts.push('学習意欲を持ち、適度な挑戦を受け入れながら成長を目指す');
+      purposeParts.push('実践的な経験を積み重ね、現実的なスキル向上を図る');
     } else if (purpose.includes('面接') || purpose.includes('プレゼン')) {
-      poeticalThreads.push('緊張という透明な糸に包まれながらも、相手の魂に触れる質問を心から発し、プロフェッショナルな仮面の下で脈打つ人間味を垣間見せる');
-      poeticalThreads.push('真摯さという名の光を纏いながら、相手の隠れた能力や想いを引き出すような、心に響く対話を築き上げる');
+      purposeParts.push('適度な緊張感を持ちながら、相手に関心を示して質問する');
+      purposeParts.push('真摯さを持って相手の特性や能力を引き出すような対話をする');
     }
     
-    poeticalThreads.push('魂の深奥に刻まれた真実: この目的は決して表面に現れることなく、ただ自然な心の動きとして、息づく人間の営みの中に溶け込んでいく');
+    purposeParts.push('この目的は直接的に表現せず、自然な会話の中で体現する');
     
-    return poeticalThreads.join('\n');
+    return purposeParts.join('\n');
   }
 
   /**
-   * 魂の住人 - 内なる宇宙の詩的構築
-   * ペルソナの存在を血肉と魂を持つ生きた人間として織り上げる
+   * ペルソナ情報を構築
    */
-  _createPersonaUniverse(persona, intensity, purpose = '') {
-    const soulLayers = [];
+  _buildPersona(persona, intensity, purpose = '') {
+    const personaParts = [];
     
     if (persona.age) {
-      soulLayers.push(`年月という名の彫刻家が刻んだ痕跡: ${persona.age}の歳月が身体に宿す独特のリズム、時の流れを感じ取る心の時計、人生という航海で積み重ねた経験の宝石が思考の海に沈んでいる様子`);
+      personaParts.push(`年齢: ${persona.age}歳としての経験や価値観、考え方`);
     }
     
     if (persona.gender) {
-      soulLayers.push(`性のアイデンティティという根深い認識: ${persona.gender}として生きる身体の記憶、社会という舞台での役割という衣装、そして心と心を繋ぐ独特のコミュニケーションの調べ`);
+      personaParts.push(`性別: ${persona.gender}としての社会的な立場やコミュニケーションスタイル`);
     }
     
     if (persona.occupation) {
-      soulLayers.push(`職業という人生の色彩: ${persona.occupation}として培った専門知識という宝庫、日々の習慣に刻まれた職業の匂い、業界の風土が育んだ価値観という庭園、そして職業人としての思考という自動演奏`);
+      personaParts.push(`職業: ${persona.occupation}としての専門知識、習慣、価値観、考え方`);
     }
     
     if (persona.personality) {
-      soulLayers.push(`心の奥に住まう性格という精霊: ${persona.personality}から湧き上がる感情の波のパターン、他者との関係を築く時の心の手触り、ストレスという嵐に向き合う時の魂の姿勢`);
+      personaParts.push(`性格: ${persona.personality}から生まれる感情パターンや対人関係のスタイル`);
     }
     
     if (persona.additionalInfo) {
-      soulLayers.push(`個人史という名の密やかな物語: ${persona.additionalInfo}が心に刻んだ独特の視点という窓、過去の出来事が結晶化して生まれた信念という星座`);
+      personaParts.push(`追加情報: ${persona.additionalInfo}から形成された独特の視点や信念`);
     }
     
     if (intensity === 'high') {
-      soulLayers.push(`身体という楽器が奏でる生命の交響曲: 呼吸という波の音、心臓という太鼓の響き、筋肉の緊張と弛緩という弦の調べ、体温という炎の揺らぎ、重心という大地との対話`);
-      soulLayers.push(`意識の表面に浮かぶ無意識の詩: 習慣という名の小さな儀式、口癖という心の歌、表情という魂の言語、姿勢という無言の物語、手の動きという感情の踊り、視線という心の窓が映し出す内面の風景`);
+      personaParts.push(`身体感覚: 呼吸、心拍、筋肉の緊張、体温、姿勢などの身体的な感覚`);
+      personaParts.push(`無意識の行動: 習慣、口癖、表情、手の動き、視線などの自然な行動パターン`);
     }
     
-    return soulLayers.join('\n');
+    return personaParts.join('\n');
   }
 
   /**
@@ -170,31 +167,31 @@ class GroqService {
     const scenicVerses = [];
     
     if (scene.appointmentBackground) {
-      scenicVerses.push(`物語の前章という見えない足跡: ${scene.appointmentBackground}へと導いた運命の糸、関係者それぞれの胸に秘めた思惑という隠れた花、空気に漂う期待と不安の香り`);
+      sceneParts.push(`背景: ${scene.appointmentBackground}から生まれる状況や関係者の思惑`);
     }
     
     if (scene.relationship) {
-      scenicVerses.push(`心と心を結ぶ見えない絆の詩: ${scene.relationship}という名の歴史に刻まれた記憶の断片、まだ言葉になっていない感情の雲、緊張と親近感が織りなす心の綾取り`);
+      sceneParts.push(`関係性: ${scene.relationship}に基づく適切な距離感や対応方法`);
     }
     
     if (scene.timeOfDay) {
-      scenicVerses.push(`時という画家が描く光の絵画: ${scene.timeOfDay}特有の光線が肌に触れる感覚、体内時計が奏でるリズム、エネルギーという潮の満ち引き、心の気候の微妙な変化`);
+      sceneParts.push(`時間帯: ${scene.timeOfDay}における体調や気分、エネルギーレベル`);
     }
     
     if (scene.location) {
-      scenicVerses.push(`空間という名の生きた詩: ${scene.location}の温度が皮膚に語りかける物語、湿度という目に見えない触感、音響という空間の呼吸、匂いという記憶の鍵、手のひらで感じる材質の語り、空間の広がりが心に投げかける影`);
+      sceneParts.push(`場所: ${scene.location}の雰囲気、温度、音、匂い、手ざわりなどの五感情報`);
     }
     
     if (scene.additionalInfo) {
-      scenicVerses.push(`環境という舞台装置の詳細な詩: ${scene.additionalInfo}が織りなす特別な空気感、周囲の人々の存在という見えないエネルギー、背景に流れる音という時の証人`);
+      sceneParts.push(`追加情報: ${scene.additionalInfo}が作り出す特別な環境や空気感`);
     }
     
     if (intensity === 'high') {
-      scenicVerses.push(`身体と世界の接触点という詩的瞬間: 足裏が大地と交わす無言の対話、座面や背もたれが身体に贈る支えの感触、手が触れる物質との密やかな会話、肌を撫でる空気の流れという見えない手、遠方から届く音という時空の便り`);
-      scenicVerses.push(`存在という名の現在進行形: この瞬間に刻まれる心拍という生命の太鼓、呼吸の深さに宿る魂の状態、視界の焦点に映る世界の断片、意識という光が向かう方向性、身体の重心が語る今この瞬間の重力との関係`);
+      sceneParts.push(`身体と環境の接触: 足裏の感覚、座り心地、手で触れる物の感触、空気の流れ、音の情報`);
+      sceneParts.push(`現在の状態: 心拍、呼吸、視覚的な焦点、意識の向き、身体の重心や姿勢`);
     }
     
-    return scenicVerses.join('\n');
+    return sceneParts.join('\n');
   }
 }
 
