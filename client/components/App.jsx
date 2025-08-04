@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
-import { User, Settings, MessageCircle, History, LogOut } from "react-feather";
+import { User, Settings, MessageCircle, Clock, LogOut } from "react-feather";
 import logo from "../assets/openai-logomark.svg";
 import SetupScreen from "./SetupScreen";
 import ChatInterface from "./ChatInterface";
@@ -303,7 +303,7 @@ export default function App() {
   const navigationItems = [
     { path: '/setup', icon: Settings, label: 'セットアップ' },
     { path: '/roleplay', icon: MessageCircle, label: 'ロールプレイ' },
-    { path: '/history', icon: History, label: '履歴' },
+    { path: '/history', icon: Clock, label: '履歴' },
     { path: '/admin', icon: User, label: '管理' }
   ];
 
