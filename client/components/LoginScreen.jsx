@@ -95,12 +95,6 @@ export default function LoginScreen({ onLogin }) {
             </button>
           </form>
 
-          {/* Demo Accounts Info */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-md">
-            <p className="text-xs text-gray-600 mb-2">デモアカウント:</p>
-            <p className="text-xs text-gray-500">admin / admin123</p>
-            <p className="text-xs text-gray-500">user / user123</p>
-          </div>
         </div>
       </div>
     </div>
