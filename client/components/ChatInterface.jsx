@@ -24,38 +24,38 @@ export default function ChatInterface({
 
   return (
     <div className="flex-1 flex flex-col h-full bg-gray-50">
-      {/* Control Bar */}
-      <div className="bg-white border-b border-gray-200 px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between flex-shrink-0">
-        {/* Left side - Mute button */}
-        <button
-          onClick={toggleMute}
-          className={`p-2.5 sm:p-3 rounded-full transition-colors ${
-            isMuted 
-              ? 'bg-red-100 hover:bg-red-200 text-red-600' 
-              : 'bg-green-100 hover:bg-green-200 text-green-600'
-          }`}
-          title={isMuted ? 'ミュート中 - クリックでミュート解除' : 'マイクオン - クリックでミュート'}
-        >
-          {isMuted ? <MicOff size={18} className="sm:size-5" /> : <Mic size={18} className="sm:size-5" />}
-        </button>
-
-        {/* Right side - End session button */}
-        <button
-          onClick={onStopSession}
-          className="bg-red-500 hover:bg-red-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 transition-colors text-sm sm:text-base"
-          title="ロールプレイを終了して準備画面に戻る"
-        >
-          <X size={14} className="sm:size-4" />
-          <span>終了</span>
-        </button>
-      </div>
-
       {/* Main content area */}
       <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 space-y-4 sm:space-y-8">
         
         {/* Persona Image */}
         <div className="w-32 h-32 sm:w-48 sm:h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
           <User size={48} className="sm:size-20 text-white" />
+        </div>
+
+        {/* Control Buttons below Persona Image */}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {/* Mute button */}
+          <button
+            onClick={toggleMute}
+            className={`p-2.5 sm:p-3 rounded-full transition-colors ${
+              isMuted 
+                ? 'bg-red-100 hover:bg-red-200 text-red-600' 
+                : 'bg-green-100 hover:bg-green-200 text-green-600'
+            }`}
+            title={isMuted ? 'ミュート中 - クリックでミュート解除' : 'マイクオン - クリックでミュート'}
+          >
+            {isMuted ? <MicOff size={18} className="sm:size-5" /> : <Mic size={18} className="sm:size-5" />}
+          </button>
+
+          {/* End session button */}
+          <button
+            onClick={onStopSession}
+            className="bg-red-500 hover:bg-red-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1.5 sm:gap-2 transition-colors text-sm sm:text-base"
+            title="ロールプレイを終了して準備画面に戻る"
+          >
+            <X size={14} className="sm:size-4" />
+            <span>終了</span>
+          </button>
         </div>
 
         {/* Roleplay Meta Information */}
