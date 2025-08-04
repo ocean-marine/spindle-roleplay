@@ -1,11 +1,9 @@
-import { User, MessageCircle, Clock, Sliders } from "react-feather";
+import { MessageCircle, Sliders } from "react-feather";
 import { Link, useLocation } from "react-router-dom";
 
 const TABS = [
   { id: 'setup', label: 'セットアップ', icon: Sliders, path: '/setup' },
-  { id: 'chat', label: 'チャット', icon: MessageCircle, path: '/roleplay' },
-  { id: 'history', label: '履歴', icon: Clock, path: '/history' },
-  { id: 'settings', label: '設定', icon: User, path: '/settings' }
+  { id: 'chat', label: 'チャット', icon: MessageCircle, path: '/roleplay' }
 ];
 
 export default function TabNavigation({ className = "" }) {
