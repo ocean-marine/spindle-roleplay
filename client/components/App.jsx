@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { User, Settings, MessageCircle, History, LogOut } from "react-feather";
 import logo from "../assets/openai-logomark.svg";
-import TabNavigation from "./TabNavigation";
 import SetupScreen from "./SetupScreen";
-import VoiceInterface from "./VoiceInterface";
 import ChatInterface from "./ChatInterface";
 import HistoryScreen from "./HistoryScreen";
 import SettingsScreen from "./SettingsScreen";
-import SessionControls from "./SessionControls";
-import ToolPanel from "./ToolPanel";
 import LoginScreen from "./LoginScreen";
 import { checkAuthStatus, logout } from "../utils/auth";
 
 export default function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   // 認証状態管理
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -21,7 +22,6 @@ export default function App() {
   const [dataChannel, setDataChannel] = useState(null);
   const [selectedVoice, setSelectedVoice] = useState("alloy");
   const [instructions, setInstructions] = useState("自然な日本語で応対します。");
-  const [activeTab, setActiveTab] = useState("setup");
   
   // Purpose setting
   const [purpose, setPurpose] = useState("");
@@ -43,6 +43,7 @@ export default function App() {
     location: "",
     additionalInfo: ""
   });
+  
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
@@ -51,7 +52,7 @@ export default function App() {
 
   const VOICE_OPTIONS = [
     "alloy",
-    "nova",
+    "nova", 
     "echo",
     "fable",
     "onyx",
@@ -72,6 +73,7 @@ export default function App() {
   const handleLogin = (accountName) => {
     setIsAuthenticated(true);
     setCurrentUser(accountName);
+    navigate('/setup');
   };
 
   const handleLogout = async () => {
@@ -82,6 +84,7 @@ export default function App() {
     if (isSessionActive) {
       stopSession();
     }
+    navigate('/login');
   };
 
   async function startSession() {
@@ -262,7 +265,7 @@ export default function App() {
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
         setEvents([]);
-        setActiveTab("chat"); // Switch to chat tab when session starts
+        navigate('/roleplay'); // Navigate to roleplay when session starts
         
         // Send initial instructions if provided
         const combinedInstructions = buildCombinedInstructions();
@@ -283,144 +286,212 @@ export default function App() {
         }
       });
     }
-  }, [dataChannel, instructions, personaSettings, sceneSettings, purpose]);
-
+  }, [dataChannel, instructions, personaSettings, sceneSettings, purpose, navigate]);
 
   // Clear history function
   const handleClearHistory = () => {
     setEvents([]);
   };
 
-  // Stop session and switch to setup tab
+  // Stop session and navigate to setup
   const handleStopSession = () => {
     stopSession();
-    setActiveTab("setup");
+    navigate('/setup');
   };
 
-  // Render current tab content
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'setup':
-        return (
-          <SetupScreen
-            selectedVoice={selectedVoice}
-            setSelectedVoice={setSelectedVoice}
-            instructions={instructions}
-            setInstructions={setInstructions}
-            purpose={purpose}
-            setPurpose={setPurpose}
-            personaSettings={personaSettings}
-            setPersonaSettings={setPersonaSettings}
-            sceneSettings={sceneSettings}
-            setSceneSettings={setSceneSettings}
-            startSession={startSession}
-            VOICE_OPTIONS={VOICE_OPTIONS}
-          />
-        );
-      
-      case 'chat':
-        return (
-          <ChatInterface
-            events={events}
-            sendTextMessage={sendTextMessage}
-            isSessionActive={isSessionActive}
-            isTyping={isSpeaking}
-          />
-        );
-      
-      case 'history':
-        return (
-          <HistoryScreen
-            events={events}
-            onClearHistory={handleClearHistory}
-          />
-        );
-      
-      case 'settings':
-        return (
-          <SettingsScreen
-            selectedVoice={selectedVoice}
-            setSelectedVoice={setSelectedVoice}
-            VOICE_OPTIONS={VOICE_OPTIONS}
-            instructions={instructions}
-            setInstructions={setInstructions}
-          />
-        );
-      
-      default:
-        return null;
-    }
-  };
+  // Navigation items based on Character.ai style
+  const navigationItems = [
+    { path: '/setup', icon: Settings, label: 'セットアップ' },
+    { path: '/roleplay', icon: MessageCircle, label: 'ロールプレイ' },
+    { path: '/history', icon: History, label: '履歴' },
+    { path: '/admin', icon: User, label: '管理' }
+  ];
 
   // 認証されていない場合はログイン画面を表示
   if (!isAuthenticated) {
-    return <LoginScreen onLogin={handleLogin} />;
+    return (
+      <Routes>
+        <Route path="/" element={<LoginScreen onLogin={handleLogin} />} />
+        <Route path="/login" element={<LoginScreen onLogin={handleLogin} />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
   }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
-      {/* Header */}
-      <nav className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 z-20">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img style={{ width: "24px" }} src={logo} alt="OpenAI Logo" />
+    <div className="h-screen bg-white flex">
+      {/* Sidebar Navigation - Hidden on mobile */}
+      <div className="hidden lg:flex w-64 bg-white border-r border-gray-200 flex-col">
+        {/* Logo and Brand */}
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-center gap-3 mb-4">
+            <img className="w-8 h-8" src={logo} alt="OpenAI Logo" />
             <div>
-              <h1 className="text-base font-semibold text-gray-800">Realtime Console</h1>
-              <p className="text-xs text-gray-500">Mobile Edition</p>
+              <h1 className="text-lg font-semibold text-gray-900">Spindle</h1>
+              <p className="text-sm text-gray-500">Roleplay Console</p>
             </div>
           </div>
           
+          {/* User Profile */}
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+              <User size={18} className="text-blue-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate">{currentUser}</p>
+              <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                isSessionActive 
+                  ? 'bg-green-100 text-green-700' 
+                  : 'bg-gray-100 text-gray-600'
+              }`}>
+                {isSessionActive ? '接続中' : '切断済み'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Menu */}
+        <nav className="flex-1 p-4">
+          <div className="space-y-2">
+            {navigationItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => navigate(item.path)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                    isActive
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <item.icon size={20} />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+
+        {/* Logout Button */}
+        <div className="p-4 border-t border-gray-100">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">ログアウト</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile Header */}
+        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* User info */}
-            <span className="text-xs text-gray-600">{currentUser}</span>
-            
-            {/* Session status indicator */}
+            <img className="w-8 h-8" src={logo} alt="OpenAI Logo" />
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900">Spindle</h1>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
             <div className={`px-2 py-1 rounded-full text-xs font-medium ${
               isSessionActive 
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-gray-100 text-gray-600'
             }`}>
-              {isSessionActive ? 'Connected' : 'Disconnected'}
+              {isSessionActive ? '接続中' : '切断済み'}
             </div>
-            
-            {/* Logout button */}
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-100"
+              className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg"
             >
-              ログアウト
+              <LogOut size={18} />
             </button>
           </div>
         </div>
-      </nav>
 
-      {/* Main content area */}
-      <div className="flex-1 relative">
-        <div className="h-full flex flex-col">
-          {renderTabContent()}
-        </div>
+        <Routes>
+          <Route path="/" element={<Navigate to="/setup" replace />} />
+          <Route 
+            path="/setup" 
+            element={
+              <SetupScreen
+                selectedVoice={selectedVoice}
+                setSelectedVoice={setSelectedVoice}
+                instructions={instructions}
+                setInstructions={setInstructions}
+                purpose={purpose}
+                setPurpose={setPurpose}
+                personaSettings={personaSettings}
+                setPersonaSettings={setPersonaSettings}
+                sceneSettings={sceneSettings}
+                setSceneSettings={setSceneSettings}
+                startSession={startSession}
+                VOICE_OPTIONS={VOICE_OPTIONS}
+              />
+            } 
+          />
+          <Route 
+            path="/roleplay" 
+            element={
+              <ChatInterface
+                events={events}
+                sendTextMessage={sendTextMessage}
+                isSessionActive={isSessionActive}
+                isTyping={isSpeaking}
+                onStopSession={handleStopSession}
+                isListening={isListening}
+                isSpeaking={isSpeaking}
+              />
+            } 
+          />
+          <Route 
+            path="/history" 
+            element={
+              <HistoryScreen
+                events={events}
+                onClearHistory={handleClearHistory}
+              />
+            } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              <SettingsScreen
+                selectedVoice={selectedVoice}
+                setSelectedVoice={setSelectedVoice}
+                VOICE_OPTIONS={VOICE_OPTIONS}
+                instructions={instructions}
+                setInstructions={setInstructions}
+              />
+            } 
+          />
+          <Route path="*" element={<Navigate to="/setup" replace />} />
+        </Routes>
       </div>
 
-      {/* Tab Navigation */}
-      <TabNavigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        className="flex-shrink-0"
-      />
-      
-      {/* Desktop tool panel (hidden on mobile) */}
-      <div className="hidden lg:block fixed top-16 right-4 bottom-16 w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="font-semibold text-gray-800">Tools & Events</h3>
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          <ToolPanel
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
-            events={events}
-            isSessionActive={isSessionActive}
-            selectedVoice={selectedVoice}
-          />
+      {/* Mobile Bottom Navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2 safe-area-bottom">
+        <div className="flex justify-around">
+          {navigationItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={`flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-colors ${
+                  isActive
+                    ? 'text-blue-700 bg-blue-50'
+                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                }`}
+              >
+                <item.icon size={20} />
+                <span className="text-xs font-medium mt-1">{item.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -191,14 +191,15 @@ export default function SetupScreen({
 
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-      <div className="max-w-md mx-auto space-y-4">
+    <div className="flex-1 overflow-y-auto p-6 bg-white">
+      <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
-        <div className="text-center py-6">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Settings size={32} className="text-blue-600" />
+        <div className="text-center py-8">
+          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Settings size={36} className="text-blue-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">AIロールプレイング</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-3">ロールプレイ設定</h1>
+          <p className="text-gray-600">キャラクターとシーンを設定してロールプレイを始めましょう</p>
         </div>
 
         {/* Mode Toggle */}

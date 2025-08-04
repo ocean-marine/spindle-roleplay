@@ -1,29 +1,29 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, User, MessageCircle } from "react-feather";
+import { Send, User, MessageCircle, Mic, MicOff, Square } from "react-feather";
 
 function MessageBubble({ message, isUser, timestamp }) {
   return (
-    <div className={`flex gap-3 mb-4 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+    <div className={`flex gap-3 mb-6 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
       {/* Avatar */}
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-        isUser ? 'bg-blue-500' : 'bg-gray-500'
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+        isUser ? 'bg-blue-500' : 'bg-gray-600'
       }`}>
-        {isUser ? <User size={16} className="text-white" /> : <MessageCircle size={16} className="text-white" />}
+        {isUser ? <User size={18} className="text-white" /> : <MessageCircle size={18} className="text-white" />}
       </div>
       
       {/* Message bubble */}
       <div className={`max-w-[70%] min-w-0 ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
-        <div className={`rounded-2xl px-4 py-2 break-words word-wrap overflow-wrap-anywhere ${
+        <div className={`rounded-2xl px-4 py-3 break-words word-wrap overflow-wrap-anywhere ${
           isUser 
             ? 'bg-blue-500 text-white rounded-br-md' 
-            : 'bg-gray-200 text-gray-800 rounded-bl-md'
+            : 'bg-gray-100 text-gray-800 rounded-bl-md border border-gray-200'
         }`}>
           <p className="text-sm leading-relaxed break-words">{message}</p>
         </div>
         
         {/* Timestamp */}
         {timestamp && (
-          <span className="text-xs text-gray-500 mt-1 px-1">
+          <span className="text-xs text-gray-400 mt-1 px-1">
             {timestamp}
           </span>
         )}
@@ -34,11 +34,11 @@ function MessageBubble({ message, isUser, timestamp }) {
 
 function TypingIndicator() {
   return (
-    <div className="flex gap-3 mb-4">
-      <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center flex-shrink-0">
-        <MessageCircle size={16} className="text-white" />
+    <div className="flex gap-3 mb-6">
+      <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center flex-shrink-0">
+        <MessageCircle size={18} className="text-white" />
       </div>
-      <div className="bg-gray-200 rounded-2xl rounded-bl-md px-4 py-3">
+      <div className="bg-gray-100 border border-gray-200 rounded-2xl rounded-bl-md px-4 py-3">
         <div className="flex gap-1">
           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
@@ -49,11 +49,44 @@ function TypingIndicator() {
   );
 }
 
+function AudioIndicator({ isListening, isSpeaking }) {
+  return (
+    <div className="flex items-center gap-2 text-sm">
+      {isListening && (
+        <div className="flex items-center gap-2 text-blue-600">
+          <Mic size={16} />
+          <span>聞き取り中...</span>
+          <div className="flex gap-1">
+            <div className="w-1 h-3 bg-blue-400 rounded animate-pulse"></div>
+            <div className="w-1 h-4 bg-blue-500 rounded animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+            <div className="w-1 h-2 bg-blue-400 rounded animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+          </div>
+        </div>
+      )}
+      
+      {isSpeaking && (
+        <div className="flex items-center gap-2 text-green-600">
+          <MessageCircle size={16} />
+          <span>応答中...</span>
+          <div className="flex gap-1">
+            <div className="w-1 h-2 bg-green-400 rounded animate-pulse"></div>
+            <div className="w-1 h-4 bg-green-500 rounded animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+            <div className="w-1 h-3 bg-green-400 rounded animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ChatInterface({ 
   events = [], 
   sendTextMessage, 
   isSessionActive,
-  isTyping = false 
+  isTyping = false,
+  onStopSession,
+  isListening = false,
+  isSpeaking = false
 }) {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -67,6 +100,13 @@ export default function ChatInterface({
   useEffect(() => {
     scrollToBottom();
   }, [events, isTyping]);
+
+  // Focus input when component mounts
+  useEffect(() => {
+    if (isSessionActive && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isSessionActive]);
 
   // Convert events to chat messages
   const messages = events
@@ -127,71 +167,94 @@ export default function ChatInterface({
 
   if (!isSessionActive) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-        <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mb-6">
-          <MessageCircle size={48} className="text-gray-400" />
+      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-white">
+        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+          <MessageCircle size={32} className="text-gray-400" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">チャット停止中</h2>
-        <p className="text-gray-600">セッションを開始してチャットを始めましょう</p>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">ロールプレイを開始</h2>
+        <p className="text-gray-600 mb-4">セットアップ画面でセッションを開始してください</p>
+        <button
+          onClick={() => window.history.back()}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          セットアップに戻る
+        </button>
       </div>
     );
   }
 
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
-      {/* Chat header */}
-      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            isSessionActive ? 'bg-green-500' : 'bg-gray-400'
-          }`}>
-            <MessageCircle size={16} className="text-white" />
+      {/* Chat header - Character.ai style */}
+      <div className="px-6 py-4 border-b border-gray-200 bg-white flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center">
+              <MessageCircle size={20} className="text-white" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">AIアシスタント</h3>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-gray-500">オンライン</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-gray-800">AIアシスタント</h3>
-            <p className={`text-xs ${isSessionActive ? 'text-green-600' : 'text-gray-500'}`}>
-              {isSessionActive ? 'オンライン' : 'オフライン'}
-            </p>
+          
+          <div className="flex items-center gap-3">
+            <AudioIndicator isListening={isListening} isSpeaking={isSpeaking} />
+            <button
+              onClick={onStopSession}
+              className="flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <Square size={16} />
+              <span className="text-sm font-medium">停止</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Messages area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2 pb-20">
+      {/* Messages area - Character.ai style */}
+      <div className="flex-1 overflow-y-auto px-6 py-4">
         {messages.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500 mb-2">まだメッセージがありません</p>
-            <p className="text-sm text-gray-400">メッセージを送信して会話を始めましょう</p>
+          <div className="text-center py-12">
+            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+              <MessageCircle size={24} className="text-gray-400" />
+            </div>
+            <p className="text-gray-600 mb-2">会話を始めましょう</p>
+            <p className="text-sm text-gray-400">音声で話すか、下のテキストボックスでメッセージを送信してください</p>
           </div>
         ) : (
-          messages.map((msg) => (
-            <MessageBubble
-              key={msg.id}
-              message={msg.message}
-              isUser={msg.isUser}
-              timestamp={msg.timestamp}
-            />
-          ))
+          <>
+            {messages.map((msg) => (
+              <MessageBubble
+                key={msg.id}
+                message={msg.message}
+                isUser={msg.isUser}
+                timestamp={msg.timestamp}
+              />
+            ))}
+            
+            {isTyping && <TypingIndicator />}
+          </>
         )}
-        
-        {isTyping && <TypingIndicator />}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area - Fixed at bottom */}
-      <div className="fixed bottom-16 left-0 right-0 border-t border-gray-200 p-4 bg-white safe-area-bottom z-10">
-        <div className="flex gap-2 items-end">
+      {/* Input area - Character.ai style with mobile spacing */}
+      <div className="px-4 lg:px-6 py-4 border-t border-gray-200 bg-gray-50 pb-20 lg:pb-4">
+        <div className="flex gap-3 items-end max-w-4xl mx-auto">
           <div className="flex-1 min-w-0">
             <textarea
               ref={inputRef}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="メッセージを入力..."
-              className="w-full p-3 border border-gray-300 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm overflow-hidden"
+              placeholder="メッセージを入力してください..."
+              className="w-full p-4 border border-gray-300 rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white shadow-sm"
               rows={1}
               style={{ 
-                minHeight: '44px', 
+                minHeight: '56px', 
                 maxHeight: '120px',
                 lineHeight: '1.5',
                 wordWrap: 'break-word',
@@ -202,14 +265,23 @@ export default function ChatInterface({
           <button
             onClick={handleSendMessage}
             disabled={!message.trim()}
-            className={`p-3 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors flex-shrink-0 ${
+            className={`p-4 rounded-xl min-h-[56px] min-w-[56px] flex items-center justify-center transition-all shadow-sm ${
               message.trim()
-                ? 'bg-blue-500 hover:bg-blue-600 text-white'
+                ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-md hover:shadow-lg'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >
-            <Send size={18} />
+            <Send size={20} />
           </button>
+        </div>
+        
+        {/* Audio status indicator */}
+        <div className="flex justify-center mt-3">
+          <div className="text-xs text-gray-500">
+            {isListening && "🎤 音声を聞き取り中..."}
+            {isSpeaking && "🔊 AIが応答中..."}
+            {!isListening && !isSpeaking && "マイクで話すか、テキストでメッセージを送信してください"}
+          </div>
         </div>
       </div>
     </div>
