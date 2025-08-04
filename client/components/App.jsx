@@ -49,8 +49,10 @@ export default function App() {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audioLevel, setAudioLevel] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
+  const microphoneTrack = useRef(null);
 
   const VOICE_OPTIONS = [
     "alloy",
@@ -105,7 +107,9 @@ export default function App() {
     const ms = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
-    pc.addTrack(ms.getTracks()[0]);
+    const track = ms.getTracks()[0];
+    microphoneTrack.current = track;
+    pc.addTrack(track);
 
     // Set up data channel for sending and receiving events
     const dc = pc.createDataChannel("oai-events");
@@ -154,6 +158,8 @@ export default function App() {
     setIsSessionActive(false);
     setDataChannel(null);
     peerConnection.current = null;
+    microphoneTrack.current = null;
+    setIsMuted(false);
   }
 
   // Send a message to the model
@@ -300,6 +306,14 @@ export default function App() {
     navigate("/setup");
   };
 
+  // Toggle mute/unmute functionality
+  const toggleMute = () => {
+    if (microphoneTrack.current) {
+      microphoneTrack.current.enabled = !microphoneTrack.current.enabled;
+      setIsMuted(!microphoneTrack.current.enabled);
+    }
+  };
+
 
   // 認証されていない場合はログイン画面を表示
   if (!isAuthenticated) {
@@ -377,6 +391,11 @@ export default function App() {
                   sendTextMessage={sendTextMessage}
                   isSessionActive={isSessionActive}
                   isTyping={isSpeaking}
+                  isMuted={isMuted}
+                  toggleMute={toggleMute}
+                  isListening={isListening}
+                  isSpeaking={isSpeaking}
+                  audioLevel={audioLevel}
                 />
               } 
             />
