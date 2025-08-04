@@ -309,35 +309,37 @@ export default function App() {
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0 z-20">
+      <nav className="bg-white border-b border-gray-200 px-3 sm:px-4 py-3 flex-shrink-0 z-20">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img style={{ width: "24px" }} src={logo} alt="OpenAI Logo" />
-            <div>
-              <h1 className="text-base font-semibold text-gray-800">Realtime Console</h1>
-              <p className="text-xs text-gray-500">Mobile Edition</p>
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <img style={{ width: "20px" }} className="sm:w-6 flex-shrink-0" src={logo} alt="OpenAI Logo" />
+            <div className="min-w-0">
+              <h1 className="text-sm sm:text-base font-semibold text-gray-800 truncate">Realtime Console</h1>
+              <p className="text-xs text-gray-500 hidden sm:block">Mobile Edition</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            {/* User info */}
-            <span className="text-xs text-gray-600">{currentUser}</span>
+          <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+            {/* User info - hide on very small screens */}
+            <span className="hidden xs:block text-xs text-gray-600 truncate max-w-20 sm:max-w-none">{currentUser}</span>
             
             {/* Session status indicator */}
-            <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+            <div className={`px-1 sm:px-2 py-1 rounded-full text-xs font-medium ${
               isSessionActive 
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-gray-100 text-gray-600'
             }`}>
-              {isSessionActive ? 'Connected' : 'Disconnected'}
+              <span className="hidden sm:inline">{isSessionActive ? 'Connected' : 'Disconnected'}</span>
+              <span className="sm:hidden">{isSessionActive ? '●' : '○'}</span>
             </div>
             
             {/* Logout button */}
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-100"
+              className="text-xs text-gray-500 hover:text-gray-700 px-1 sm:px-2 py-1 rounded hover:bg-gray-100 flex-shrink-0"
             >
-              ログアウト
+              <span className="hidden sm:inline">ログアウト</span>
+              <span className="sm:hidden">出</span>
             </button>
           </div>
         </div>
@@ -406,8 +408,8 @@ export default function App() {
       {/* Tab Navigation */}
       <TabNavigation className="flex-shrink-0" />
       
-      {/* Desktop tool panel (hidden on mobile) */}
-      <div className="hidden lg:block fixed top-16 right-4 bottom-16 w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
+      {/* Desktop tool panel (hidden on mobile and tablet) */}
+      <div className="hidden xl:block fixed top-16 right-4 bottom-20 w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-10">
         <div className="p-4 border-b border-gray-200">
           <h3 className="font-semibold text-gray-800">Tools & Events</h3>
         </div>

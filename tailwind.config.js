@@ -2,7 +2,14 @@
 export default {
   content: ["./client/index.html", "./client/**/*.{jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'xs': '475px',
+      },
+      spacing: {
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+      },
+    },
   },
   plugins: [],
 };

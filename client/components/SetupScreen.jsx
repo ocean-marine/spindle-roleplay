@@ -13,7 +13,7 @@ function ExpandableSection({ title, children, defaultExpanded = false, icon: Ico
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+        className="w-full p-3 sm:p-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-3">
           {Icon && <Icon size={20} className="text-gray-600" />}
@@ -27,7 +27,7 @@ function ExpandableSection({ title, children, defaultExpanded = false, icon: Ico
       </button>
       
       {isExpanded && (
-        <div className="px-4 pb-4 border-t border-gray-100">
+        <div className="px-3 sm:px-4 pb-3 sm:pb-4 border-t border-gray-100">
           {children}
         </div>
       )}
@@ -191,8 +191,8 @@ export default function SetupScreen({
 
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
-      <div className="max-w-md mx-auto space-y-4">
+    <div className="flex-1 overflow-y-auto p-3 sm:p-4 xl:pr-[340px] bg-gray-50">
+      <div className="max-w-md mx-auto space-y-3 sm:space-y-4 pb-4">
         {/* Header */}
         <div className="text-center py-6">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -238,15 +238,15 @@ export default function SetupScreen({
             {/* 既存のカスタム設定UI */}
 
         {/* Purpose Setting */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-3 sm:p-4">
           <div className="flex items-center gap-3 mb-3">
-            <h2 className="text-lg font-semibold text-gray-800">目的</h2>
+            <h2 className="text-base sm:text-lg font-semibold text-gray-800">目的</h2>
           </div>
           <textarea
             value={purpose}
             onChange={(e) => setPurpose(e.target.value)}
             placeholder="例: マンション購入契約、雑談、プレゼンテーションの練習など"
-            className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={2}
           />
         </div>
@@ -265,7 +265,7 @@ export default function SetupScreen({
               <select
                 value={personaSettings.age}
                 onChange={(e) => setPersonaSettings({...personaSettings, age: e.target.value})}
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">選択してください</option>
                 <option value="20代前半">20代前半</option>
@@ -288,7 +288,7 @@ export default function SetupScreen({
               <select
                 value={personaSettings.gender}
                 onChange={(e) => setPersonaSettings({...personaSettings, gender: e.target.value})}
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">選択してください</option>
                 <option value="男性">男性</option>
@@ -306,7 +306,7 @@ export default function SetupScreen({
                 value={personaSettings.occupation}
                 onChange={(e) => setPersonaSettings({...personaSettings, occupation: e.target.value})}
                 placeholder="例: エンジニア、医師、教師など"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -318,7 +318,7 @@ export default function SetupScreen({
                 value={personaSettings.personality}
                 onChange={(e) => setPersonaSettings({...personaSettings, personality: e.target.value})}
                 placeholder="例: 明るく親しみやすい、論理的で分析的、優しく思いやりがあるなど"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={3}
               />
             </div>
@@ -331,7 +331,7 @@ export default function SetupScreen({
                 value={personaSettings.additionalInfo}
                 onChange={(e) => setPersonaSettings({...personaSettings, additionalInfo: e.target.value})}
                 placeholder="その他の特徴や詳細情報があれば入力してください"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={2}
               />
             </div>
@@ -353,7 +353,7 @@ export default function SetupScreen({
                 value={sceneSettings.appointmentBackground}
                 onChange={(e) => setSceneSettings({...sceneSettings, appointmentBackground: e.target.value})}
                 placeholder="例: 新商品の打ち合わせ、健康診断、面接など"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={2}
               />
             </div>
@@ -367,7 +367,7 @@ export default function SetupScreen({
                 value={sceneSettings.relationship}
                 onChange={(e) => setSceneSettings({...sceneSettings, relationship: e.target.value})}
                 placeholder="例: 同僚、友人、初対面、上司など"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -378,7 +378,7 @@ export default function SetupScreen({
               <select
                 value={sceneSettings.timeOfDay}
                 onChange={(e) => setSceneSettings({...sceneSettings, timeOfDay: e.target.value})}
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">選択してください</option>
                 <option value="朝">朝</option>
@@ -399,7 +399,7 @@ export default function SetupScreen({
                 value={sceneSettings.location}
                 onChange={(e) => setSceneSettings({...sceneSettings, location: e.target.value})}
                 placeholder="例: オフィス、カフェ、病院、自宅など"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
@@ -411,7 +411,7 @@ export default function SetupScreen({
                 value={sceneSettings.additionalInfo}
                 onChange={(e) => setSceneSettings({...sceneSettings, additionalInfo: e.target.value})}
                 placeholder="シーンに関する追加情報があれば入力してください"
-                className="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={2}
               />
             </div>
