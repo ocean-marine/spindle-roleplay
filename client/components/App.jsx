@@ -317,10 +317,10 @@ export default function App() {
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200 px-3 sm:px-4 py-3 flex-shrink-0 z-20">
-        <div className="flex items-center justify-between">
+      <nav className="bg-white border-b border-gray-200 px-2 sm:px-4 py-2 sm:py-3 flex-shrink-0 z-20">
+        <div className="flex items-center justify-between h-12 sm:h-auto">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <img style={{ width: "20px" }} className="sm:w-6 flex-shrink-0" src={logo} alt="OpenAI Logo" />
+            <img style={{ width: "18px" }} className="sm:w-6 flex-shrink-0" src={logo} alt="OpenAI Logo" />
             <div className="min-w-0">
               <h1 className="text-sm sm:text-base font-semibold text-gray-800 truncate">Realtime Console</h1>
               <p className="text-xs text-gray-500 hidden sm:block">Mobile Edition</p>
@@ -329,10 +329,10 @@ export default function App() {
           
           <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
             {/* User info - hide on very small screens */}
-            <span className="hidden xs:block text-xs text-gray-600 truncate max-w-20 sm:max-w-none">{currentUser}</span>
+            <span className="hidden xs:block text-xs text-gray-600 truncate max-w-16 sm:max-w-none">{currentUser}</span>
             
             {/* Session status indicator */}
-            <div className={`px-1 sm:px-2 py-1 rounded-full text-xs font-medium ${
+            <div className={`px-1.5 sm:px-2 py-1 rounded-full text-xs font-medium ${
               isSessionActive 
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-gray-100 text-gray-600'
@@ -344,7 +344,7 @@ export default function App() {
             {/* Logout button */}
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-500 hover:text-gray-700 px-1 sm:px-2 py-1 rounded hover:bg-gray-100 flex-shrink-0"
+              className="text-xs text-gray-500 hover:text-gray-700 px-1.5 sm:px-2 py-1 rounded hover:bg-gray-100 flex-shrink-0"
             >
               <span className="hidden sm:inline">ログアウト</span>
               <span className="sm:hidden">出</span>
