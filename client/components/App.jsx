@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/openai-logomark.svg";
 import TabNavigation from "./TabNavigation";
 import SetupScreen from "./SetupScreen";
@@ -21,7 +22,9 @@ export default function App() {
   const [dataChannel, setDataChannel] = useState(null);
   const [selectedVoice, setSelectedVoice] = useState("alloy");
   const [instructions, setInstructions] = useState("自然な日本語で応対します。");
-  const [activeTab, setActiveTab] = useState("setup");
+  
+  const navigate = useNavigate();
+  const location = useLocation();
   
   // Purpose setting
   const [purpose, setPurpose] = useState("");
@@ -262,7 +265,7 @@ export default function App() {
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
         setEvents([]);
-        setActiveTab("chat"); // Switch to chat tab when session starts
+        navigate("/roleplay"); // Switch to roleplay route when session starts
         
         // Send initial instructions if provided
         const combinedInstructions = buildCombinedInstructions();
@@ -283,7 +286,7 @@ export default function App() {
         }
       });
     }
-  }, [dataChannel, instructions, personaSettings, sceneSettings, purpose]);
+  }, [dataChannel, instructions, personaSettings, sceneSettings, purpose, navigate]);
 
 
   // Clear history function
@@ -291,66 +294,12 @@ export default function App() {
     setEvents([]);
   };
 
-  // Stop session and switch to setup tab
+  // Stop session and switch to setup route
   const handleStopSession = () => {
     stopSession();
-    setActiveTab("setup");
+    navigate("/setup");
   };
 
-  // Render current tab content
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'setup':
-        return (
-          <SetupScreen
-            selectedVoice={selectedVoice}
-            setSelectedVoice={setSelectedVoice}
-            instructions={instructions}
-            setInstructions={setInstructions}
-            purpose={purpose}
-            setPurpose={setPurpose}
-            personaSettings={personaSettings}
-            setPersonaSettings={setPersonaSettings}
-            sceneSettings={sceneSettings}
-            setSceneSettings={setSceneSettings}
-            startSession={startSession}
-            VOICE_OPTIONS={VOICE_OPTIONS}
-          />
-        );
-      
-      case 'chat':
-        return (
-          <ChatInterface
-            events={events}
-            sendTextMessage={sendTextMessage}
-            isSessionActive={isSessionActive}
-            isTyping={isSpeaking}
-          />
-        );
-      
-      case 'history':
-        return (
-          <HistoryScreen
-            events={events}
-            onClearHistory={handleClearHistory}
-          />
-        );
-      
-      case 'settings':
-        return (
-          <SettingsScreen
-            selectedVoice={selectedVoice}
-            setSelectedVoice={setSelectedVoice}
-            VOICE_OPTIONS={VOICE_OPTIONS}
-            instructions={instructions}
-            setInstructions={setInstructions}
-          />
-        );
-      
-      default:
-        return null;
-    }
-  };
 
   // 認証されていない場合はログイン画面を表示
   if (!isAuthenticated) {
@@ -397,16 +346,65 @@ export default function App() {
       {/* Main content area */}
       <div className="flex-1 relative">
         <div className="h-full flex flex-col">
-          {renderTabContent()}
+          <Routes>
+            <Route path="/" element={<Navigate to="/setup" replace />} />
+            <Route 
+              path="/setup" 
+              element={
+                <SetupScreen
+                  selectedVoice={selectedVoice}
+                  setSelectedVoice={setSelectedVoice}
+                  instructions={instructions}
+                  setInstructions={setInstructions}
+                  purpose={purpose}
+                  setPurpose={setPurpose}
+                  personaSettings={personaSettings}
+                  setPersonaSettings={setPersonaSettings}
+                  sceneSettings={sceneSettings}
+                  setSceneSettings={setSceneSettings}
+                  startSession={startSession}
+                  VOICE_OPTIONS={VOICE_OPTIONS}
+                />
+              } 
+            />
+            <Route 
+              path="/roleplay" 
+              element={
+                <ChatInterface
+                  events={events}
+                  sendTextMessage={sendTextMessage}
+                  isSessionActive={isSessionActive}
+                  isTyping={isSpeaking}
+                />
+              } 
+            />
+            <Route 
+              path="/history" 
+              element={
+                <HistoryScreen
+                  events={events}
+                  onClearHistory={handleClearHistory}
+                />
+              } 
+            />
+            <Route 
+              path="/settings" 
+              element={
+                <SettingsScreen
+                  selectedVoice={selectedVoice}
+                  setSelectedVoice={setSelectedVoice}
+                  VOICE_OPTIONS={VOICE_OPTIONS}
+                  instructions={instructions}
+                  setInstructions={setInstructions}
+                />
+              } 
+            />
+          </Routes>
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <TabNavigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        className="flex-shrink-0"
-      />
+      <TabNavigation className="flex-shrink-0" />
       
       {/* Desktop tool panel (hidden on mobile) */}
       <div className="hidden lg:block fixed top-16 right-4 bottom-16 w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">

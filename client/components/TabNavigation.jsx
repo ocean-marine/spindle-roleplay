@@ -1,29 +1,37 @@
 import { User, MessageCircle, Clock, Sliders } from "react-feather";
+import { Link, useLocation } from "react-router-dom";
 
 const TABS = [
-  { id: 'setup', label: 'セットアップ', icon: Sliders },
-  { id: 'chat', label: 'チャット', icon: MessageCircle },
-  { id: 'history', label: '履歴', icon: Clock },
-  { id: 'settings', label: '設定', icon: User }
+  { id: 'setup', label: 'セットアップ', icon: Sliders, path: '/setup' },
+  { id: 'chat', label: 'チャット', icon: MessageCircle, path: '/roleplay' },
+  { id: 'history', label: '履歴', icon: Clock, path: '/history' },
+  { id: 'settings', label: '設定', icon: User, path: '/settings' }
 ];
 
-export default function TabNavigation({ activeTab, onTabChange, className = "" }) {
+export default function TabNavigation({ className = "" }) {
+  const location = useLocation();
+  
   return (
     <nav className={`flex bg-white border-t border-gray-200 shadow-lg ${className}`}>
-      {TABS.map(({ id, label, icon: Icon }) => (
-        <button
-          key={id}
-          onClick={() => onTabChange(id)}
-          className={`flex-1 flex flex-col items-center justify-center py-2 px-1 min-h-[60px] transition-colors ${
-            activeTab === id
-              ? 'text-blue-600 bg-blue-50 border-t-2 border-blue-600'
-              : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
-          }`}
-        >
-          <Icon size={20} className="mb-1" />
-          <span className="text-xs font-medium">{label}</span>
-        </button>
-      ))}
+      {TABS.map(({ id, label, icon: Icon, path }) => {
+        const isActive = location.pathname === path || 
+          (path === '/setup' && location.pathname === '/');
+        
+        return (
+          <Link
+            key={id}
+            to={path}
+            className={`flex-1 flex flex-col items-center justify-center py-2 px-1 min-h-[60px] transition-colors ${
+              isActive
+                ? 'text-blue-600 bg-blue-50 border-t-2 border-blue-600'
+                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+            }`}
+          >
+            <Icon size={20} className="mb-1" />
+            <span className="text-xs font-medium">{label}</span>
+          </Link>
+        );
+      })}
     </nav>
   );
 }
