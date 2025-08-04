@@ -192,7 +192,7 @@ export default function SetupScreen({
 
   return (
     <div className="flex-1 overflow-y-auto p-3 sm:p-4 xl:pr-[340px] bg-gray-50">
-      <div className="max-w-md mx-auto space-y-3 sm:space-y-4 pb-4">
+      <div className="max-w-md mx-auto space-y-3 sm:space-y-4 pb-20 safe-area-inset-bottom">
         {/* Header */}
         <div className="text-center py-6">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">

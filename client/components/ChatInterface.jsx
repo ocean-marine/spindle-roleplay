@@ -180,7 +180,7 @@ export default function ChatInterface({
       </div>
 
       {/* Messages area - with responsive padding for desktop tool panel */}
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 xl:pr-[340px] space-y-2 pb-20 relative">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 xl:pr-[340px] space-y-2 pb-32 sm:pb-28 relative">
         {/* Mute status overlay */}
         {isMuted && (
           <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-full shadow-lg z-20 flex items-center gap-2">
@@ -210,7 +210,7 @@ export default function ChatInterface({
       </div>
 
       {/* Input area - Fixed at bottom with responsive padding */}
-      <div className="fixed bottom-16 left-0 right-0 xl:right-[320px] border-t border-gray-200 p-3 sm:p-4 bg-white z-10">
+      <div className="fixed bottom-14 sm:bottom-16 left-0 right-0 xl:right-[320px] border-t border-gray-200 p-3 sm:p-4 bg-white z-10 safe-area-inset-bottom">
         <div className="flex gap-2 items-end max-w-4xl mx-auto">
           <div className="flex-1 min-w-0">
             <textarea
