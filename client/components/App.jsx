@@ -390,6 +390,10 @@ export default function App() {
                   isListening={isListening}
                   isSpeaking={isSpeaking}
                   audioLevel={audioLevel}
+                  personaSettings={personaSettings}
+                  sceneSettings={sceneSettings}
+                  purpose={purpose}
+                  onStopSession={handleStopSession}
                 />
               } 
             />
