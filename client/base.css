@@ -17,12 +17,14 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: "Consolas", "Andale Mono", monospace;
   font-size: 0.9rem;
   background-color: var(--color-base);
   -webkit-text-size-adjust: 100%;
   touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Improve mobile touch targets and scrolling */
@@ -31,7 +33,22 @@ body {
     font-size: 0.85rem;
   }
   
-  input, button {
+  input, button, textarea {
     font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* Ensure proper scrolling on mobile */
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Fix mobile viewport height issues */
+@supports (-webkit-touch-callout: none) {
+  #root {
+    height: -webkit-fill-available;
   }
 }
