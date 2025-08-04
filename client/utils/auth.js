@@ -1,33 +1,89 @@
 // 認証ユーティリティ関数
 
-// セッション有効期限（24時間）
-const SESSION_TIMEOUT = 24 * 60 * 60 * 1000;
+const API_BASE_URL = '/api';
+
+/**
+ * ログイン処理
+ * @param {string} accountName アカウント名
+ * @param {string} password パスワード
+ * @returns {Promise<Object>} ログイン結果
+ */
+export async function login(accountName, password) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'login',
+        accountName,
+        password
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      // トークンをlocalStorageに保存
+      localStorage.setItem('auth_token', data.token);
+      localStorage.setItem('auth_account', data.accountName);
+      
+      return {
+        success: true,
+        accountName: data.accountName
+      };
+    } else {
+      return {
+        success: false,
+        error: data.error || 'ログインに失敗しました'
+      };
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    return {
+      success: false,
+      error: 'ネットワークエラーが発生しました'
+    };
+  }
+}
 
 /**
  * 現在の認証状態をチェック
- * @returns {Object|null} 認証されている場合はユーザー情報、そうでなければnull
+ * @returns {Promise<Object|null>} 認証されている場合はユーザー情報、そうでなければnull
  */
-export function checkAuthStatus() {
+export async function checkAuthStatus() {
   try {
-    const authSession = localStorage.getItem('auth_session');
-    if (!authSession) return null;
+    const token = localStorage.getItem('auth_token');
+    if (!token) return null;
 
-    const authData = JSON.parse(atob(authSession));
-    
-    // セッション有効期限チェック
-    if (Date.now() - authData.timestamp > SESSION_TIMEOUT) {
-      // 期限切れの場合は削除
-      localStorage.removeItem('auth_session');
+    const response = await fetch(`${API_BASE_URL}/auth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        action: 'verify'
+      })
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      return {
+        accountName: data.accountName
+      };
+    } else {
+      // トークンが無効な場合は削除
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_account');
       return null;
     }
-
-    return {
-      accountName: authData.accountName,
-      timestamp: authData.timestamp
-    };
   } catch (error) {
-    // 破損したデータの場合は削除
-    localStorage.removeItem('auth_session');
+    // エラーの場合は認証情報を削除
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_account');
     return null;
   }
 }
@@ -35,20 +91,27 @@ export function checkAuthStatus() {
 /**
  * ログアウト処理
  */
-export function logout() {
-  localStorage.removeItem('auth_session');
-}
-
-/**
- * セッションを延長
- */
-export function refreshSession() {
-  const currentAuth = checkAuthStatus();
-  if (currentAuth) {
-    const authData = {
-      accountName: currentAuth.accountName,
-      timestamp: Date.now()
-    };
-    localStorage.setItem('auth_session', btoa(JSON.stringify(authData)));
+export async function logout() {
+  try {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      // サーバーにログアウト通知（オプション）
+      await fetch(`${API_BASE_URL}/auth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          action: 'logout'
+        })
+      });
+    }
+  } catch (error) {
+    console.warn('Logout request failed:', error);
+  } finally {
+    // ローカルストレージをクリア
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('auth_account');
   }
 }

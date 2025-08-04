@@ -9,7 +9,7 @@ import SettingsScreen from "./SettingsScreen";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 import LoginScreen from "./LoginScreen";
-import { checkAuthStatus, logout, refreshSession } from "../utils/auth";
+import { checkAuthStatus, logout } from "../utils/auth";
 
 export default function App() {
   // 認証状態管理
@@ -61,11 +61,12 @@ export default function App() {
   // 認証関連の処理
   useEffect(() => {
     // アプリ起動時に認証状態をチェック
-    const authStatus = checkAuthStatus();
-    if (authStatus) {
-      setIsAuthenticated(true);
-      setCurrentUser(authStatus.accountName);
-    }
+    checkAuthStatus().then((authStatus) => {
+      if (authStatus) {
+        setIsAuthenticated(true);
+        setCurrentUser(authStatus.accountName);
+      }
+    });
   }, []);
 
   const handleLogin = (accountName) => {
@@ -73,8 +74,8 @@ export default function App() {
     setCurrentUser(accountName);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setIsAuthenticated(false);
     setCurrentUser(null);
     // セッションが有効な場合は停止

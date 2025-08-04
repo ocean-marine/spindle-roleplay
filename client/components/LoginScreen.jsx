@@ -1,36 +1,30 @@
 import { useState } from "react";
 import logo from "../assets/openai-logomark.svg";
+import { login } from "../utils/auth.js";
 
 export default function LoginScreen({ onLogin }) {
   const [accountName, setAccountName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 固定認証情報（将来的にはAPIから取得可能な構造）
-  const ACCOUNTS = [
-    { name: "admin", password: "admin123" },
-    { name: "user", password: "user123" }
-  ];
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
-    // 認証チェック
-    const account = ACCOUNTS.find(acc => 
-      acc.name === accountName && acc.password === password
-    );
+    try {
+      const result = await login(accountName, password);
 
-    if (account) {
-      // 認証成功 - 簡易暗号化してlocalStorageに保存
-      const authData = {
-        accountName: account.name,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('auth_session', btoa(JSON.stringify(authData)));
-      onLogin(account.name);
-    } else {
-      setError("アカウント名またはパスワードが正しくありません");
+      if (result.success) {
+        onLogin(result.accountName);
+      } else {
+        setError(result.error);
+      }
+    } catch (error) {
+      setError("予期しないエラーが発生しました");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -89,9 +83,10 @@ export default function LoginScreen({ onLogin }) {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+              disabled={isLoading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:bg-blue-400 disabled:cursor-not-allowed"
             >
-              ログイン
+              {isLoading ? "ログイン中..." : "ログイン"}
             </button>
           </form>
 
