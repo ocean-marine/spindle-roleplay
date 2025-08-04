@@ -3,27 +3,27 @@ import { Send, User, MessageCircle } from "react-feather";
 
 function MessageBubble({ message, isUser, timestamp }) {
   return (
-    <div className={`flex gap-3 mb-4 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+    <div className={`flex gap-3 mb-6 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
       {/* Avatar */}
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-        isUser ? 'bg-blue-500' : 'bg-gray-500'
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm ${
+        isUser ? 'bg-gradient-to-br from-blue-500 to-blue-600' : 'bg-gradient-to-br from-purple-500 to-purple-600'
       }`}>
-        {isUser ? <User size={16} className="text-white" /> : <MessageCircle size={16} className="text-white" />}
+        {isUser ? <User size={18} className="text-white" /> : <MessageCircle size={18} className="text-white" />}
       </div>
       
       {/* Message bubble */}
-      <div className={`max-w-[70%] min-w-0 ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
-        <div className={`rounded-2xl px-4 py-2 break-words word-wrap overflow-wrap-anywhere ${
+      <div className={`max-w-[75%] min-w-0 ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
+        <div className={`rounded-2xl px-4 py-3 break-words word-wrap overflow-wrap-anywhere shadow-sm ${
           isUser 
-            ? 'bg-blue-500 text-white rounded-br-md' 
-            : 'bg-gray-200 text-gray-800 rounded-bl-md'
+            ? 'bg-blue-500 text-white rounded-br-sm' 
+            : 'bg-gray-100 text-gray-900 rounded-bl-sm border border-gray-200'
         }`}>
           <p className="text-sm leading-relaxed break-words">{message}</p>
         </div>
         
         {/* Timestamp */}
         {timestamp && (
-          <span className="text-xs text-gray-500 mt-1 px-1">
+          <span className="text-xs text-gray-400 mt-1 px-2">
             {timestamp}
           </span>
         )}
@@ -34,15 +34,15 @@ function MessageBubble({ message, isUser, timestamp }) {
 
 function TypingIndicator() {
   return (
-    <div className="flex gap-3 mb-4">
-      <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center flex-shrink-0">
-        <MessageCircle size={16} className="text-white" />
+    <div className="flex gap-3 mb-6">
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+        <MessageCircle size={18} className="text-white" />
       </div>
-      <div className="bg-gray-200 rounded-2xl rounded-bl-md px-4 py-3">
+      <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 border border-gray-200 shadow-sm">
         <div className="flex gap-1">
-          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
         </div>
       </div>
     </div>
@@ -140,16 +140,21 @@ export default function ChatInterface({
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Chat header */}
-      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0">
+      <div className="px-4 py-3 border-b border-gray-100 bg-white flex-shrink-0 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            isSessionActive ? 'bg-green-500' : 'bg-gray-400'
-          }`}>
-            <MessageCircle size={16} className="text-white" />
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+            isSessionActive ? 'bg-gradient-to-br from-blue-500 to-purple-600' : 'bg-gray-400'
+          } shadow-md`}>
+            <MessageCircle size={18} className="text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-800">AIアシスタント</h3>
-            <p className={`text-xs ${isSessionActive ? 'text-green-600' : 'text-gray-500'}`}>
+            <h3 className="font-semibold text-gray-900">AIキャラクター</h3>
+            <p className={`text-xs flex items-center gap-1 ${
+              isSessionActive ? 'text-green-600' : 'text-gray-500'
+            }`}>
+              <div className={`w-2 h-2 rounded-full ${
+                isSessionActive ? 'bg-green-500' : 'bg-gray-400'
+              }`}></div>
               {isSessionActive ? 'オンライン' : 'オフライン'}
             </p>
           </div>
@@ -179,7 +184,7 @@ export default function ChatInterface({
       </div>
 
       {/* Input area - Fixed at bottom */}
-      <div className="fixed bottom-16 left-0 right-0 border-t border-gray-200 p-4 bg-white safe-area-bottom z-10">
+      <div className="fixed bottom-16 left-0 right-0 border-t border-gray-100 p-4 bg-white safe-area-bottom z-10 shadow-lg">
         <div className="flex gap-2 items-end">
           <div className="flex-1 min-w-0">
             <textarea
@@ -188,10 +193,10 @@ export default function ChatInterface({
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="メッセージを入力..."
-              className="w-full p-3 border border-gray-300 rounded-2xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm overflow-hidden"
+              className="w-full p-4 border border-gray-200 rounded-3xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-300 text-sm overflow-hidden shadow-sm bg-gray-50 focus:bg-white transition-colors"
               rows={1}
               style={{ 
-                minHeight: '44px', 
+                minHeight: '48px', 
                 maxHeight: '120px',
                 lineHeight: '1.5',
                 wordWrap: 'break-word',
@@ -202,9 +207,9 @@ export default function ChatInterface({
           <button
             onClick={handleSendMessage}
             disabled={!message.trim()}
-            className={`p-3 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors flex-shrink-0 ${
+            className={`p-3 rounded-full min-h-[48px] min-w-[48px] flex items-center justify-center transition-all flex-shrink-0 shadow-sm ${
               message.trim()
-                ? 'bg-blue-500 hover:bg-blue-600 text-white'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-md'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >
