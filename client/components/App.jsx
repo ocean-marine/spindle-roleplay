@@ -5,8 +5,6 @@ import TabNavigation from "./TabNavigation";
 import SetupScreen from "./SetupScreen";
 import VoiceInterface from "./VoiceInterface";
 import ChatInterface from "./ChatInterface";
-import HistoryScreen from "./HistoryScreen";
-import SettingsScreen from "./SettingsScreen";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 import LoginScreen from "./LoginScreen";
@@ -295,10 +293,6 @@ export default function App() {
   }, [dataChannel, instructions, personaSettings, sceneSettings, purpose, navigate]);
 
 
-  // Clear history function
-  const handleClearHistory = () => {
-    setEvents([]);
-  };
 
   // Stop session and switch to setup route
   const handleStopSession = () => {
@@ -396,27 +390,6 @@ export default function App() {
                   isListening={isListening}
                   isSpeaking={isSpeaking}
                   audioLevel={audioLevel}
-                />
-              } 
-            />
-            <Route 
-              path="/history" 
-              element={
-                <HistoryScreen
-                  events={events}
-                  onClearHistory={handleClearHistory}
-                />
-              } 
-            />
-            <Route 
-              path="/settings" 
-              element={
-                <SettingsScreen
-                  selectedVoice={selectedVoice}
-                  setSelectedVoice={setSelectedVoice}
-                  VOICE_OPTIONS={VOICE_OPTIONS}
-                  instructions={instructions}
-                  setInstructions={setInstructions}
                 />
               } 
             />
