@@ -5,7 +5,8 @@ export default function VoiceInterface({
   isSessionActive, 
   isListening = false, 
   isSpeaking = false,
-  audioLevel = 0 
+  audioLevel = 0,
+  isMuted = false
 }) {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
@@ -110,7 +111,12 @@ export default function VoiceInterface({
       {/* Status indicators */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
         <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-2 shadow-sm">
-          {isListening ? (
+          {isMuted ? (
+            <>
+              <MicOff size={16} className="text-red-600" />
+              <span className="text-sm font-medium text-red-600">ミュート</span>
+            </>
+          ) : isListening ? (
             <>
               <Mic size={16} className="text-green-600" />
               <span className="text-sm font-medium text-green-600">リスニング中</span>
@@ -141,26 +147,40 @@ export default function VoiceInterface({
       {/* Main microphone visualization */}
       <div className="relative">
         <div className={`w-40 h-40 rounded-full flex items-center justify-center transition-all duration-300 ${
-          isListening 
+          isMuted
+            ? 'bg-red-100 shadow-lg shadow-red-500/20'
+            : isListening 
             ? 'bg-green-100 shadow-lg shadow-green-500/20' 
             : isSpeaking 
             ? 'bg-blue-100 shadow-lg shadow-blue-500/20' 
             : 'bg-gray-100'
         }`}>
-          <Mic size={64} className={`transition-colors ${
-            isListening 
-              ? 'text-green-600' 
-              : isSpeaking 
-              ? 'text-blue-600' 
-              : 'text-gray-400'
-          }`} />
+          {isMuted ? (
+            <MicOff size={64} className="text-red-600" />
+          ) : (
+            <Mic size={64} className={`transition-colors ${
+              isListening 
+                ? 'text-green-600' 
+                : isSpeaking 
+                ? 'text-blue-600' 
+                : 'text-gray-400'
+            }`} />
+          )}
         </div>
         
         {/* Pulse animation rings */}
-        {isListening && (
+        {isListening && !isMuted && (
           <>
             <div className="absolute inset-0 rounded-full border-2 border-green-400 animate-ping opacity-20"></div>
             <div className="absolute inset-4 rounded-full border-2 border-green-400 animate-ping opacity-30 animation-delay-150"></div>
+          </>
+        )}
+        
+        {/* Muted indicator rings */}
+        {isMuted && (
+          <>
+            <div className="absolute inset-0 rounded-full border-2 border-red-400 animate-pulse opacity-30"></div>
+            <div className="absolute inset-4 rounded-full border-2 border-red-400 animate-pulse opacity-40 animation-delay-150"></div>
           </>
         )}
       </div>
@@ -179,10 +199,20 @@ export default function VoiceInterface({
       {/* Instruction text */}
       <div className="mt-8 text-center">
         <p className="text-lg font-medium text-gray-800 mb-2">
-          {isListening ? "聞いています..." : isSpeaking ? "AIが応答中..." : "タップして話してください"}
+          {isMuted 
+            ? "マイクがミュートされています" 
+            : isListening 
+            ? "聞いています..." 
+            : isSpeaking 
+            ? "AIが応答中..." 
+            : "タップして話してください"
+          }
         </p>
         <p className="text-sm text-gray-600">
-          音声会話がアクティブです。自然に話しかけてください。
+          {isMuted 
+            ? "チャット画面のミュートボタンをタップしてミュートを解除してください" 
+            : "音声会話がアクティブです。自然に話しかけてください。"
+          }
         </p>
       </div>
     </div>

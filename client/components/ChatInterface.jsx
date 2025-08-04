@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, User, MessageCircle } from "react-feather";
+import { Send, User, MessageCircle, Mic, MicOff } from "react-feather";
+import VoiceInterface from "./VoiceInterface";
 
 function MessageBubble({ message, isUser, timestamp }) {
   return (
@@ -53,7 +54,12 @@ export default function ChatInterface({
   events = [], 
   sendTextMessage, 
   isSessionActive,
-  isTyping = false 
+  isTyping = false,
+  isMuted = false,
+  toggleMute,
+  isListening = false,
+  isSpeaking = false,
+  audioLevel = 0
 }) {
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef(null);
@@ -141,23 +147,48 @@ export default function ChatInterface({
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Chat header */}
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            isSessionActive ? 'bg-green-500' : 'bg-gray-400'
-          }`}>
-            <MessageCircle size={16} className="text-white" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              isSessionActive ? 'bg-green-500' : 'bg-gray-400'
+            }`}>
+              <MessageCircle size={16} className="text-white" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-800">AIアシスタント</h3>
+              <p className={`text-xs ${isSessionActive ? 'text-green-600' : 'text-gray-500'}`}>
+                {isSessionActive ? 'オンライン' : 'オフライン'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold text-gray-800">AIアシスタント</h3>
-            <p className={`text-xs ${isSessionActive ? 'text-green-600' : 'text-gray-500'}`}>
-              {isSessionActive ? 'オンライン' : 'オフライン'}
-            </p>
-          </div>
+          
+          {/* Mute button - only show when session is active */}
+          {isSessionActive && (
+            <button
+              onClick={toggleMute}
+              className={`p-2 rounded-full transition-colors ${
+                isMuted 
+                  ? 'bg-red-100 hover:bg-red-200 text-red-600' 
+                  : 'bg-green-100 hover:bg-green-200 text-green-600'
+              }`}
+              title={isMuted ? 'ミュート中 - クリックでミュート解除' : 'マイクオン - クリックでミュート'}
+            >
+              {isMuted ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
+          )}
         </div>
       </div>
 
       {/* Messages area - with responsive padding for desktop tool panel */}
-      <div className="flex-1 overflow-y-auto p-3 sm:p-4 xl:pr-[340px] space-y-2 pb-20">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 xl:pr-[340px] space-y-2 pb-20 relative">
+        {/* Mute status overlay */}
+        {isMuted && (
+          <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-full shadow-lg z-20 flex items-center gap-2">
+            <MicOff size={16} />
+            <span className="text-sm font-medium">マイクミュート中</span>
+          </div>
+        )}
+        
         {messages.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 mb-2">まだメッセージがありません</p>
