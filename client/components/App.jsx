@@ -8,8 +8,14 @@ import HistoryScreen from "./HistoryScreen";
 import SettingsScreen from "./SettingsScreen";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
+import LoginScreen from "./LoginScreen";
+import { checkAuthStatus, logout, refreshSession } from "../utils/auth";
 
 export default function App() {
+  // 認証状態管理
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
@@ -51,6 +57,31 @@ export default function App() {
     "onyx",
     "shimmer"
   ];
+
+  // 認証関連の処理
+  useEffect(() => {
+    // アプリ起動時に認証状態をチェック
+    const authStatus = checkAuthStatus();
+    if (authStatus) {
+      setIsAuthenticated(true);
+      setCurrentUser(authStatus.accountName);
+    }
+  }, []);
+
+  const handleLogin = (accountName) => {
+    setIsAuthenticated(true);
+    setCurrentUser(accountName);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    // セッションが有効な場合は停止
+    if (isSessionActive) {
+      stopSession();
+    }
+  };
 
   async function startSession() {
     // Get a session token for OpenAI Realtime API
@@ -320,6 +351,11 @@ export default function App() {
     }
   };
 
+  // 認証されていない場合はログイン画面を表示
+  if (!isAuthenticated) {
+    return <LoginScreen onLogin={handleLogin} />;
+  }
+
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       {/* Header */}
@@ -333,13 +369,26 @@ export default function App() {
             </div>
           </div>
           
-          {/* Session status indicator */}
-          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-            isSessionActive 
-              ? 'bg-green-100 text-green-700' 
-              : 'bg-gray-100 text-gray-600'
-          }`}>
-            {isSessionActive ? 'Connected' : 'Disconnected'}
+          <div className="flex items-center gap-3">
+            {/* User info */}
+            <span className="text-xs text-gray-600">{currentUser}</span>
+            
+            {/* Session status indicator */}
+            <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isSessionActive 
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-gray-100 text-gray-600'
+            }`}>
+              {isSessionActive ? 'Connected' : 'Disconnected'}
+            </div>
+            
+            {/* Logout button */}
+            <button
+              onClick={handleLogout}
+              className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-100"
+            >
+              ログアウト
+            </button>
           </div>
         </div>
       </nav>
