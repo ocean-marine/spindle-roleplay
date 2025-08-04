@@ -4,6 +4,7 @@ import Button from "./Button";
 import groqService from "../services/groq";
 import PromptModal from "./PromptModal";
 import { selectVoiceByRules } from "../utils/voiceSelection";
+import PresetSelector from "./PresetSelector";
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
@@ -51,6 +52,8 @@ export default function SetupScreen({
   const [isStarting, setIsStarting] = useState(false);
   const [showPromptModal, setShowPromptModal] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
+  const [viewMode, setViewMode] = useState("preset"); // "preset" | "custom"
+  const [selectedPresetId, setSelectedPresetId] = useState(null);
   const immersionLevel = "high"; // Always set to high as requested
 
   // Check if persona and scene settings have been changed from defaults
@@ -144,6 +147,48 @@ export default function SetupScreen({
     }
   };
 
+  // プリセット選択時の処理
+  const handlePresetSelect = async (preset) => {
+    if (!preset) return;
+    
+    setIsStarting(true);
+    try {
+      // プリセットの設定を適用
+      setPurpose(preset.purpose);
+      setPersonaSettings(preset.persona);
+      setSceneSettings(preset.scene);
+      setSelectedVoice(preset.voice);
+      
+      // プロンプトを生成
+      const promptToUse = await groqService.generateImmersiveRoleplayPrompt(
+        preset.persona, 
+        preset.scene, 
+        immersionLevel,
+        preset.purpose
+      );
+      
+      setGeneratedPrompt(promptToUse);
+      setShowPromptModal(true);
+    } catch (error) {
+      console.error('Failed to process preset:', error);
+      alert(`プリセットの処理に失敗しました: ${error.message}`);
+    } finally {
+      setIsStarting(false);
+    }
+  };
+
+  // カスタマイズモードへの切り替え
+  const handleCustomize = (preset = null) => {
+    if (preset) {
+      // プリセットを適用してからカスタマイズモードに
+      setPurpose(preset.purpose);
+      setPersonaSettings(preset.persona);
+      setSceneSettings(preset.scene);
+      setSelectedVoice(preset.voice);
+    }
+    setViewMode("custom");
+  };
+
 
   return (
     <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
@@ -155,6 +200,42 @@ export default function SetupScreen({
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">AIロールプレイング</h1>
         </div>
+
+        {/* Mode Toggle */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1 flex">
+          <button
+            onClick={() => setViewMode("preset")}
+            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+              viewMode === "preset"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+            }`}
+          >
+            プリセット選択
+          </button>
+          <button
+            onClick={() => setViewMode("custom")}
+            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+              viewMode === "custom"
+                ? "bg-blue-600 text-white shadow-sm"
+                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+            }`}
+          >
+            詳細設定
+          </button>
+        </div>
+
+        {/* Content based on view mode */}
+        {viewMode === "preset" ? (
+          <PresetSelector
+            onPresetSelect={handlePresetSelect}
+            onCustomize={handleCustomize}
+            selectedPresetId={selectedPresetId}
+            setSelectedPresetId={setSelectedPresetId}
+          />
+        ) : (
+          <>
+            {/* 既存のカスタム設定UI */}
 
         {/* Purpose Setting */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
@@ -338,21 +419,23 @@ export default function SetupScreen({
         </ExpandableSection>
 
 
-        {/* Generate Prompt Button */}
-        <div className="pt-6">
-          <Button
-            onClick={handleGeneratePrompt}
-            disabled={isStarting}
-            className={`w-full py-4 text-base font-semibold ${
-              isStarting 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-green-600 hover:bg-green-700'
-            }`}
-            icon={<Play size={20} />}
-          >
-            {isStarting ? 'プロンプト生成中...' : 'ロープレ開始'}
-          </Button>
-        </div>
+            {/* Generate Prompt Button */}
+            <div className="pt-6">
+              <Button
+                onClick={handleGeneratePrompt}
+                disabled={isStarting}
+                className={`w-full py-4 text-base font-semibold ${
+                  isStarting 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
+                icon={<Play size={20} />}
+              >
+                {isStarting ? 'プロンプト生成中...' : 'ロープレ開始'}
+              </Button>
+            </div>
+          </>
+        )}
 
         {/* Prompt Modal */}
         <PromptModal
