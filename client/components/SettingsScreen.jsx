@@ -17,14 +17,14 @@ import groqService from "../services/groq";
 
 function SettingSection({ title, children, icon: Icon }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-4">
-      <div className="p-4 border-b border-gray-100">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-3 sm:mb-4">
+      <div className="p-3 sm:p-4 border-b border-gray-100">
         <div className="flex items-center gap-3">
-          {Icon && <Icon size={20} className="text-gray-600" />}
-          <h3 className="font-semibold text-gray-800">{title}</h3>
+          {Icon && <Icon size={18} className="sm:w-5 sm:h-5 text-gray-600" />}
+          <h3 className="font-semibold text-gray-800 text-sm sm:text-base">{title}</h3>
         </div>
       </div>
-      <div className="p-4 space-y-4">
+      <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
         {children}
       </div>
     </div>
@@ -148,7 +148,7 @@ export default function SettingsScreen({
 
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50">
-      <div className="p-4 max-w-md mx-auto">
+      <div className="p-3 sm:p-4 xl:pr-[340px] max-w-md mx-auto">
         {/* Header */}
         <div className="text-center py-6">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">

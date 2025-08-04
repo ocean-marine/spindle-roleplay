@@ -80,23 +80,23 @@ export default function PromptModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[85vh] overflow-hidden">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] sm:max-h-[85vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-800">
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-800 pr-2">
             {hasSettingsChanges ? '生成されたプロンプト' : 'カスタム指示入力'}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors flex-shrink-0"
           >
-            <X size={20} />
+            <X size={18} className="sm:w-5 sm:h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-4 max-h-[calc(85vh-80px)] overflow-y-auto">
+        <div className="p-3 sm:p-4 max-h-[calc(90vh-80px)] sm:max-h-[calc(85vh-80px)] overflow-y-auto">
           <p className="text-sm text-gray-600 mb-4">
             {hasSettingsChanges 
               ? '生成されたロールプレイング用プロンプトを確認・編集して会話を始めます。このプロンプトはAIが完全にペルソナになりきるよう設計されています。' 
@@ -141,11 +141,11 @@ export default function PromptModal({
             </div>
           )}
           
-          <div className="mb-6">
+          <div className="mb-4 sm:mb-6">
             <textarea
               value={editedPrompt}
               onChange={(e) => setEditedPrompt(e.target.value)}
-              className="w-full h-48 p-4 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
+              className="w-full h-40 sm:h-48 p-3 sm:p-4 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono"
               placeholder={hasSettingsChanges 
                 ? 'プロンプトを入力してください...' 
                 : 'AIアシスタントへのカスタム指示を入力してください...'
@@ -154,16 +154,16 @@ export default function PromptModal({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               キャンセル
             </button>
             <Button
               onClick={() => onStartSession(editedPrompt)}
-              className="flex-1 bg-green-600 hover:bg-green-700"
+              className="flex-1 bg-green-600 hover:bg-green-700 py-2.5 sm:py-3"
               icon={<Play size={16} />}
             >
               会話を開始
