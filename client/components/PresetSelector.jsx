@@ -102,24 +102,6 @@ export default function PresetSelector({
           </div>
         )}
 
-        {/* その他のオプション */}
-        <div className="pt-4 border-t border-gray-200 space-y-3">
-          <Button
-            onClick={() => setShowAdvanced(true)}
-            className="w-full py-3 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700"
-            icon={<ChevronRight size={16} />}
-          >
-            その他のプリセットを見る
-          </Button>
-          
-          <Button
-            onClick={() => onCustomize(null)}
-            className="w-full py-3 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700"
-            icon={<Edit3 size={16} />}
-          >
-            詳細設定でカスタマイズ
-          </Button>
-        </div>
       </div>
     );
   }
