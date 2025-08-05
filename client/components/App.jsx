@@ -320,8 +320,7 @@ export default function App() {
       <nav className="bg-white border-b border-gray-100 px-4 py-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img className="w-5 h-5" src={logo} alt="OpenAI Logo" />
-            <h1 className="text-lg font-medium text-gray-900">Realtime Console</h1>
+            <h1 className="text-lg font-medium text-gray-900">Spindle AX</h1>
           </div>
           
           <div className="flex items-center gap-4">
