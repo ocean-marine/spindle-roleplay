@@ -32,16 +32,6 @@ export default function PresetSelector({
   if (!showAdvanced) {
     return (
       <div className="space-y-4">
-        {/* ヘッダー */}
-        <div className="text-center py-4">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Zap size={32} className="text-blue-600" />
-          </div>
-          <h2 className="text-xl font-bold text-gray-800 mb-2">プリセット選択</h2>
-          <p className="text-sm text-gray-600">
-            ワンクリックでロールプレイを開始できます
-          </p>
-        </div>
 
         {/* トップレベルプリセット一覧 */}
         <div className="space-y-3">
