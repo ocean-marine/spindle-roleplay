@@ -6,6 +6,7 @@ import Button from "./Button";
 export default function PresetSelector({ 
   onPresetSelect, 
   onCustomize,
+  onDirectStart,
   selectedPresetId,
   setSelectedPresetId 
 }) {
@@ -87,7 +88,14 @@ export default function PresetSelector({
         {selectedPresetId && (
           <div className="pt-4 space-y-3 border-t border-gray-200">
             <Button
-              onClick={() => onPresetSelect(getPresetById(selectedPresetId))}
+              onClick={() => {
+                const preset = getPresetById(selectedPresetId);
+                if (preset && preset.predefinedInstructions && onDirectStart) {
+                  onDirectStart(preset);
+                } else {
+                  onPresetSelect(preset);
+                }
+              }}
               className="w-full py-4 text-base font-semibold bg-green-600 hover:bg-green-700"
               icon={<Zap size={20} />}
             >
@@ -237,7 +245,14 @@ export default function PresetSelector({
       {selectedPresetId && (
         <div className="pt-4 space-y-3 border-t border-gray-200">
           <Button
-            onClick={() => onPresetSelect(getPresetById(selectedPresetId))}
+            onClick={() => {
+              const preset = getPresetById(selectedPresetId);
+              if (preset && preset.predefinedInstructions && onDirectStart) {
+                onDirectStart(preset);
+              } else {
+                onPresetSelect(preset);
+              }
+            }}
             className="w-full py-4 text-base font-semibold bg-green-600 hover:bg-green-700"
             icon={<Zap size={20} />}
           >
