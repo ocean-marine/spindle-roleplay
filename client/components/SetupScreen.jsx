@@ -159,19 +159,50 @@ export default function SetupScreen({
       setSceneSettings(preset.scene);
       setSelectedVoice(preset.voice);
       
-      // プロンプトを生成
-      const promptToUse = await groqService.generateImmersiveRoleplayPrompt(
-        preset.persona, 
-        preset.scene, 
-        immersionLevel,
-        preset.purpose
-      );
+      // プリセットに predefinedInstructions がある場合はそれを使用、ない場合は従来通り生成
+      let promptToUse = "";
+      if (preset.predefinedInstructions) {
+        promptToUse = preset.predefinedInstructions;
+      } else {
+        // 従来の動的生成（後方互換性のため）
+        promptToUse = await groqService.generateImmersiveRoleplayPrompt(
+          preset.persona, 
+          preset.scene, 
+          immersionLevel,
+          preset.purpose
+        );
+      }
       
       setGeneratedPrompt(promptToUse);
       setShowPromptModal(true);
     } catch (error) {
       console.error('Failed to process preset:', error);
       alert(`プリセットの処理に失敗しました: ${error.message}`);
+    } finally {
+      setIsStarting(false);
+    }
+  };
+
+  // プリセットで直接開始（プロンプトモーダルを飛ばす）
+  const handleDirectStart = async (preset) => {
+    if (!preset || !preset.predefinedInstructions) return;
+    
+    setIsStarting(true);
+    try {
+      // プリセットの設定を適用
+      setPurpose(preset.purpose);
+      setPersonaSettings(preset.persona);
+      setSceneSettings(preset.scene);
+      setSelectedVoice(preset.voice);
+      
+      // 事前定義されたインストラクションを直接使用
+      setInstructions(preset.predefinedInstructions);
+      
+      // セッションを直接開始
+      await startSession();
+    } catch (error) {
+      console.error('Failed to start direct session:', error);
+      alert(`セッションの開始に失敗しました: ${error.message}`);
     } finally {
       setIsStarting(false);
     }
@@ -230,6 +261,7 @@ export default function SetupScreen({
           <PresetSelector
             onPresetSelect={handlePresetSelect}
             onCustomize={handleCustomize}
+            onDirectStart={handleDirectStart}
             selectedPresetId={selectedPresetId}
             setSelectedPresetId={setSelectedPresetId}
           />
