@@ -227,7 +227,6 @@ export default function SetupScreen({
         {/* Header - Clean and minimal */}
         <div className="text-center py-8">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロールプレイング</h1>
-          <p className="text-gray-500">設定を選択してセッションを開始してください</p>
         </div>
 
         {/* Mode Toggle - Apple-inspired segmented control */}
