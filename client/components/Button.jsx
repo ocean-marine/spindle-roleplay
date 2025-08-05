@@ -1,8 +1,9 @@
-export default function Button({ icon, children, onClick, className }) {
+export default function Button({ icon, children, onClick, className, disabled }) {
   return (
     <button
-      className={`bg-gray-800 text-white rounded-full p-3 md:p-4 flex items-center justify-center gap-1 hover:opacity-90 transition-opacity min-h-[44px] ${className}`}
+      className={`bg-black text-white rounded-lg px-6 py-3 flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {icon}
       {children}
