@@ -10,24 +10,24 @@ function ExpandableSection({ title, children, defaultExpanded = false, icon: Ico
   const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg border border-gray-100">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-2.5 sm:p-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+        className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
       >
-        <div className="flex items-center gap-2 sm:gap-3">
-          {Icon && <Icon size={18} className="sm:size-5 text-gray-600" />}
-          <h3 className="text-sm sm:text-base font-semibold text-gray-800">{title}</h3>
+        <div className="flex items-center gap-3">
+          {Icon && <Icon size={20} className="text-gray-500" />}
+          <h3 className="text-base font-medium text-gray-900">{title}</h3>
         </div>
         {isExpanded ? (
-          <ChevronUp size={18} className="sm:size-5 text-gray-400" />
+          <ChevronUp size={20} className="text-gray-400" />
         ) : (
-          <ChevronDown size={18} className="sm:size-5 text-gray-400" />
+          <ChevronDown size={20} className="text-gray-400" />
         )}
       </button>
       
       {isExpanded && (
-        <div className="px-2.5 sm:px-4 pb-2.5 sm:pb-4 border-t border-gray-100">
+        <div className="px-4 pb-4 border-t border-gray-50">
           {children}
         </div>
       )}
@@ -222,34 +222,32 @@ export default function SetupScreen({
 
 
   return (
-    <div className="flex-1 overflow-y-auto p-2 sm:p-4 xl:pr-[340px] bg-gray-50">
-      <div className="max-w-md mx-auto space-y-2 sm:space-y-4 pb-20 safe-area-inset-bottom">
-        {/* Header - Compact for mobile */}
-        <div className="text-center py-3 sm:py-6">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-4">
-            <Settings size={20} className="sm:size-8 text-blue-600" />
-          </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1 sm:mb-2">AIロールプレイング</h1>
+    <div className="flex-1 overflow-y-auto p-6 bg-white">
+      <div className="max-w-lg mx-auto space-y-6">
+        {/* Header - Clean and minimal */}
+        <div className="text-center py-8">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロールプレイング</h1>
+          <p className="text-gray-500">設定を選択してセッションを開始してください</p>
         </div>
 
-        {/* Mode Toggle */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-1 flex">
+        {/* Mode Toggle - Apple-inspired segmented control */}
+        <div className="bg-gray-100 rounded-lg p-1 flex">
           <button
             onClick={() => setViewMode("preset")}
-            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
               viewMode === "preset"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
             }`}
           >
             プリセット選択
           </button>
           <button
             onClick={() => setViewMode("custom")}
-            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
               viewMode === "custom"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
             }`}
           >
             詳細設定
@@ -270,15 +268,13 @@ export default function SetupScreen({
             {/* 既存のカスタム設定UI */}
 
         {/* Purpose Setting */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-2.5 sm:p-4">
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <h2 className="text-sm sm:text-lg font-semibold text-gray-800">目的</h2>
-          </div>
+        <div className="bg-white rounded-lg border border-gray-100 p-4">
+          <h2 className="text-base font-medium text-gray-900 mb-3">目的</h2>
           <textarea
             value={purpose}
             onChange={(e) => setPurpose(e.target.value)}
             placeholder="例: マンション購入契約、雑談、プレゼンテーションの練習など"
-            className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-3 border border-gray-200 rounded-md text-sm resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
             rows={2}
           />
         </div>
@@ -289,15 +285,15 @@ export default function SetupScreen({
           defaultExpanded={false}
           icon={User}
         >
-          <div className="pt-2 sm:pt-3 space-y-3 sm:space-y-4">
+          <div className="pt-3 space-y-4">
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 年齢
               </label>
               <select
                 value={personaSettings.age}
                 onChange={(e) => setPersonaSettings({...personaSettings, age: e.target.value})}
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               >
                 <option value="">選択してください</option>
                 <option value="20代前半">20代前半</option>
@@ -314,13 +310,13 @@ export default function SetupScreen({
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 性別
               </label>
               <select
                 value={personaSettings.gender}
                 onChange={(e) => setPersonaSettings({...personaSettings, gender: e.target.value})}
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               >
                 <option value="">選択してください</option>
                 <option value="男性">男性</option>
@@ -330,7 +326,7 @@ export default function SetupScreen({
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 職業
               </label>
               <input
@@ -338,32 +334,32 @@ export default function SetupScreen({
                 value={personaSettings.occupation}
                 onChange={(e) => setPersonaSettings({...personaSettings, occupation: e.target.value})}
                 placeholder="例: エンジニア、医師、教師など"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 パーソナリティ
               </label>
               <textarea
                 value={personaSettings.personality}
                 onChange={(e) => setPersonaSettings({...personaSettings, personality: e.target.value})}
                 placeholder="例: 明るく親しみやすい、論理的で分析的、優しく思いやりがあるなど"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
                 rows={3}
               />
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 追加情報
               </label>
               <textarea
                 value={personaSettings.additionalInfo}
                 onChange={(e) => setPersonaSettings({...personaSettings, additionalInfo: e.target.value})}
                 placeholder="その他の特徴や詳細情報があれば入力してください"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
                 rows={2}
               />
             </div>
@@ -376,22 +372,22 @@ export default function SetupScreen({
           defaultExpanded={false}
           icon={MapPin}
         >
-          <div className="pt-2 sm:pt-3 space-y-3 sm:space-y-4">
+          <div className="pt-3 space-y-4">
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 アポイントメントの背景
               </label>
               <textarea
                 value={sceneSettings.appointmentBackground}
                 onChange={(e) => setSceneSettings({...sceneSettings, appointmentBackground: e.target.value})}
                 placeholder="例: 新商品の打ち合わせ、健康診断、面接など"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
                 rows={2}
               />
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 相手との関係性
               </label>
               <input
@@ -399,18 +395,18 @@ export default function SetupScreen({
                 value={sceneSettings.relationship}
                 onChange={(e) => setSceneSettings({...sceneSettings, relationship: e.target.value})}
                 placeholder="例: 同僚、友人、初対面、上司など"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 時間帯
               </label>
               <select
                 value={sceneSettings.timeOfDay}
                 onChange={(e) => setSceneSettings({...sceneSettings, timeOfDay: e.target.value})}
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               >
                 <option value="">選択してください</option>
                 <option value="朝">朝</option>
@@ -423,7 +419,7 @@ export default function SetupScreen({
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 場所
               </label>
               <input
@@ -431,19 +427,19 @@ export default function SetupScreen({
                 value={sceneSettings.location}
                 onChange={(e) => setSceneSettings({...sceneSettings, location: e.target.value})}
                 placeholder="例: オフィス、カフェ、病院、自宅など"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 追加情報
               </label>
               <textarea
                 value={sceneSettings.additionalInfo}
                 onChange={(e) => setSceneSettings({...sceneSettings, additionalInfo: e.target.value})}
                 placeholder="シーンに関する追加情報があれば入力してください"
-                className="w-full p-2 sm:p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full p-3 border border-gray-200 rounded-md text-sm resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
                 rows={2}
               />
             </div>
@@ -452,16 +448,12 @@ export default function SetupScreen({
 
 
             {/* Generate Prompt Button */}
-            <div className="pt-4 sm:pt-6">
+            <div className="pt-6">
               <Button
                 onClick={handleGeneratePrompt}
                 disabled={isStarting}
-                className={`w-full py-3 sm:py-4 text-sm sm:text-base font-semibold ${
-                  isStarting 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-green-600 hover:bg-green-700'
-                }`}
-                icon={<Play size={18} className="sm:size-5" />}
+                className="w-full"
+                icon={<Play size={18} />}
               >
                 {isStarting ? 'プロンプト生成中...' : 'ロープレ開始'}
               </Button>

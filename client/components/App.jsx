@@ -315,109 +315,78 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
-      {/* Header */}
-      <nav className="bg-white border-b border-gray-200 px-2 sm:px-4 py-2 sm:py-3 flex-shrink-0 z-20">
-        <div className="flex items-center justify-between h-12 sm:h-auto">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-            <img style={{ width: "18px" }} className="sm:w-6 flex-shrink-0" src={logo} alt="OpenAI Logo" />
-            <div className="min-w-0">
-              <h1 className="text-sm sm:text-base font-semibold text-gray-800 truncate">Realtime Console</h1>
-              <p className="text-xs text-gray-500 hidden sm:block">Mobile Edition</p>
-            </div>
+    <div className="h-screen bg-white flex flex-col overflow-hidden">
+      {/* Header - Apple-inspired minimal design */}
+      <nav className="bg-white border-b border-gray-100 px-4 py-3 flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img className="w-5 h-5" src={logo} alt="OpenAI Logo" />
+            <h1 className="text-lg font-medium text-gray-900">Realtime Console</h1>
           </div>
           
-          <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
-            {/* User info - hide on very small screens */}
-            <span className="hidden xs:block text-xs text-gray-600 truncate max-w-16 sm:max-w-none">{currentUser}</span>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-500">{currentUser}</span>
             
-            {/* Session status indicator */}
-            <div className={`px-1.5 sm:px-2 py-1 rounded-full text-xs font-medium ${
-              isSessionActive 
-                ? 'bg-green-100 text-green-700' 
-                : 'bg-gray-100 text-gray-600'
-            }`}>
-              <span className="hidden sm:inline">{isSessionActive ? 'Connected' : 'Disconnected'}</span>
-              <span className="sm:hidden">{isSessionActive ? '●' : '○'}</span>
-            </div>
+            {/* Minimal session indicator */}
+            <div className={`w-2 h-2 rounded-full ${
+              isSessionActive ? 'bg-green-500' : 'bg-gray-300'
+            }`} />
             
-            {/* Logout button */}
+            {/* Clean logout button */}
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-500 hover:text-gray-700 px-1.5 sm:px-2 py-1 rounded hover:bg-gray-100 flex-shrink-0"
+              className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
             >
-              <span className="hidden sm:inline">ログアウト</span>
-              <span className="sm:hidden">出</span>
+              ログアウト
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Main content area */}
-      <div className="flex-1 relative">
-        <div className="h-full flex flex-col">
-          <Routes>
-            <Route path="/" element={<Navigate to="/setup" replace />} />
-            <Route 
-              path="/setup" 
-              element={
-                <SetupScreen
-                  selectedVoice={selectedVoice}
-                  setSelectedVoice={setSelectedVoice}
-                  instructions={instructions}
-                  setInstructions={setInstructions}
-                  purpose={purpose}
-                  setPurpose={setPurpose}
-                  personaSettings={personaSettings}
-                  setPersonaSettings={setPersonaSettings}
-                  sceneSettings={sceneSettings}
-                  setSceneSettings={setSceneSettings}
-                  startSession={startSession}
-                  VOICE_OPTIONS={VOICE_OPTIONS}
-                />
-              } 
-            />
-            <Route 
-              path="/roleplay" 
-              element={
-                <ChatInterface
-                  events={events}
-                  sendTextMessage={sendTextMessage}
-                  isSessionActive={isSessionActive}
-                  isTyping={isSpeaking}
-                  isMuted={isMuted}
-                  toggleMute={toggleMute}
-                  isListening={isListening}
-                  isSpeaking={isSpeaking}
-                  audioLevel={audioLevel}
-                  personaSettings={personaSettings}
-                  sceneSettings={sceneSettings}
-                  purpose={purpose}
-                  onStopSession={handleStopSession}
-                />
-              } 
-            />
-          </Routes>
-        </div>
-      </div>
-
-      {/* Tab Navigation */}
-      <TabNavigation className="flex-shrink-0" />
-      
-      {/* Desktop tool panel (hidden on mobile and tablet) */}
-      <div className="hidden xl:block fixed top-16 right-4 bottom-20 w-80 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-10">
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="font-semibold text-gray-800">Tools & Events</h3>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4">
-          <ToolPanel
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
-            events={events}
-            isSessionActive={isSessionActive}
-            selectedVoice={selectedVoice}
+      {/* Main content area - Clean and minimal */}
+      <div className="flex-1">
+        <Routes>
+          <Route path="/" element={<Navigate to="/setup" replace />} />
+          <Route 
+            path="/setup" 
+            element={
+              <SetupScreen
+                selectedVoice={selectedVoice}
+                setSelectedVoice={setSelectedVoice}
+                instructions={instructions}
+                setInstructions={setInstructions}
+                purpose={purpose}
+                setPurpose={setPurpose}
+                personaSettings={personaSettings}
+                setPersonaSettings={setPersonaSettings}
+                sceneSettings={sceneSettings}
+                setSceneSettings={setSceneSettings}
+                startSession={startSession}
+                VOICE_OPTIONS={VOICE_OPTIONS}
+              />
+            } 
           />
-        </div>
+          <Route 
+            path="/roleplay" 
+            element={
+              <ChatInterface
+                events={events}
+                sendTextMessage={sendTextMessage}
+                isSessionActive={isSessionActive}
+                isTyping={isSpeaking}
+                isMuted={isMuted}
+                toggleMute={toggleMute}
+                isListening={isListening}
+                isSpeaking={isSpeaking}
+                audioLevel={audioLevel}
+                personaSettings={personaSettings}
+                sceneSettings={sceneSettings}
+                purpose={purpose}
+                onStopSession={handleStopSession}
+              />
+            } 
+          />
+        </Routes>
       </div>
     </div>
   );
