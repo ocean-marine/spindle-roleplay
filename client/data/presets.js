@@ -21,7 +21,7 @@ export const presets = {
       location: "不動産会社の相談ブース",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
-    voice: "alloy",
+    voice: "onyx",
     predefinedInstructions: `あなたは30代前半の男性不動産営業担当者として、不動産会社の相談ブースで初回面談を行っています。午後の時間帯に、不動産購入を検討している顧客（初対面）との資産背景ヒアリングを担当します。
 
 【あなたの特徴】
