@@ -92,13 +92,6 @@ export default function PresetSelector({
               このプリセットで開始
             </Button>
             
-            <Button
-              onClick={handleCustomizeClick}
-              className="w-full py-3 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700"
-              icon={<Edit3 size={16} />}
-            >
-              微調整してから開始
-            </Button>
           </div>
         )}
 
@@ -231,13 +224,6 @@ export default function PresetSelector({
             このプリセットで開始
           </Button>
           
-          <Button
-            onClick={handleCustomizeClick}
-            className="w-full py-3 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700"
-            icon={<Edit3 size={16} />}
-          >
-            微調整してから開始
-          </Button>
         </div>
       )}
     </div>
