@@ -259,7 +259,7 @@ export default function App() {
         }
       });
     }
-  }, [dataChannel, instructions, personaSettings, sceneSettings, purpose, navigate]);
+  }, [instructions]);
 
 
 
