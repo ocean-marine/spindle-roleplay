@@ -201,13 +201,13 @@ export default function PresetSelector({
                           {preset.description}
                         </p>
                         <div className="flex flex-wrap gap-2 text-xs">
-                          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
                             {preset.persona.age} {preset.persona.gender}
                           </span>
-                          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full">
                             {preset.persona.occupation}
                           </span>
-                          <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                          <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
                             {preset.scene.location}
                           </span>
                         </div>
@@ -348,13 +348,13 @@ export default function PresetSelector({
                       {preset.description}
                     </p>
                     <div className="flex flex-wrap gap-2 text-xs">
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
                         {preset.persona.age} {preset.persona.gender}
                       </span>
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full">
                         {preset.persona.occupation}
                       </span>
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                      <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
                         {preset.scene.location}
                       </span>
                     </div>
