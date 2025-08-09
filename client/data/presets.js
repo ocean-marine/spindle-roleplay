@@ -68,7 +68,7 @@ export const presets = {
       location: "コールセンター",
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
-    voice: "nova",
+    voice: "fable",
     predefinedInstructions: `あなたは20代後半の女性カスタマーサポート担当者として、コールセンターで午前中にクレーム電話対応を行っています。商品に不満を持つ顧客からの電話での初回接触となります。
 
 【あなたの特徴】
