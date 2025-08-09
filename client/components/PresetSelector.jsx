@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Zap, ChevronRight, Edit3 } from "react-feather";
+import { Zap, ChevronRight, Edit3, Settings, MoreVertical } from "react-feather";
 import { getPresetsByCategory, getPresetById, getTopLevelPresets } from "../data/presets";
 import Button from "./Button";
 
@@ -16,14 +16,18 @@ export default function PresetSelector({
   const categories = Object.keys(categorizedPresets).filter(category => category !== "トップ");
 
   const handlePresetSelect = (presetId) => {
-    setSelectedPresetId(presetId);
     const preset = getPresetById(presetId);
-    onPresetSelect(preset);
+    if (preset && preset.predefinedInstructions && onDirectStart) {
+      onDirectStart(preset);
+    } else {
+      setSelectedPresetId(presetId);
+      onPresetSelect(preset);
+    }
   };
 
-  const handleCustomizeClick = () => {
-    if (selectedPresetId) {
-      const preset = getPresetById(selectedPresetId);
+  const handleCustomizeClick = (preset) => {
+    if (preset) {
+      setSelectedPresetId(preset.id);
       onCustomize(preset);
     }
   };
@@ -37,70 +41,58 @@ export default function PresetSelector({
         <div className="space-y-3">
           {topLevelPresets.map((preset) => (
             <div key={preset.id} className="space-y-2">
-              <button
-                onClick={() => handlePresetSelect(preset.id)}
-                className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                  selectedPresetId === preset.id
-                    ? 'border-blue-500 bg-blue-50 shadow-md'
-                    : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">{preset.icon}</span>
-                  <div className="flex-1">
-                    <h3 className={`font-semibold mb-1 ${
-                      selectedPresetId === preset.id ? 'text-blue-800' : 'text-gray-800'
-                    }`}>
-                      {preset.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-2">
-                      {preset.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 text-xs">
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
-                        {preset.persona.age} {preset.persona.gender}
-                      </span>
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
-                        {preset.persona.occupation}
-                      </span>
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
-                        {preset.scene.location}
-                      </span>
+              <div className={`relative w-full p-4 rounded-xl border-2 transition-all duration-200 ${
+                selectedPresetId === preset.id
+                  ? 'border-blue-500 bg-blue-50 shadow-md'
+                  : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
+              }`}>
+                {/* Settings button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCustomizeClick(preset);
+                  }}
+                  className="absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition-colors z-10"
+                  title="声色・プロンプト設定"
+                >
+                  <Settings size={16} className="text-gray-500 hover:text-gray-700" />
+                </button>
+                
+                {/* Main preset button */}
+                <button
+                  onClick={() => handlePresetSelect(preset.id)}
+                  className="w-full text-left"
+                >
+                  <div className="flex items-start gap-3 pr-8">
+                    <span className="text-2xl">{preset.icon}</span>
+                    <div className="flex-1">
+                      <h3 className={`font-semibold mb-1 ${
+                        selectedPresetId === preset.id ? 'text-blue-800' : 'text-gray-800'
+                      }`}>
+                        {preset.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2">
+                        {preset.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                          {preset.persona.age} {preset.persona.gender}
+                        </span>
+                        <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                          {preset.persona.occupation}
+                        </span>
+                        <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                          {preset.scene.location}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </button>
+                </button>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* アクションボタン */}
-        {selectedPresetId && (
-          <div className="pt-4 space-y-3 border-t border-gray-200">
-            <Button
-              onClick={() => {
-                const preset = getPresetById(selectedPresetId);
-                if (preset && preset.predefinedInstructions && onDirectStart) {
-                  onDirectStart(preset);
-                } else {
-                  onPresetSelect(preset);
-                }
-              }}
-              className="w-full py-4 text-base font-semibold bg-green-600 hover:bg-green-700"
-              icon={<Zap size={20} />}
-            >
-              このプリセットで開始
-            </Button>
-            
-            <Button
-              onClick={handleCustomizeClick}
-              className="w-full py-3 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700"
-              icon={<Edit3 size={16} />}
-            >
-              微調整してから開始
-            </Button>
-          </div>
-        )}
 
       </div>
     );
@@ -176,70 +168,58 @@ export default function PresetSelector({
       <div className="space-y-3">
         {categoryPresets.map((preset) => (
           <div key={preset.id} className="space-y-2">
-            <button
-              onClick={() => handlePresetSelect(preset.id)}
-              className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${
-                selectedPresetId === preset.id
-                  ? 'border-blue-500 bg-blue-50 shadow-md'
-                  : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">{preset.icon}</span>
-                <div className="flex-1">
-                  <h3 className={`font-semibold mb-1 ${
-                    selectedPresetId === preset.id ? 'text-blue-800' : 'text-gray-800'
-                  }`}>
-                    {preset.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                    {preset.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
-                      {preset.persona.age} {preset.persona.gender}
-                    </span>
-                    <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
-                      {preset.persona.occupation}
-                    </span>
-                    <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
-                      {preset.scene.location}
-                    </span>
+            <div className={`relative w-full p-4 rounded-xl border-2 transition-all duration-200 ${
+              selectedPresetId === preset.id
+                ? 'border-blue-500 bg-blue-50 shadow-md'
+                : 'border-gray-200 bg-white hover:border-blue-300 hover:shadow-sm'
+            }`}>
+              {/* Settings button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCustomizeClick(preset);
+                }}
+                className="absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition-colors z-10"
+                title="声色・プロンプト設定"
+              >
+                <Settings size={16} className="text-gray-500 hover:text-gray-700" />
+              </button>
+              
+              {/* Main preset button */}
+              <button
+                onClick={() => handlePresetSelect(preset.id)}
+                className="w-full text-left"
+              >
+                <div className="flex items-start gap-3 pr-8">
+                  <span className="text-2xl">{preset.icon}</span>
+                  <div className="flex-1">
+                    <h3 className={`font-semibold mb-1 ${
+                      selectedPresetId === preset.id ? 'text-blue-800' : 'text-gray-800'
+                    }`}>
+                      {preset.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {preset.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                        {preset.persona.age} {preset.persona.gender}
+                      </span>
+                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                        {preset.persona.occupation}
+                      </span>
+                      <span className="px-2 py-1 bg-gray-100 rounded-full text-gray-600">
+                        {preset.scene.location}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* アクションボタン */}
-      {selectedPresetId && (
-        <div className="pt-4 space-y-3 border-t border-gray-200">
-          <Button
-            onClick={() => {
-              const preset = getPresetById(selectedPresetId);
-              if (preset && preset.predefinedInstructions && onDirectStart) {
-                onDirectStart(preset);
-              } else {
-                onPresetSelect(preset);
-              }
-            }}
-            className="w-full py-4 text-base font-semibold bg-green-600 hover:bg-green-700"
-            icon={<Zap size={20} />}
-          >
-            このプリセットで開始
-          </Button>
-          
-          <Button
-            onClick={handleCustomizeClick}
-            className="w-full py-3 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700"
-            icon={<Edit3 size={16} />}
-          >
-            微調整してから開始
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
