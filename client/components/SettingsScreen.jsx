@@ -11,7 +11,8 @@ import {
   RefreshCw,
   Shield,
   Zap,
-  MessageSquare
+  MessageSquare,
+  Play
 } from "react-feather";
 import groqService from "../services/groq";
 
@@ -91,6 +92,9 @@ export default function SettingsScreen({
   // Kimi K2 state
   const [isGeneratingInstructions, setIsGeneratingInstructions] = useState(false);
   const [instructionContext, setInstructionContext] = useState("");
+  
+  // Voice test state
+  const [isTestingVoice, setIsTestingVoice] = useState(false);
 
   const updateSetting = (key, value) => {
     setSettings(prev => ({ ...prev, [key]: value }));
@@ -146,6 +150,48 @@ export default function SettingsScreen({
     }
   };
 
+  const handleVoiceTest = async () => {
+    if (isTestingVoice) return;
+    
+    setIsTestingVoice(true);
+    try {
+      // Call the TTS API with the selected voice
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          voice: selectedVoice,
+          text: 'こんにちは。音声テストです。選択された声でお話ししています。'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Create audio blob and play it
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      
+      // Play the audio
+      await audio.play();
+      
+      // Clean up URL when audio finishes
+      audio.addEventListener('ended', () => {
+        URL.revokeObjectURL(audioUrl);
+      });
+
+    } catch (error) {
+      console.error('Voice test error:', error);
+      alert(`音声テストに失敗しました: ${error.message}`);
+    } finally {
+      setIsTestingVoice(false);
+    }
+  };
+
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50">
       <div className="p-3 sm:p-4 xl:pr-[340px] max-w-md mx-auto">
@@ -164,17 +210,41 @@ export default function SettingsScreen({
             label="Voice Model"
             description="会話用のAI音声を選択"
           >
-            <select
-              value={selectedVoice}
-              onChange={(e) => setSelectedVoice(e.target.value)}
-              className="text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              {VOICE_OPTIONS.map((voice) => (
-                <option key={voice} value={voice}>
-                  {voice}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedVoice}
+                onChange={(e) => setSelectedVoice(e.target.value)}
+                className="text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {VOICE_OPTIONS.map((voice) => (
+                  <option key={voice} value={voice}>
+                    {voice}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={handleVoiceTest}
+                disabled={isTestingVoice}
+                className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-colors ${
+                  isTestingVoice
+                    ? 'bg-gray-400 text-white cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+                title="音声をテスト再生"
+              >
+                {isTestingVoice ? (
+                  <>
+                    <RefreshCw size={12} className="animate-spin" />
+                    再生中
+                  </>
+                ) : (
+                  <>
+                    <Play size={12} />
+                    テスト
+                  </>
+                )}
+              </button>
+            </div>
           </SettingItem>
 
           <SettingItem 
