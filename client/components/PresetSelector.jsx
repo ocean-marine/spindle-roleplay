@@ -92,8 +92,26 @@ export default function PresetSelector({
             </div>
           ))}
         </div>
-
-
+        {/* アクションボタン */}
+        {selectedPresetId && (
+          <div className="pt-4 space-y-3 border-t border-gray-200">
+            <Button
+              onClick={() => {
+                const preset = getPresetById(selectedPresetId);
+                if (preset && preset.predefinedInstructions && onDirectStart) {
+                  onDirectStart(preset);
+                } else {
+                  onPresetSelect(preset);
+                }
+              }}
+              className="w-full py-4 text-base font-semibold bg-green-600 hover:bg-green-700"
+              icon={<Zap size={20} />}
+            >
+              このプリセットで開始
+            </Button>
+            
+          </div>
+        )}
       </div>
     );
   }
@@ -219,7 +237,6 @@ export default function PresetSelector({
           </div>
         ))}
       </div>
-
     </div>
   );
 }

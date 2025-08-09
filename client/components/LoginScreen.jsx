@@ -1,5 +1,4 @@
 import { useState } from "react";
-import logo from "../assets/openai-logomark.svg";
 import { login } from "../utils/auth.js";
 
 export default function LoginScreen({ onLogin }) {
@@ -34,11 +33,6 @@ export default function LoginScreen({ onLogin }) {
         <div className="bg-white rounded-lg shadow-md p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <img 
-              src={logo} 
-              alt="OpenAI Logo" 
-              className="w-12 h-12 mx-auto mb-4"
-            />
             <h1 className="text-2xl font-bold text-gray-900">Realtime Console</h1>
             <p className="text-gray-600 mt-2">認証が必要です</p>
           </div>
