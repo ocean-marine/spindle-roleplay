@@ -8,7 +8,7 @@ export const presets = {
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
     persona: {
-      age: "30代前半",
+      age: "70代前半",
       gender: "男性",
       occupation: "不動産営業",
       personality: "親身で誠実、質問上手で聞き上手、数字に強い",
@@ -18,7 +18,7 @@ export const presets = {
       appointmentBackground: "初回面談での資産背景ヒアリング",
       relationship: "不動産購入検討中の顧客（初対面）",
       timeOfDay: "午後",
-      location: "不動産会社の相談ブース",
+      location: "ご自宅",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
     voice: "alloy",
@@ -48,7 +48,7 @@ export const presets = {
     icon: "📞",
     purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
     persona: {
-      age: "20代後半",
+      age: "50代後半",
       gender: "女性",
       occupation: "カスタマーサポート",
       personality: "冷静で忍耐強い、共感力が高く解決志向",
@@ -58,7 +58,7 @@ export const presets = {
       appointmentBackground: "商品に不満を持つ顧客からのクレーム電話",
       relationship: "不満を抱いた顧客（電話での初回接触）",
       timeOfDay: "午前",
-      location: "コールセンター",
+      location: "電話口",
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
     voice: "coral",
