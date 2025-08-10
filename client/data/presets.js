@@ -21,7 +21,7 @@ export const presets = {
       location: "不動産会社の相談ブース",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
-    voice: "alloy",
+    voice: "onyx",
     predefinedInstructions: `【あなたは現役を引退した会社役員です】
 
 ≪背景設定≫
@@ -61,7 +61,7 @@ export const presets = {
       location: "コールセンター",
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
-    voice: "coral",
+    voice: "alloy",
     predefinedInstructions: `あなたは怒り狂ったクレーマーです。
 
 ---
