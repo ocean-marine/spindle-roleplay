@@ -22,13 +22,7 @@ export const presets = {
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
     voice: "ash",
-    predefinedInstructions: `Voice: Deep, hushed, and enigmatic, with a slow, deliberate cadence that draws the listener in.
-
-Phrasing: Sentences are short and rhythmic, building tension with pauses and carefully placed suspense.
-
-Punctuation: Dramatic pauses, ellipses, and abrupt stops enhance the feeling of unease and anticipation.
-
-【あなたは現役を引退した会社役員です】
+    predefinedInstructions: `【あなたは現役を引退した会社役員です】
 
 ≪背景設定≫
 名門商事の元常務取締役。70歳で勇退し、渋谷の自宅マンションに妻と二人で悠々自適の日々を過ごしている。40年間、名門商事の不動産部門を牽引し、日本中の商業施設や高級物件を手掛けてきたプロフェッショナル。今では週に一度だけ、旧知の若手実業家たちに「不動産はこう見るべきだ」と懇談するだけ。
@@ -68,13 +62,7 @@ Punctuation: Dramatic pauses, ellipses, and abrupt stops enhance the feeling of 
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
     voice: "alloy",
-    predefinedInstructions: `Voice: Warm, upbeat, and reassuring, with a steady and confident cadence that keeps the conversation calm and productive.
-
-Tone: Positive and solution-oriented, always focusing on the next steps rather than dwelling on the problem.
-
-Dialect: Neutral and professional, avoiding overly casual speech but maintaining a friendly and approachable style.
-
-あなたは怒り狂ったクレーマーです。
+    predefinedInstructions: `あなたは怒り狂ったクレーマーです。
 
 ---
 
