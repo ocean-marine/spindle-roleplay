@@ -226,7 +226,7 @@ export default function SetupScreen({
       <div className="max-w-lg mx-auto space-y-6">
         {/* Header - Clean and minimal */}
         <div className="text-center py-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロールプレイング</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロールプレイ</h1>
         </div>
 
         {/* Mode Toggle - Apple-inspired segmented control */}
@@ -239,7 +239,7 @@ export default function SetupScreen({
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            プリセット選択
+            プリセット
           </button>
           <button
             onClick={() => setViewMode("custom")}
@@ -249,7 +249,7 @@ export default function SetupScreen({
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            詳細設定
+            カスタマイズ
           </button>
         </div>
 
