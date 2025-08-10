@@ -41,7 +41,7 @@ export default function ChatInterface({
             />
           ) : null}
           <User 
-            size={80} 
+            size={100} 
             className={`text-gray-400 ${personaSettings.image ? 'hidden' : 'flex'}`} 
           />
         </div>

@@ -88,19 +88,29 @@ export default function App() {
   };
 
   async function startSession() {
-    // Get a session token for OpenAI Realtime API, sending voice and persona data
-    const tokenResponse = await fetch("/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        presetVoice: selectedVoice,
-        persona: personaSettings,
-      }),
-    });
-    const data = await tokenResponse.json();
-    const EPHEMERAL_KEY = data.client_secret?.value || data.client_secret;
+    try {
+      // Get a session token for OpenAI Realtime API, sending voice and persona data
+      const tokenResponse = await fetch("/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          presetVoice: selectedVoice,
+          persona: personaSettings,
+        }),
+      });
+      
+      if (!tokenResponse.ok) {
+        throw new Error(`認証に失敗しました: ${tokenResponse.status}`);
+      }
+      
+      const data = await tokenResponse.json();
+      const EPHEMERAL_KEY = data.client_secret?.value || data.client_secret;
+      
+      if (!EPHEMERAL_KEY) {
+        throw new Error("認証トークンの取得に失敗しました");
+      }
 
     // Create a peer connection
     const pc = new RTCPeerConnection();
@@ -137,13 +147,42 @@ export default function App() {
       },
     });
 
+    if (!sdpResponse.ok) {
+      throw new Error(`セッション開始に失敗しました: ${sdpResponse.status} ${sdpResponse.statusText}`);
+    }
+
+    const answerSdp = await sdpResponse.text();
+    
+    if (!answerSdp || !answerSdp.startsWith('v=')) {
+      throw new Error(`無効なSDP応答: ${answerSdp.substring(0, 100)}`);
+    }
+
     const answer = {
       type: "answer",
-      sdp: await sdpResponse.text(),
+      sdp: answerSdp,
     };
-    await pc.setRemoteDescription(answer);
+    
+    try {
+      await pc.setRemoteDescription(answer);
+    } catch (error) {
+      throw new Error(`セッションの開始に失敗しました: ${error.message}`);
+    }
 
     peerConnection.current = pc;
+    } catch (error) {
+      console.error('セッション開始エラー:', error);
+      alert(`セッションの開始に失敗しました: ${error.message}`);
+      
+      // クリーンアップ
+      if (peerConnection.current) {
+        peerConnection.current.close();
+        peerConnection.current = null;
+      }
+      if (microphoneTrack.current) {
+        microphoneTrack.current.stop();
+        microphoneTrack.current = null;
+      }
+    }
   }
 
   // Stop current session, clean up peer connection and data channel
