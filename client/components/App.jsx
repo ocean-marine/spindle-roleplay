@@ -211,29 +211,29 @@ export default function App() {
       combined.push(instructions.trim());
     }
 
-    // Add persona settings
-    const personaInstructions = [];
-    if (personaSettings.age) personaInstructions.push(`年齢: ${personaSettings.age}`);
-    if (personaSettings.gender) personaInstructions.push(`性別: ${personaSettings.gender}`);
-    if (personaSettings.occupation) personaInstructions.push(`職業: ${personaSettings.occupation}`);
-    if (personaSettings.personality) personaInstructions.push(`パーソナリティ: ${personaSettings.personality}`);
-    if (personaSettings.additionalInfo) personaInstructions.push(`追加情報: ${personaSettings.additionalInfo}`);
+    // // Add persona settings
+    // const personaInstructions = [];
+    // if (personaSettings.age) personaInstructions.push(`年齢: ${personaSettings.age}`);
+    // if (personaSettings.gender) personaInstructions.push(`性別: ${personaSettings.gender}`);
+    // if (personaSettings.occupation) personaInstructions.push(`職業: ${personaSettings.occupation}`);
+    // if (personaSettings.personality) personaInstructions.push(`パーソナリティ: ${personaSettings.personality}`);
+    // if (personaSettings.additionalInfo) personaInstructions.push(`追加情報: ${personaSettings.additionalInfo}`);
 
-    if (personaInstructions.length > 0) {
-      combined.push(`あなたのペルソナ設定:\n${personaInstructions.join('\n')}`);
-    }
+    // if (personaInstructions.length > 0) {
+    //   combined.push(`あなたのペルソナ設定:\n${personaInstructions.join('\n')}`);
+    // }
 
-    // Add scene settings
-    const sceneInstructions = [];
-    if (sceneSettings.appointmentBackground) sceneInstructions.push(`アポイントメントの背景: ${sceneSettings.appointmentBackground}`);
-    if (sceneSettings.relationship) sceneInstructions.push(`相手との関係性: ${sceneSettings.relationship}`);
-    if (sceneSettings.timeOfDay) sceneInstructions.push(`時間帯: ${sceneSettings.timeOfDay}`);
-    if (sceneSettings.location) sceneInstructions.push(`場所: ${sceneSettings.location}`);
-    if (sceneSettings.additionalInfo) sceneInstructions.push(`追加情報: ${sceneSettings.additionalInfo}`);
+    // // Add scene settings
+    // const sceneInstructions = [];
+    // if (sceneSettings.appointmentBackground) sceneInstructions.push(`アポイントメントの背景: ${sceneSettings.appointmentBackground}`);
+    // if (sceneSettings.relationship) sceneInstructions.push(`相手との関係性: ${sceneSettings.relationship}`);
+    // if (sceneSettings.timeOfDay) sceneInstructions.push(`時間帯: ${sceneSettings.timeOfDay}`);
+    // if (sceneSettings.location) sceneInstructions.push(`場所: ${sceneSettings.location}`);
+    // if (sceneSettings.additionalInfo) sceneInstructions.push(`追加情報: ${sceneSettings.additionalInfo}`);
 
-    if (sceneInstructions.length > 0) {
-      combined.push(`シーン設定:\n${sceneInstructions.join('\n')}`);
-    }
+    // if (sceneInstructions.length > 0) {
+    //   combined.push(`シーン設定:\n${sceneInstructions.join('\n')}`);
+    // }
 
     return combined.join('\n\n');
   }
