@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { selectVoiceByRules } from '../client/utils/voiceSelection.js';
 
 const apiKey = process.env.OPENAI_API_KEY;
 
@@ -27,9 +28,28 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Only handle GET requests to /token
-  if (req.method === 'GET') {
+  // Handle GET and POST requests to /token
+  if (req.method === 'GET' || req.method === 'POST') {
     try {
+      // Default voice
+      let selectedVoice = "verse";
+      
+      // If POST request with persona data, select voice based on persona
+      if (req.method === 'POST' && req.body && req.body.persona) {
+        const { persona } = req.body;
+        const availableVoices = [
+          'alloy', 'ash', 'ballad', 'coral', 'echo', 'fable', 'nova', 
+          'sage', 'shimmer', 'verse', 'juniper', 'breeze', 'maple', 
+          'vale', 'ember', 'cove', 'sol', 'spruce', 'arbor'
+        ];
+        
+        selectedVoice = selectVoiceByRules(
+          persona.age, 
+          persona.gender, 
+          availableVoices
+        );
+      }
+
       const response = await fetch(
         "https://api.openai.com/v1/realtime/sessions",
         {
@@ -40,7 +60,7 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({
             model: "gpt-4o-realtime-preview-2025-06-03",
-            voice: "verse",
+            voice: selectedVoice,
           }),
         },
       );
