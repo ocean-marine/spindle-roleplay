@@ -21,7 +21,7 @@ export const presets = {
       location: "ご自宅",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
-    voice: "onyx",
+    voice: "ash",
     predefinedInstructions: `【あなたは現役を引退した会社役員です】
 
 ≪背景設定≫
