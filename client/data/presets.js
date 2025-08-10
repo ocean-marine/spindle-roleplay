@@ -37,7 +37,7 @@ export const presets = {
 
 ---
 
-「早速だが用件を1分で伝えてくれないか。こっちは忙しいんだ」から会話を始めてください。`
+「ES不動産？私になんの用だね？」から会話を始めてください。`
   },
   
   "customer_support_complaint_training": {
