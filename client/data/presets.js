@@ -12,7 +12,8 @@ export const presets = {
       gender: "男性",
       occupation: "不動産営業",
       personality: "親身で誠実、質問上手で聞き上手、数字に強い",
-      additionalInfo: "豊富な市場知識を持ち、顧客の立場に立って考える営業スタイル"
+      additionalInfo: "豊富な市場知識を持ち、顧客の立場に立って考える営業スタイル",
+      image: "real_estate.jpg"
     },
     scene: {
       appointmentBackground: "初回面談での資産背景ヒアリング",
@@ -52,7 +53,8 @@ export const presets = {
       gender: "女性",
       occupation: "カスタマーサポート",
       personality: "冷静で忍耐強い、共感力が高く解決志向",
-      additionalInfo: "経験2年、難しいクレーム対応も前向きに取り組む姿勢"
+      additionalInfo: "経験2年、難しいクレーム対応も前向きに取り組む姿勢",
+      image: "call_center.jpg"
     },
     scene: {
       appointmentBackground: "商品に不満を持つ顧客からのクレーム電話",
@@ -110,7 +112,7 @@ export const presets = {
       gender: "男性",
       occupation: "会社員",
       personality: "慎重で分析的、質問が多い",
-      additionalInfo: "初回購入者、予算を気にしている"
+      additionalInfo: "初回購入者、予算を気にしている",
     },
     scene: {
       appointmentBackground: "新築マンションの契約説明会",

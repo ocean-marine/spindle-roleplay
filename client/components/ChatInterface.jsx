@@ -29,9 +29,21 @@ export default function ChatInterface({
         
         {/* Persona Image - Large and centered */}
         <div className="relative w-64 h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
-          <User size={80} className="text-gray-400" />
-          {/* You can add actual persona image here when available */}
-          {/* <img src="persona.png" alt="Persona" className="w-full h-full rounded-full object-cover" /> */}
+          {personaSettings.image ? (
+            <img 
+              src={`/client/assets/personas/${personaSettings.image}`} 
+              alt="Persona" 
+              className="w-full h-full rounded-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          <User 
+            size={80} 
+            className={`text-gray-400 ${personaSettings.image ? 'hidden' : 'flex'}`} 
+          />
         </div>
 
         {/* Control Buttons - Clean and minimal */}
