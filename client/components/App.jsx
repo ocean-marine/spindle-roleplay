@@ -18,7 +18,7 @@ export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
-  const [selectedVoice, setSelectedVoice] = useState("alloy");
+  const [selectedVoice, setSelectedVoice] = useState("");
   const [instructions, setInstructions] = useState("自然な日本語で応対します。");
   
   const navigate = useNavigate();
@@ -88,8 +88,17 @@ export default function App() {
   };
 
   async function startSession() {
-    // Get a session token for OpenAI Realtime API
-    const tokenResponse = await fetch("/token");
+    // Get a session token for OpenAI Realtime API, sending voice and persona data
+    const tokenResponse = await fetch("/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        presetVoice: selectedVoice,
+        persona: personaSettings,
+      }),
+    });
     const data = await tokenResponse.json();
     const EPHEMERAL_KEY = data.client_secret.value;
 

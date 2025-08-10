@@ -34,20 +34,25 @@ export default async function handler(req, res) {
       // Default voice
       let selectedVoice = "verse";
       
-      // If POST request with persona data, select voice based on persona
-      if (req.method === 'POST' && req.body && req.body.persona) {
-        const { persona } = req.body;
+      // If POST request with preset data, use preset voice; otherwise use persona-based selection
+      if (req.method === 'POST' && req.body) {
         const availableVoices = [
           'alloy', 'ash', 'ballad', 'coral', 'echo', 'fable', 'nova', 
           'sage', 'shimmer', 'verse', 'juniper', 'breeze', 'maple', 
           'vale', 'ember', 'cove', 'sol', 'spruce', 'arbor'
         ];
         
-        selectedVoice = selectVoiceByRules(
-          persona.age, 
-          persona.gender, 
-          availableVoices
-        );
+        // Prioritize preset voice if provided
+        if (req.body.presetVoice && availableVoices.includes(req.body.presetVoice)) {
+          selectedVoice = req.body.presetVoice;
+        } else if (req.body.persona) {
+          // Fallback to persona-based selection
+          selectedVoice = selectVoiceByRules(
+            req.body.persona.age, 
+            req.body.persona.gender, 
+            availableVoices
+          );
+        }
       }
 
       const response = await fetch(

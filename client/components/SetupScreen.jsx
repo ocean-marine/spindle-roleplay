@@ -70,13 +70,15 @@ export default function SetupScreen({
   const handleGeneratePrompt = async () => {
     setIsStarting(true);
     try {
-      // Auto-select voice based on persona settings
-      const autoSelectedVoice = selectVoiceByRules(
-        personaSettings.age, 
-        personaSettings.gender, 
-        VOICE_OPTIONS
-      );
-      setSelectedVoice(autoSelectedVoice);
+      // Auto-select voice based on persona settings only if no preset voice is already set
+      if (!selectedVoice || selectedVoice === "alloy") {
+        const autoSelectedVoice = selectVoiceByRules(
+          personaSettings.age, 
+          personaSettings.gender, 
+          VOICE_OPTIONS
+        );
+        setSelectedVoice(autoSelectedVoice);
+      }
       
       let promptToUse = "";
       const hasChanges = hasPersonaChanges() || hasSceneChanges();
