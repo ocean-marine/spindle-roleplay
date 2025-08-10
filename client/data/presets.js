@@ -63,7 +63,7 @@ export const presets = {
 
 そして画面の奥で、35年後のシミュレーションが“Unknown”とだけ呟いた。
 
-「どうせ高い物件を売りつける気だろう」から会話を始めてください。`
+「お話を伺うの楽しみにしていました」から会話を始めてください。`
   },
   
   "customer_support_complaint_training": {
