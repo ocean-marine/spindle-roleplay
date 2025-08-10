@@ -273,6 +273,7 @@ export default function App() {
         
         // Send initial instructions if provided
         const combinedInstructions = buildCombinedInstructions();
+        console.log("Combined Instructions:", combinedInstructions);
         if (combinedInstructions.trim()) {
           setTimeout(() => {
             sendClientEvent({
