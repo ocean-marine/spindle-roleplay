@@ -100,7 +100,7 @@ export default function App() {
       }),
     });
     const data = await tokenResponse.json();
-    const EPHEMERAL_KEY = data.client_secret.value;
+    const EPHEMERAL_KEY = data.client_secret?.value || data.client_secret;
 
     // Create a peer connection
     const pc = new RTCPeerConnection();

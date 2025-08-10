@@ -31,7 +31,7 @@ export default function ChatInterface({
         <div className="relative w-64 h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-full flex items-center justify-center shadow-lg border-4 border-white">
           {personaSettings.image ? (
             <img 
-              src={`/assets/personas/${personaSettings.image}`} 
+              src={`/personas/${personaSettings.image}`} 
               alt="Persona" 
               className="w-full h-full rounded-full object-cover"
               onError={(e) => {
