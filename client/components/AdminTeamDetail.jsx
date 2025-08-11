@@ -229,7 +229,12 @@ export default function AdminTeamDetail() {
                         <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center mr-3">
                           <User size={16} className="text-gray-600" />
                         </div>
-                        <div className="text-sm font-medium text-gray-900">{member.name}</div>
+                        <Link 
+                          to={`/admin/employee?employeeId=${member.id}&teamId=${teamId}`}
+                          className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                        >
+                          {member.name}
+                        </Link>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{member.position}</td>
