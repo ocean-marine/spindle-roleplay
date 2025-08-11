@@ -5,19 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 // Mock data for dashboard
 const mockData = {
   overallStats: {
-    totalEmployees: 247,
-    activeUsers: 189,
+    totalEmployees: 57,
+    activeUsers: 50,
     completionRate: 74,
     averageScore: 8.2,
     totalLearningHours: 1256,
     coursesCompleted: 342
   },
   departmentStats: [
-    { id: 1, name: "営業部", members: 45, completionRate: 82, avgScore: 8.7, activeLearners: 38 },
-    { id: 2, name: "開発部", members: 32, completionRate: 91, avgScore: 9.1, activeLearners: 31 },
-    { id: 3, name: "マーケティング部", members: 28, completionRate: 76, avgScore: 8.3, activeLearners: 22 },
-    { id: 4, name: "人事部", members: 15, completionRate: 68, avgScore: 7.9, activeLearners: 12 },
-    { id: 5, name: "総務部", members: 18, completionRate: 59, avgScore: 7.4, activeLearners: 11 }
+    { id: 1, name: "営業部", members: 15, completionRate: 82, avgScore: 8.7, activeLearners: 13 },
+    { id: 2, name: "開発部", members: 12, completionRate: 91, avgScore: 9.1, activeLearners: 12 },
+    { id: 3, name: "マーケティング部", members: 12, completionRate: 76, avgScore: 8.3, activeLearners: 10 },
+    { id: 4, name: "人事部", members: 9, completionRate: 68, avgScore: 7.9, activeLearners: 8 },
+    { id: 5, name: "総務部", members: 9, completionRate: 59, avgScore: 7.4, activeLearners: 7 }
   ],
   topPerformers: [
     { id: 1, name: "田中 太郎", department: "開発部", score: 9.8, hours: 45, courses: 12 },
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
               <StatCard
                 title="総従業員数"
                 value={mockData.overallStats.totalEmployees}
-                subtitle="アクティブユーザー: 189名"
+                subtitle="アクティブユーザー: 50名"
                 icon={Users}
                 trend={5}
               />
