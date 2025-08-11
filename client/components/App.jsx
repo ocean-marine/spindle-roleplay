@@ -8,6 +8,8 @@ import ChatInterface from "./ChatInterface";
 import SessionControls from "./SessionControls";
 import ToolPanel from "./ToolPanel";
 import LoginScreen from "./LoginScreen";
+import AdminDashboard from "./AdminDashboard";
+import AdminTeamDetail from "./AdminTeamDetail";
 import { checkAuthStatus, logout } from "../utils/auth";
 
 export default function App() {
@@ -411,6 +413,7 @@ export default function App() {
                 setSceneSettings={setSceneSettings}
                 startSession={startSession}
                 VOICE_OPTIONS={VOICE_OPTIONS}
+                currentUser={currentUser}
               />
             } 
           />
@@ -433,6 +436,26 @@ export default function App() {
                 onStopSession={handleStopSession}
               />
             } 
+          />
+          <Route 
+            path="/admin" 
+            element={
+              currentUser === "admin" ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/setup" replace />
+              )
+            }
+          />
+          <Route 
+            path="/admin/team" 
+            element={
+              currentUser === "admin" ? (
+                <AdminTeamDetail />
+              ) : (
+                <Navigate to="/setup" replace />
+              )
+            }
           />
         </Routes>
       </div>
