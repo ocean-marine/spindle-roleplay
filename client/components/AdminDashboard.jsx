@@ -167,7 +167,12 @@ export default function AdminDashboard() {
                             {index + 1}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{performer.name}</p>
+                            <Link 
+                              to={`/admin/employee?employeeId=${performer.id}`}
+                              className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+                            >
+                              {performer.name}
+                            </Link>
                             <p className="text-sm text-gray-600">{performer.department}</p>
                           </div>
                         </div>
@@ -193,7 +198,12 @@ export default function AdminDashboard() {
                         <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                         <div className="flex-1">
                           <p className="text-sm text-gray-900">
-                            <span className="font-medium">{activity.user}</span>が
+                            <Link 
+                              to={`/admin/employee?employeeId=${activity.id}`}
+                              className="font-medium hover:text-blue-600 transition-colors"
+                            >
+                              {activity.user}
+                            </Link>が
                             <span className="font-medium text-blue-600"> {activity.action}</span>
                           </p>
                           <p className="text-sm text-gray-600">{activity.course}</p>
@@ -229,7 +239,14 @@ export default function AdminDashboard() {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {mockData.departmentStats.map((dept) => (
                       <tr key={dept.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{dept.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <Link 
+                            to={`/admin/team?teamId=${dept.id}`}
+                            className="text-gray-900 hover:text-blue-600 transition-colors"
+                          >
+                            {dept.name}
+                          </Link>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{dept.members}名</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
