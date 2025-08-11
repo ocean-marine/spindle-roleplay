@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, BarChart3 } from "react-feather";
+import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, BarChart } from "react-feather";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import groqService from "../services/groq";
@@ -237,7 +237,7 @@ export default function SetupScreen({
                 to="/admin"
                 className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               >
-                <BarChart3 size={16} />
+                <BarChart size={16} />
                 管理職ダッシュボード
               </Link>
             </div>
