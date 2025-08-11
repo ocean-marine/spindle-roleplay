@@ -23,7 +23,7 @@ export default function ChatInterface({
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-white">
+    <div className="flex-1 flex flex-col h-full bg-white overflow-x-hidden overflow-y-auto">
       {/* Main content area */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-12">
         

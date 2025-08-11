@@ -226,7 +226,7 @@ export default function SetupScreen({
 
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 bg-white">
+    <div className="flex-1 overflow-x-hidden overflow-y-auto p-6 bg-white">
       <div className="max-w-lg mx-auto space-y-6">
         {/* Header - Clean and minimal */}
         <div className="text-center py-8 relative">
