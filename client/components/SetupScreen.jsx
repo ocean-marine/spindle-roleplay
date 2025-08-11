@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings, User, MapPin } from "react-feather";
+import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, BarChart3 } from "react-feather";
+import { Link } from "react-router-dom";
 import Button from "./Button";
 import groqService from "../services/groq";
 import PromptModal from "./PromptModal";
@@ -47,7 +48,8 @@ export default function SetupScreen({
   sceneSettings,
   setSceneSettings,
   startSession,
-  VOICE_OPTIONS 
+  VOICE_OPTIONS,
+  currentUser
 }) {
   const [isStarting, setIsStarting] = useState(false);
   const [showPromptModal, setShowPromptModal] = useState(false);
@@ -227,7 +229,19 @@ export default function SetupScreen({
     <div className="flex-1 overflow-y-auto p-6 bg-white">
       <div className="max-w-lg mx-auto space-y-6">
         {/* Header - Clean and minimal */}
-        <div className="text-center py-8">
+        <div className="text-center py-8 relative">
+          {/* Admin Dashboard Link - Top Right */}
+          {currentUser === "admin" && (
+            <div className="absolute top-0 right-0">
+              <Link
+                to="/admin"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                <BarChart3 size={16} />
+                管理職ダッシュボード
+              </Link>
+            </div>
+          )}
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロールプレイ</h1>
         </div>
 
