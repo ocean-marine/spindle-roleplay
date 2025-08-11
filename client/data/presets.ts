@@ -1,5 +1,7 @@
 // プリセットデータ - 営業チーム向けに一般的なユースケースを定義
-export const presets = {
+import { PresetConfig } from '../types/openai-realtime';
+
+export const presets: Record<string, PresetConfig> = {
   "real_estate_asset_hearing": {
     id: "real_estate_asset_hearing",
     category: "トップ",
@@ -8,7 +10,7 @@ export const presets = {
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
     persona: {
-      age: "70代前半",
+      age: 70,
       gender: "男性",
       occupation: "不動産営業",
       personality: "親身で誠実、質問上手で聞き上手、数字に強い",
@@ -49,7 +51,7 @@ export const presets = {
     icon: "📞",
     purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
     persona: {
-      age: "50代後半",
+      age: 50,
       gender: "女性",
       occupation: "カスタマーサポート",
       personality: "冷静で忍耐強い、共感力が高く解決志向",
@@ -109,7 +111,7 @@ export const presets = {
     icon: "💧",
     purpose: "ウォーターサーバー営業の商品説明と質疑応答の練習",
     persona: {
-      age: "30代前半",
+      age: 30,
       gender: "男性",
       occupation: "会社員",
       personality: "慎重で実用性を重視、コストパフォーマンスを気にする",
@@ -156,7 +158,7 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
     icon: "🏢",
     purpose: "マンション購入契約の検討と営業担当者との相談",
     persona: {
-      age: "30代前半",
+      age: 30,
       gender: "男性",
       occupation: "会社員",
       personality: "慎重で分析的、質問が多い",
@@ -204,7 +206,7 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
     icon: "💼",
     purpose: "エンジニア職への転職面接の練習",
     persona: {
-      age: "20代後半",
+      age: 25,
       gender: "女性",
       occupation: "システムエンジニア",
       personality: "向上心が強く、技術に関心が高い",
@@ -252,7 +254,7 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
     icon: "🍽️",
     purpose: "レストランでの丁寧な接客とサービス提供",
     persona: {
-      age: "20代前半",
+      age: 22,
       gender: "女性",
       occupation: "サービススタッフ",
       personality: "明るく丁寧、気配りができる",
@@ -300,7 +302,7 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
     icon: "🏥",
     purpose: "健康診断結果の説明と生活指導",
     persona: {
-      age: "40代前半",
+      age: 42,
       gender: "男性",
       occupation: "内科医",
       personality: "親身で分かりやすい説明を心がける",
@@ -348,7 +350,7 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
     icon: "☕",
     purpose: "友人との自然な日常会話と近況報告",
     persona: {
-      age: "20代後半",
+      age: 27,
       gender: "女性",
       occupation: "デザイナー",
       personality: "親しみやすく話しやすい、ユーモアがある",
@@ -396,7 +398,7 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
     icon: "🛡️",
     purpose: "家族構成の変化に伴う保険の見直し",
     persona: {
-      age: "30代後半",
+      age: 37,
       gender: "男性",
       occupation: "保険アドバイザー",
       personality: "誠実で丁寧、顧客目線で提案する",
@@ -438,8 +440,8 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
 };
 
 // カテゴリ別のプリセット取得
-export const getPresetsByCategory = () => {
-  const categories = {};
+export const getPresetsByCategory = (): Record<string, PresetConfig[]> => {
+  const categories: Record<string, PresetConfig[]> = {};
   Object.values(presets).forEach(preset => {
     if (!categories[preset.category]) {
       categories[preset.category] = [];
@@ -450,16 +452,16 @@ export const getPresetsByCategory = () => {
 };
 
 // プリセットIDでプリセット取得
-export const getPresetById = (id) => {
+export const getPresetById = (id: string): PresetConfig | null => {
   return presets[id] || null;
 };
 
 // 全カテゴリ名の取得
-export const getAllCategories = () => {
+export const getAllCategories = (): string[] => {
   return [...new Set(Object.values(presets).map(preset => preset.category))];
 };
 
 // トップレベルプリセットの取得（階層なし表示用）
-export const getTopLevelPresets = () => {
+export const getTopLevelPresets = (): PresetConfig[] => {
   return Object.values(presets).filter(preset => preset.category === "トップ");
 };

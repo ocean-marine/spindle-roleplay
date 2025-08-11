@@ -3,20 +3,33 @@
  * Now uses secure backend API endpoint instead of client-side API calls
  */
 
+import { PersonaConfig, SceneConfig } from '../types/openai-realtime';
+
+export interface GroqResponse {
+  content: string;
+}
+
+export interface GroqRequest {
+  prompt?: string;
+  context?: string;
+}
+
 class GroqService {
+  private apiEndpoint: string;
+
   constructor() {
     // Backend API endpoint for secure GROQ processing
     this.apiEndpoint = '/api/groq';
   }
 
-  async generateInstructions(prompt) {
+  async generateInstructions(prompt: string): Promise<string> {
     try {
       const response = await fetch(this.apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ prompt } as GroqRequest)
       });
 
       if (!response.ok) {
@@ -24,7 +37,7 @@ class GroqService {
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: GroqResponse = await response.json();
       return data.content || '';
     } catch (error) {
       console.error('Groq API request failed:', error);
@@ -32,14 +45,14 @@ class GroqService {
     }
   }
 
-  async generateDetailedInstructions(context = '') {
+  async generateDetailedInstructions(context: string = ''): Promise<string> {
     try {
       const response = await fetch(this.apiEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ context })
+        body: JSON.stringify({ context } as GroqRequest)
       });
 
       if (!response.ok) {
@@ -47,7 +60,7 @@ class GroqService {
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: GroqResponse = await response.json();
       return data.content || '';
     } catch (error) {
       console.error('Groq API request failed:', error);
@@ -58,7 +71,12 @@ class GroqService {
   /**
    * ロールプレイ用のプロンプトを生成
    */
-  async generateRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+  async generateRoleplayPrompt(
+    personaSettings: PersonaConfig, 
+    sceneSettings: SceneConfig, 
+    intensity: 'high' | 'medium' = 'high', 
+    purpose: string = ''
+  ): Promise<string> {
     const roleplayContext = this._buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose);
     return this.generateDetailedInstructions(roleplayContext);
   }
@@ -66,7 +84,12 @@ class GroqService {
   /**
    * 没入型ロールプレイ用のプロンプトを生成
    */
-  async generateImmersiveRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+  async generateImmersiveRoleplayPrompt(
+    personaSettings: PersonaConfig, 
+    sceneSettings: SceneConfig, 
+    intensity: 'high' | 'medium' = 'high', 
+    purpose: string = ''
+  ): Promise<string> {
     const roleplayContext = this._buildImmersiveRoleplayContext(personaSettings, sceneSettings, intensity, purpose);
     return this.generateDetailedInstructions(roleplayContext);
   }
@@ -74,8 +97,13 @@ class GroqService {
   /**
    * ロールプレイ用のコンテキストを構築
    */
-  _buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
-    const contextParts = [];
+  private _buildRoleplayContext(
+    personaSettings: PersonaConfig, 
+    sceneSettings: SceneConfig, 
+    intensity: 'high' | 'medium', 
+    purpose: string
+  ): string {
+    const contextParts: string[] = [];
     
     // 目的
     if (purpose && purpose.trim()) {
@@ -107,8 +135,13 @@ class GroqService {
   /**
    * 没入型ロールプレイ用のコンテキストを構築
    */
-  _buildImmersiveRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
-    const contextParts = [];
+  private _buildImmersiveRoleplayContext(
+    personaSettings: PersonaConfig, 
+    sceneSettings: SceneConfig, 
+    intensity: 'high' | 'medium', 
+    purpose: string
+  ): string {
+    const contextParts: string[] = [];
     
     // 目的
     if (purpose && purpose.trim()) {
@@ -140,8 +173,8 @@ class GroqService {
   /**
    * 基本的な目的を構築
    */
-  _buildPurpose(purpose, intensity) {
-    const purposeParts = [];
+  private _buildPurpose(purpose: string, _intensity: 'high' | 'medium'): string {
+    const purposeParts: string[] = [];
     
     purposeParts.push(`目的: ${purpose}`);
     
@@ -162,8 +195,8 @@ class GroqService {
   /**
    * シーン設定を構築
    */
-  _buildScene(scene, intensity, purpose = '') {
-    const sceneParts = [];
+  private _buildScene(scene: SceneConfig, _intensity: 'high' | 'medium', _purpose: string = ''): string {
+    const sceneParts: string[] = [];
     
     if (scene.appointmentBackground) {
       sceneParts.push(`背景: ${scene.appointmentBackground}`);
@@ -192,8 +225,8 @@ class GroqService {
    * 魂の奥底に潜む目的を詩的に紡ぐ
    * 表面的な意図を血の通った人間的動機へと昇華させる
    */
-  _weavePoeticalPurpose(purpose, intensity) {
-    const purposeParts = [];
+  private _weavePoeticalPurpose(purpose: string, _intensity: 'high' | 'medium'): string {
+    const purposeParts: string[] = [];
     
     purposeParts.push(`目的: ${purpose}`);
     
@@ -220,8 +253,8 @@ class GroqService {
   /**
    * ペルソナ情報を構築
    */
-  _buildPersona(persona, intensity, purpose = '') {
-    const personaParts = [];
+  private _buildPersona(persona: PersonaConfig, intensity: 'high' | 'medium', _purpose: string = ''): string {
+    const personaParts: string[] = [];
     
     if (persona.age) {
       personaParts.push(`年齢: ${persona.age}歳としての経験や価値観、考え方`);
@@ -255,8 +288,8 @@ class GroqService {
    * 舞台という名の詩的現実の構築
    * シーンを五感と感情が織りなす立体的な詩として創造する
    */
-  _createScenePoetry(scene, intensity, purpose = '') {
-    const sceneParts = [];
+  private _createScenePoetry(scene: SceneConfig, intensity: 'high' | 'medium', _purpose: string = ''): string {
+    const sceneParts: string[] = [];
     
     if (scene.appointmentBackground) {
       sceneParts.push(`背景: ${scene.appointmentBackground}から生まれる状況や関係者の思惑`);

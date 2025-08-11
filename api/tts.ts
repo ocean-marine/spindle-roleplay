@@ -1,16 +1,22 @@
 import OpenAI from "openai";
+import { VercelRequest, VercelResponse } from '@vercel/node';
+
+interface TTSRequestBody {
+  voice?: string;
+  text?: string;
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { voice = 'alloy', text = 'こんにちは。音声テストです。' } = req.body;
+    const { voice = 'alloy', text = 'こんにちは。音声テストです。' }: TTSRequestBody = req.body;
 
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: 'OpenAI API key not configured' });
@@ -19,7 +25,7 @@ export default async function handler(req, res) {
     // Create TTS audio using OpenAI API
     const mp3 = await openai.audio.speech.create({
       model: "gpt-4o-mini-tts",
-      voice: voice,
+      voice: voice as 'alloy' | 'echo' | 'fable' | 'nova' | 'onyx' | 'shimmer',
       input: text,
       instructions: "Speak in a clear and natural tone.",
     });
@@ -36,7 +42,7 @@ export default async function handler(req, res) {
     console.error('TTS Error:', error);
     res.status(500).json({ 
       error: 'Failed to generate speech',
-      details: error.message 
+      details: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }

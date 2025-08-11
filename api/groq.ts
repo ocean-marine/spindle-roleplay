@@ -1,5 +1,11 @@
 import "dotenv/config";
 import Groq from 'groq-sdk';
+import { VercelRequest, VercelResponse } from '@vercel/node';
+
+interface GroqRequestBody {
+  prompt?: string;
+  context?: string;
+}
 
 const groqApiKey = process.env.GROQ_API_KEY;
 
@@ -7,7 +13,7 @@ const groqApiKey = process.env.GROQ_API_KEY;
 console.log('GROQ_API_KEY:', groqApiKey ? 'Set' : 'Missing');
 console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
 
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Handle CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -30,7 +36,7 @@ export default async function handler(req, res) {
   // Only handle POST requests
   if (req.method === 'POST') {
     try {
-      const { prompt, context } = req.body;
+      const { prompt, context }: GroqRequestBody = req.body;
 
       if (!prompt && !context) {
         res.status(400).json({ error: 'promptまたはcontextが必要です' });
@@ -39,7 +45,7 @@ export default async function handler(req, res) {
 
       const groq = new Groq({ apiKey: groqApiKey });
 
-      let finalPrompt = prompt;
+      let finalPrompt = prompt || '';
 
       // If context is provided, generate detailed instructions
       if (context && !prompt) {
@@ -84,7 +90,7 @@ ${context || '基本的なロールプレイ'}
       console.error('Groq API request failed:', error);
       res.status(500).json({ 
         error: 'Groq APIリクエストが失敗しました',
-        message: error.message 
+        message: error instanceof Error ? error.message : 'Unknown error'
       });
     }
   } else {

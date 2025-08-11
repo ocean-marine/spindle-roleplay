@@ -2,13 +2,23 @@
 
 const API_BASE_URL = '/api';
 
+export interface LoginResult {
+  success: boolean;
+  accountName?: string;
+  error?: string;
+}
+
+export interface AuthUser {
+  accountName: string;
+}
+
 /**
  * ログイン処理
- * @param {string} accountName アカウント名
- * @param {string} password パスワード
- * @returns {Promise<Object>} ログイン結果
+ * @param accountName アカウント名
+ * @param password パスワード
+ * @returns ログイン結果
  */
-export async function login(accountName, password) {
+export async function login(accountName: string, password: string): Promise<LoginResult> {
   try {
     const response = await fetch(`${API_BASE_URL}/auth`, {
       method: 'POST',
@@ -50,9 +60,9 @@ export async function login(accountName, password) {
 
 /**
  * 現在の認証状態をチェック
- * @returns {Promise<Object|null>} 認証されている場合はユーザー情報、そうでなければnull
+ * @returns 認証されている場合はユーザー情報、そうでなければnull
  */
-export async function checkAuthStatus() {
+export async function checkAuthStatus(): Promise<AuthUser | null> {
   try {
     const token = localStorage.getItem('auth_token');
     if (!token) return null;
@@ -91,7 +101,7 @@ export async function checkAuthStatus() {
 /**
  * ログアウト処理
  */
-export async function logout() {
+export async function logout(): Promise<void> {
   try {
     const token = localStorage.getItem('auth_token');
     if (token) {
