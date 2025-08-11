@@ -1,6 +1,36 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { User, Clock, BookOpen, TrendingUp, Award, Calendar, BarChart, ArrowLeft } from "react-feather";
+import { getTopLevelPresets } from "../data/presets";
+
+// コース名からコースIDへのマッピング（従業員データとプリセットデータの紐付け）
+const courseNameToId = {
+  // 実際のプリセットコース
+  "不動産営業の資産背景ヒアリング": "real_estate_asset_hearing",
+  "カスタマーサポートのクレーム対応強化": "customer_support_complaint_training", 
+  "ウォーターサーバーの商品説明ロールプレイ": "water_server_sales_training",
+  // 他のコース名（将来追加予定のコース）
+  "顧客対応スキル向上": null,
+  "プレゼンテーション技法": null,
+  "営業基礎": null,
+  "リーダーシップ入門": null,
+  "チームマネジメント": null,
+  "データ分析入門": null,
+  "デジタル変革基礎": null,
+  "上級データ分析": null,
+  "上級マーケティング戦略": null,
+  "マーケティング戦略": null,
+  "人事基礎": null,
+  "労務管理": null,
+  "総務基礎": null,
+  "事務効率化": null,
+  "コンプライアンス": null
+};
+
+// コース名からコースIDを取得する関数
+const getCourseIdFromName = (courseName) => {
+  return courseNameToId[courseName] || null;
+};
 
 // Mock employee data - comprehensive data for all team members
 const employeeData = {
@@ -390,20 +420,31 @@ export default function AdminEmployeeDetail() {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                {employee.recentActivities.map((activity, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className={`w-2 h-2 rounded-full mt-2 ${
-                      activity.type === '完了' ? 'bg-green-500' :
-                      activity.type === '進行中' ? 'bg-blue-500' : 'bg-gray-400'
-                    }`}></div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900">
-                        <span className="font-medium">{activity.activity}</span> を
-                        <span className={`font-medium ${
-                          activity.type === '完了' ? 'text-green-600' :
-                          activity.type === '進行中' ? 'text-blue-600' : 'text-gray-600'
-                        }`}> {activity.type}</span>
-                      </p>
+                {employee.recentActivities.map((activity, index) => {
+                  const courseId = getCourseIdFromName(activity.activity);
+                  return (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className={`w-2 h-2 rounded-full mt-2 ${
+                        activity.type === '完了' ? 'bg-green-500' :
+                        activity.type === '進行中' ? 'bg-blue-500' : 'bg-gray-400'
+                      }`}></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-900">
+                          {courseId ? (
+                            <Link 
+                              to={`/admin/courses/${courseId}`}
+                              className="font-medium hover:text-blue-600 transition-colors cursor-pointer"
+                            >
+                              {activity.activity}
+                            </Link>
+                          ) : (
+                            <span className="font-medium">{activity.activity}</span>
+                          )} を
+                          <span className={`font-medium ${
+                            activity.type === '完了' ? 'text-green-600' :
+                            activity.type === '進行中' ? 'text-blue-600' : 'text-gray-600'
+                          }`}> {activity.type}</span>
+                        </p>
                       <div className="flex items-center justify-between mt-1">
                         <p className="text-xs text-gray-500">
                           {new Date(activity.date).toLocaleDateString('ja-JP')}
@@ -419,9 +460,10 @@ export default function AdminEmployeeDetail() {
                           </p>
                         )}
                       </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -436,17 +478,29 @@ export default function AdminEmployeeDetail() {
             </div>
             <div className="p-6">
               <div className="space-y-3">
-                {employee.completedCourses.map((course, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <Award size={16} className="text-green-600" />
-                      <span className="text-sm font-medium text-gray-900">{course}</span>
+                {employee.completedCourses.map((course, index) => {
+                  const courseId = getCourseIdFromName(course);
+                  return (
+                    <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Award size={16} className="text-green-600" />
+                        {courseId ? (
+                          <Link 
+                            to={`/admin/courses/${courseId}`}
+                            className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer"
+                          >
+                            {course}
+                          </Link>
+                        ) : (
+                          <span className="text-sm font-medium text-gray-900">{course}</span>
+                        )}
+                      </div>
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                        完了
+                      </span>
                     </div>
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                      完了
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -459,17 +513,29 @@ export default function AdminEmployeeDetail() {
             <div className="p-6">
               <div className="space-y-3">
                 {employee.currentCourses.length > 0 ? (
-                  employee.currentCourses.map((course, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <BookOpen size={16} className="text-blue-600" />
-                        <span className="text-sm font-medium text-gray-900">{course}</span>
+                  employee.currentCourses.map((course, index) => {
+                    const courseId = getCourseIdFromName(course);
+                    return (
+                      <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <BookOpen size={16} className="text-blue-600" />
+                          {courseId ? (
+                            <Link 
+                              to={`/admin/courses/${courseId}`}
+                              className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer"
+                            >
+                              {course}
+                            </Link>
+                          ) : (
+                            <span className="text-sm font-medium text-gray-900">{course}</span>
+                          )}
+                        </div>
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                          進行中
+                        </span>
                       </div>
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                        進行中
-                      </span>
-                    </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="text-center py-4 text-gray-500">
                     <BookOpen size={24} className="mx-auto mb-2 text-gray-400" />
