@@ -280,19 +280,29 @@ export default function AdminDashboard() {
 
         {activeTab === "courses" && (
           <div className="space-y-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">コース管理</h2>
+              <Link
+                to="/admin/courses"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              >
+                <BookOpen size={16} />
+                詳細コース管理
+              </Link>
+            </div>
             <div className="bg-white rounded-lg border border-gray-100 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">コース効果測定</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
-                  { name: "顧客対応スキル向上", completions: 89, satisfaction: 4.7 },
-                  { name: "プレゼンテーション技法", completions: 67, satisfaction: 4.5 },
-                  { name: "リーダーシップ基礎", completions: 45, satisfaction: 4.8 },
-                  { name: "データ分析入門", completions: 34, satisfaction: 4.3 },
-                  { name: "チームマネジメント", completions: 28, satisfaction: 4.6 },
-                  { name: "デジタル変革基礎", completions: 52, satisfaction: 4.4 }
+                  { name: "不動産営業の資産背景ヒアリング", completions: 67, satisfaction: 4.7, icon: "🏡" },
+                  { name: "カスタマーサポートのクレーム対応強化", completions: 58, satisfaction: 4.3, icon: "📞" },
+                  { name: "ウォーターサーバーの商品説明ロールプレイ", completions: 42, satisfaction: 4.5, icon: "💧" },
                 ].map((course, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-2">{course.name}</h4>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">{course.icon}</span>
+                      <h4 className="font-medium text-gray-900">{course.name}</h4>
+                    </div>
                     <div className="space-y-2 text-sm text-gray-600">
                       <div className="flex justify-between">
                         <span>完了者数:</span>

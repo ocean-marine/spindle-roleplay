@@ -11,6 +11,7 @@ import LoginScreen from "./LoginScreen";
 import AdminDashboard from "./AdminDashboard";
 import AdminTeamDetail from "./AdminTeamDetail";
 import AdminEmployeeDetail from "./AdminEmployeeDetail";
+import CourseManagement from "./CourseManagement";
 import { checkAuthStatus, logout } from "../utils/auth";
 
 export default function App() {
@@ -463,6 +464,16 @@ export default function App() {
             element={
               currentUser === "admin" ? (
                 <AdminEmployeeDetail />
+              ) : (
+                <Navigate to="/setup" replace />
+              )
+            }
+          />
+          <Route 
+            path="/admin/courses" 
+            element={
+              currentUser === "admin" ? (
+                <CourseManagement />
               ) : (
                 <Navigate to="/setup" replace />
               )
