@@ -83,7 +83,14 @@ function CourseCard({ course, progress }) {
         <div className="flex items-center gap-3">
           <div className="text-2xl">{course.icon}</div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">{course.name}</h3>
+            <Link 
+              to={`/admin/courses/${course.id}`}
+              className="block"
+            >
+              <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
+                {course.name}
+              </h3>
+            </Link>
             <p className="text-sm text-gray-600">{course.description}</p>
           </div>
         </div>
@@ -322,7 +329,14 @@ export default function CourseManagement() {
                             <div className="flex items-center gap-3">
                               <span className="text-lg">{course.icon}</span>
                               <div>
-                                <div className="text-sm font-medium text-gray-900">{course.name}</div>
+                                <Link 
+                                  to={`/admin/courses/${course.id}`}
+                                  className="block"
+                                >
+                                  <div className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">
+                                    {course.name}
+                                  </div>
+                                </Link>
                                 <div className="text-sm text-gray-500">{course.description}</div>
                               </div>
                             </div>
