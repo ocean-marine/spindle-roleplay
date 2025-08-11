@@ -3,13 +3,38 @@
  * Now uses secure backend API endpoint instead of client-side API calls
  */
 
+interface PersonaSettings {
+  age?: string;
+  gender?: string;
+  occupation?: string;
+  personality?: string;
+  additionalInfo?: string;
+}
+
+interface SceneSettings {
+  appointmentBackground?: string;
+  relationship?: string;
+  timeOfDay?: string;
+  location?: string;
+  additionalInfo?: string;
+}
+
+interface GroqApiResponse {
+  content?: string;
+  error?: string;
+}
+
+type IntensityLevel = 'high' | 'medium' | 'low';
+
 class GroqService {
+  private apiEndpoint: string;
+
   constructor() {
     // Backend API endpoint for secure GROQ processing
     this.apiEndpoint = '/api/groq';
   }
 
-  async generateInstructions(prompt) {
+  async generateInstructions(prompt: string): Promise<string> {
     try {
       const response = await fetch(this.apiEndpoint, {
         method: 'POST',
@@ -20,11 +45,11 @@ class GroqService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData: GroqApiResponse = await response.json();
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: GroqApiResponse = await response.json();
       return data.content || '';
     } catch (error) {
       console.error('Groq API request failed:', error);
@@ -32,7 +57,7 @@ class GroqService {
     }
   }
 
-  async generateDetailedInstructions(context = '') {
+  async generateDetailedInstructions(context: string = ''): Promise<string> {
     try {
       const response = await fetch(this.apiEndpoint, {
         method: 'POST',
@@ -43,11 +68,11 @@ class GroqService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData: GroqApiResponse = await response.json();
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: GroqApiResponse = await response.json();
       return data.content || '';
     } catch (error) {
       console.error('Groq API request failed:', error);
@@ -58,7 +83,12 @@ class GroqService {
   /**
    * ロールプレイ用のプロンプトを生成
    */
-  async generateRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+  async generateRoleplayPrompt(
+    personaSettings: PersonaSettings, 
+    sceneSettings: SceneSettings, 
+    intensity: IntensityLevel = 'high', 
+    purpose: string = ''
+  ): Promise<string> {
     const roleplayContext = this._buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose);
     return this.generateDetailedInstructions(roleplayContext);
   }
@@ -66,7 +96,12 @@ class GroqService {
   /**
    * 没入型ロールプレイ用のプロンプトを生成
    */
-  async generateImmersiveRoleplayPrompt(personaSettings, sceneSettings, intensity = 'high', purpose = '') {
+  async generateImmersiveRoleplayPrompt(
+    personaSettings: PersonaSettings, 
+    sceneSettings: SceneSettings, 
+    intensity: IntensityLevel = 'high', 
+    purpose: string = ''
+  ): Promise<string> {
     const roleplayContext = this._buildImmersiveRoleplayContext(personaSettings, sceneSettings, intensity, purpose);
     return this.generateDetailedInstructions(roleplayContext);
   }
@@ -74,8 +109,13 @@ class GroqService {
   /**
    * ロールプレイ用のコンテキストを構築
    */
-  _buildRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
-    const contextParts = [];
+  private _buildRoleplayContext(
+    personaSettings: PersonaSettings, 
+    sceneSettings: SceneSettings, 
+    intensity: IntensityLevel, 
+    purpose: string
+  ): string {
+    const contextParts: string[] = [];
     
     // 目的
     if (purpose && purpose.trim()) {
@@ -107,8 +147,13 @@ class GroqService {
   /**
    * 没入型ロールプレイ用のコンテキストを構築
    */
-  _buildImmersiveRoleplayContext(personaSettings, sceneSettings, intensity, purpose) {
-    const contextParts = [];
+  private _buildImmersiveRoleplayContext(
+    personaSettings: PersonaSettings, 
+    sceneSettings: SceneSettings, 
+    intensity: IntensityLevel, 
+    purpose: string
+  ): string {
+    const contextParts: string[] = [];
     
     // 目的
     if (purpose && purpose.trim()) {
@@ -140,8 +185,8 @@ class GroqService {
   /**
    * 基本的な目的を構築
    */
-  _buildPurpose(purpose, intensity) {
-    const purposeParts = [];
+  private _buildPurpose(purpose: string, intensity: IntensityLevel): string {
+    const purposeParts: string[] = [];
     
     purposeParts.push(`目的: ${purpose}`);
     
@@ -162,8 +207,8 @@ class GroqService {
   /**
    * シーン設定を構築
    */
-  _buildScene(scene, intensity, purpose = '') {
-    const sceneParts = [];
+  private _buildScene(scene: SceneSettings, intensity: IntensityLevel, purpose: string = ''): string {
+    const sceneParts: string[] = [];
     
     if (scene.appointmentBackground) {
       sceneParts.push(`背景: ${scene.appointmentBackground}`);
@@ -192,8 +237,8 @@ class GroqService {
    * 魂の奥底に潜む目的を詩的に紡ぐ
    * 表面的な意図を血の通った人間的動機へと昇華させる
    */
-  _weavePoeticalPurpose(purpose, intensity) {
-    const purposeParts = [];
+  private _weavePoeticalPurpose(purpose: string, intensity: IntensityLevel): string {
+    const purposeParts: string[] = [];
     
     purposeParts.push(`目的: ${purpose}`);
     
@@ -220,8 +265,8 @@ class GroqService {
   /**
    * ペルソナ情報を構築
    */
-  _buildPersona(persona, intensity, purpose = '') {
-    const personaParts = [];
+  private _buildPersona(persona: PersonaSettings, intensity: IntensityLevel, purpose: string = ''): string {
+    const personaParts: string[] = [];
     
     if (persona.age) {
       personaParts.push(`年齢: ${persona.age}歳としての経験や価値観、考え方`);
@@ -255,8 +300,8 @@ class GroqService {
    * 舞台という名の詩的現実の構築
    * シーンを五感と感情が織りなす立体的な詩として創造する
    */
-  _createScenePoetry(scene, intensity, purpose = '') {
-    const sceneParts = [];
+  private _createScenePoetry(scene: SceneSettings, intensity: IntensityLevel, purpose: string = ''): string {
+    const sceneParts: string[] = [];
     
     if (scene.appointmentBackground) {
       sceneParts.push(`背景: ${scene.appointmentBackground}から生まれる状況や関係者の思惑`);

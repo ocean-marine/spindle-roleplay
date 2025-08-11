@@ -1,6 +1,6 @@
 # OpenAI Realtime Console
 
-React + Vite アプリケーション（OpenAI Realtime API + WebRTC使用）
+React + Vite + TypeScript アプリケーション（OpenAI Realtime API + WebRTC使用）
 
 ## このプロジェクトが実現すること
 
@@ -20,6 +20,7 @@ OpenAI Realtime APIとWebRTCを活用したリアルタイム音声会話アプ�
 ## 技術スタック
 
 - **React 18.2** - UIライブラリ
+- **TypeScript 5.0** - 型安全性とコード品質向上
 - **Vite 5.0** - ビルドツール
 - **TailwindCSS 3.4** - CSSフレームワーク
 - **Express** - APIサーバー（Vercel Functions）
@@ -39,10 +40,26 @@ OpenAI Realtime APIとWebRTCを活用したリアルタイム音声会話アプ�
 - `npm run dev` - 開発サーバー起動（localhost:3000）
 - `npm run build` - 本番ビルド
 - `npm run lint` - ESLint実行
+- `npm run type-check` - TypeScript型チェック実行
 
 ## 重要なポイント
 
+- **TypeScript化完了** - コードベース全体をTypeScriptに移行、型安全性とコード品質を向上
 - 日本語UI対応済み（デフォルト指示: "自然な日本語で応対します"）
 - WebRTC経由でRealtime API接続
 - Vercelデプロイ設定済み
 - 環境変数 `.env` ファイルでOpenAI API Key設定必須
+
+## TypeScript移行詳細
+
+### 移行されたファイル
+- **ユーティリティファイル**: `auth.ts`, `voiceSelection.ts` - 型定義により安全な認証と音声選択
+- **データファイル**: `presets.ts` - プリセット設定の厳密な型定義
+- **サービスファイル**: `groq.ts` - Groq API通信の型安全化
+- **APIファイル**: すべてのAPI関数をNextJS型定義で強化
+- **設定ファイル**: `vite.config.ts`, `tailwind.config.ts`, `tsconfig.json`
+
+### 型安全性の改善
+- Interface定義により実行時エラーを大幅削減
+- IDE支援によるコード補完と早期エラー検出
+- リファクタリング時の安全性向上

@@ -1,5 +1,17 @@
 import "dotenv/config";
 import Groq from 'groq-sdk';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+interface GroqRequestBody {
+  prompt?: string;
+  context?: string;
+}
+
+interface GroqResponse {
+  content?: string;
+  error?: string;
+  message?: string;
+}
 
 const groqApiKey = process.env.GROQ_API_KEY;
 
@@ -7,7 +19,7 @@ const groqApiKey = process.env.GROQ_API_KEY;
 console.log('GROQ_API_KEY:', groqApiKey ? 'Set' : 'Missing');
 console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<GroqResponse>) {
   // Handle CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -30,7 +42,7 @@ export default async function handler(req, res) {
   // Only handle POST requests
   if (req.method === 'POST') {
     try {
-      const { prompt, context } = req.body;
+      const { prompt, context }: GroqRequestBody = req.body;
 
       if (!prompt && !context) {
         res.status(400).json({ error: 'promptまたはcontextが必要です' });
@@ -70,7 +82,7 @@ ${context || '基本的なロールプレイ'}
         messages: [
           {
             role: 'user',
-            content: finalPrompt
+            content: finalPrompt || ''
           }
         ],
         temperature: 0.7,
@@ -80,7 +92,7 @@ ${context || '基本的なロールプレイ'}
       const content = completion.choices[0]?.message?.content || '';
       
       res.status(200).json({ content });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Groq API request failed:', error);
       res.status(500).json({ 
         error: 'Groq APIリクエストが失敗しました',

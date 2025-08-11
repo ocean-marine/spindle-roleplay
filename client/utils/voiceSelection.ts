@@ -1,9 +1,18 @@
 // Voice selection utilities based on age and gender according to research findings
 
+interface VoiceCharacteristics {
+  gender: 'feminine' | 'masculine' | 'neutral';
+  age: 'young' | 'medium' | 'mature';
+  traits: string[];
+}
+
+type AgeCategory = 'young' | 'medium' | 'mature';
+type GenderCategory = 'masculine' | 'feminine' | 'neutral';
+
 /**
  * Voice characteristics mapping based on the research documentation provided
  */
-const VOICE_CHARACTERISTICS = {
+const VOICE_CHARACTERISTICS: Record<string, VoiceCharacteristics> = {
   // Feminine/young voices
   juniper: { gender: 'feminine', age: 'young', traits: ['open', 'upbeat'] },
   breeze: { gender: 'neutral', age: 'young', traits: ['animated', 'earnest'] },
@@ -32,12 +41,12 @@ const VOICE_CHARACTERISTICS = {
 
 /**
  * Rule-based voice selection based on persona age and gender
- * @param {string} age - Age range from persona settings
- * @param {string} gender - Gender from persona settings
- * @param {Array} availableVoices - List of available voice options
- * @returns {string} Selected voice name
+ * @param age - Age range from persona settings
+ * @param gender - Gender from persona settings
+ * @param availableVoices - List of available voice options
+ * @returns Selected voice name
  */
-export function selectVoiceByRules(age, gender, availableVoices = []) {
+export function selectVoiceByRules(age?: string, gender?: string, availableVoices: string[] = []): string {
   if (!age && !gender) {
     // Default fallback
     return availableVoices.includes('alloy') ? 'alloy' : availableVoices[0];
@@ -48,7 +57,7 @@ export function selectVoiceByRules(age, gender, availableVoices = []) {
   const genderCategory = getGenderCategory(gender);
 
   // Priority voice candidates based on age and gender
-  let candidates = [];
+  let candidates: string[] = [];
 
   if (genderCategory === 'feminine') {
     if (ageCategory === 'young') {
@@ -95,10 +104,10 @@ export function selectVoiceByRules(age, gender, availableVoices = []) {
 
 /**
  * Get age category from Japanese age string
- * @param {string} age - Age string like "20代前半", "30代後半"
- * @returns {string} 'young', 'medium', or 'mature'
+ * @param age - Age string like "20代前半", "30代後半"
+ * @returns 'young', 'medium', or 'mature'
  */
-function getAgeCategory(age) {
+function getAgeCategory(age?: string): AgeCategory {
   if (!age) return 'medium';
   
   if (age.includes('20代') || age.includes('10代')) {
@@ -112,10 +121,10 @@ function getAgeCategory(age) {
 
 /**
  * Get gender category from Japanese gender string
- * @param {string} gender - Gender string like "男性", "女性", "その他"
- * @returns {string} 'masculine', 'feminine', or 'neutral'
+ * @param gender - Gender string like "男性", "女性", "その他"
+ * @returns 'masculine', 'feminine', or 'neutral'
  */
-function getGenderCategory(gender) {
+function getGenderCategory(gender?: string): GenderCategory {
   if (!gender) return 'neutral';
   
   if (gender === '女性') {
@@ -129,16 +138,16 @@ function getGenderCategory(gender) {
 
 /**
  * Get fallback voices by gender category
- * @param {string} genderCategory - 'masculine', 'feminine', or 'neutral'
- * @param {Array} availableVoices - Available voice options
- * @returns {Array} Array of suitable voice names
+ * @param genderCategory - 'masculine', 'feminine', or 'neutral'
+ * @param availableVoices - Available voice options
+ * @returns Array of suitable voice names
  */
-function getFallbackVoicesByGender(genderCategory, availableVoices) {
+function getFallbackVoicesByGender(genderCategory: GenderCategory, availableVoices: string[]): string[] {
   const feminineFallbacks = ['coral', 'nova', 'shimmer'];
   const masculineFallbacks = ['echo', 'ash'];
   const neutralFallbacks = ['alloy', 'fable', 'sage'];
 
-  let fallbacks;
+  let fallbacks: string[];
   if (genderCategory === 'feminine') {
     fallbacks = feminineFallbacks;
   } else if (genderCategory === 'masculine') {
@@ -152,10 +161,10 @@ function getFallbackVoicesByGender(genderCategory, availableVoices) {
 
 /**
  * Get voice description for UI display
- * @param {string} voiceName - Name of the voice
- * @returns {string} Description of the voice characteristics
+ * @param voiceName - Name of the voice
+ * @returns Description of the voice characteristics
  */
-export function getVoiceDescription(voiceName) {
+export function getVoiceDescription(voiceName: string): string {
   const characteristics = VOICE_CHARACTERISTICS[voiceName];
   if (!characteristics) return '';
 

@@ -1,6 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./client/index.html", "./client/**/*.{jsx,tsx}"],
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
+  content: ["./client/index.html", "./client/**/*.{jsx,tsx,ts,js}"],
   theme: {
     extend: {
       screens: {
@@ -13,3 +14,5 @@ export default {
   },
   plugins: [],
 };
+
+export default config;

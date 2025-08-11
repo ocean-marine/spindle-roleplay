@@ -1,16 +1,27 @@
 import OpenAI from "openai";
+import { NextApiRequest, NextApiResponse } from 'next';
+
+interface TTSRequestBody {
+  voice?: string;
+  text?: string;
+}
+
+interface TTSErrorResponse {
+  error: string;
+  details?: string;
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Buffer | TTSErrorResponse>) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { voice = 'alloy', text = 'こんにちは。音声テストです。' } = req.body;
+    const { voice = 'alloy', text = 'こんにちは。音声テストです。' }: TTSRequestBody = req.body;
 
     if (!process.env.OPENAI_API_KEY) {
       return res.status(500).json({ error: 'OpenAI API key not configured' });
@@ -19,7 +30,7 @@ export default async function handler(req, res) {
     // Create TTS audio using OpenAI API
     const mp3 = await openai.audio.speech.create({
       model: "gpt-4o-mini-tts",
-      voice: voice,
+      voice: voice as any,
       input: text,
       instructions: "Speak in a clear and natural tone.",
     });
@@ -32,7 +43,7 @@ export default async function handler(req, res) {
     res.setHeader('Content-Length', buffer.length);
     res.status(200).send(buffer);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('TTS Error:', error);
     res.status(500).json({ 
       error: 'Failed to generate speech',
