@@ -367,7 +367,7 @@ export default function App() {
   }
 
   return (
-    <div className="h-screen bg-white flex flex-col overflow-hidden">
+    <div className="h-screen bg-white flex flex-col overflow-x-hidden overflow-y-auto">
       {/* Header - Apple-inspired minimal design */}
       <nav className="bg-white border-b border-gray-100 px-4 py-3 flex-shrink-0">
         <div className="flex items-center justify-between">
