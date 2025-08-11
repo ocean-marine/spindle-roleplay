@@ -81,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "gpt-4o-realtime-preview-2025-06-03",
+            model: "gpt-4o-realtime-preview-2024-10-01",
             voice: selectedVoice,
           }),
         },
