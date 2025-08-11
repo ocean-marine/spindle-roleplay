@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Users, BookOpen, TrendingUp, Clock, Star, BarChart3 } from "react-feather";
+import { Users, BookOpen, TrendingUp, Clock, Star, BarChart } from "react-feather";
 import { Link, useNavigate } from "react-router-dom";
 
 // Mock data for dashboard
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
 
   const tabs = [
-    { id: "overview", label: "組織全体俯瞰", icon: BarChart3 },
+    { id: "overview", label: "組織全体俯瞰", icon: BarChart },
     { id: "departments", label: "部門別分析", icon: Users },
     { id: "courses", label: "コース管理", icon: BookOpen }
   ];
