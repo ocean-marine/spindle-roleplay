@@ -12,7 +12,17 @@ const teamData = {
       { id: 2, name: "田中 一郎", position: "係長", score: 8.9, hours: 38, courses: 9, progress: 72, lastActivity: "1日前" },
       { id: 3, name: "鈴木 美咲", position: "主任", score: 8.7, hours: 35, courses: 8, progress: 68, lastActivity: "3時間前" },
       { id: 4, name: "高橋 健太", position: "一般", score: 8.2, hours: 28, courses: 6, progress: 58, lastActivity: "5時間前" },
-      { id: 5, name: "伊藤 恵", position: "一般", score: 7.9, hours: 25, courses: 5, progress: 45, lastActivity: "1日前" }
+      { id: 5, name: "伊藤 恵", position: "一般", score: 7.9, hours: 25, courses: 5, progress: 45, lastActivity: "1日前" },
+      { id: 13, name: "小林 修", position: "主任", score: 9.1, hours: 40, courses: 10, progress: 78, lastActivity: "4時間前" },
+      { id: 14, name: "森田 里美", position: "一般", score: 8.5, hours: 31, courses: 7, progress: 65, lastActivity: "6時間前" },
+      { id: 15, name: "加藤 雅人", position: "一般", score: 8.0, hours: 26, courses: 5, progress: 52, lastActivity: "8時間前" },
+      { id: 16, name: "藤田 由美", position: "一般", score: 7.8, hours: 23, courses: 4, progress: 48, lastActivity: "1日前" },
+      { id: 17, name: "井上 拓也", position: "一般", score: 8.3, hours: 29, courses: 6, progress: 62, lastActivity: "3時間前" },
+      { id: 18, name: "石川 麻衣", position: "係長", score: 9.0, hours: 36, courses: 9, progress: 74, lastActivity: "2時間前" },
+      { id: 19, name: "村上 健二", position: "一般", score: 7.6, hours: 22, courses: 4, progress: 41, lastActivity: "12時間前" },
+      { id: 20, name: "岡田 純子", position: "一般", score: 8.4, hours: 30, courses: 7, progress: 63, lastActivity: "5時間前" },
+      { id: 21, name: "木村 博", position: "主任", score: 8.8, hours: 34, courses: 8, progress: 70, lastActivity: "1時間前" },
+      { id: 22, name: "橋本 美香", position: "一般", score: 8.1, hours: 27, courses: 6, progress: 56, lastActivity: "7時間前" }
     ]
   },
   2: {
@@ -22,7 +32,15 @@ const teamData = {
       { id: 6, name: "田中 太郎", position: "リーダー", score: 9.8, hours: 45, courses: 12, progress: 95, lastActivity: "30分前" },
       { id: 7, name: "山田 さくら", position: "シニア", score: 9.2, hours: 41, courses: 10, progress: 88, lastActivity: "1時間前" },
       { id: 8, name: "松本 大輔", position: "シニア", score: 8.8, hours: 37, courses: 9, progress: 76, lastActivity: "2時間前" },
-      { id: 9, name: "中村 あやか", position: "一般", score: 8.4, hours: 33, courses: 7, progress: 64, lastActivity: "4時間前" }
+      { id: 9, name: "中村 あやか", position: "一般", score: 8.4, hours: 33, courses: 7, progress: 64, lastActivity: "4時間前" },
+      { id: 23, name: "長谷川 勇", position: "シニア", score: 9.5, hours: 43, courses: 11, progress: 91, lastActivity: "1時間前" },
+      { id: 24, name: "斎藤 真理", position: "一般", score: 8.9, hours: 35, courses: 8, progress: 73, lastActivity: "3時間前" },
+      { id: 25, name: "青木 慎一", position: "一般", score: 8.6, hours: 32, courses: 7, progress: 68, lastActivity: "2時間前" },
+      { id: 26, name: "山口 恵子", position: "一般", score: 8.2, hours: 29, courses: 6, progress: 61, lastActivity: "5時間前" },
+      { id: 27, name: "清水 隆", position: "シニア", score: 9.3, hours: 42, courses: 10, progress: 86, lastActivity: "45分前" },
+      { id: 28, name: "吉田 美奈", position: "一般", score: 8.7, hours: 34, courses: 8, progress: 71, lastActivity: "4時間前" },
+      { id: 29, name: "大野 洋一", position: "一般", score: 8.0, hours: 26, courses: 5, progress: 54, lastActivity: "6時間前" },
+      { id: 30, name: "福田 香織", position: "リーダー", score: 9.6, hours: 44, courses: 11, progress: 92, lastActivity: "2時間前" }
     ]
   },
   3: {
@@ -31,7 +49,46 @@ const teamData = {
     members: [
       { id: 10, name: "山田 次郎", position: "主任", score: 9.4, hours: 38, courses: 10, progress: 82, lastActivity: "1時間前" },
       { id: 11, name: "佐々木 美穂", position: "一般", score: 8.6, hours: 32, courses: 8, progress: 71, lastActivity: "3時間前" },
-      { id: 12, name: "渡辺 翔太", position: "一般", score: 8.1, hours: 29, courses: 6, progress: 59, lastActivity: "6時間前" }
+      { id: 12, name: "渡辺 翔太", position: "一般", score: 8.1, hours: 29, courses: 6, progress: 59, lastActivity: "6時間前" },
+      { id: 31, name: "三浦 康子", position: "主任", score: 9.0, hours: 36, courses: 9, progress: 76, lastActivity: "2時間前" },
+      { id: 32, name: "野村 直人", position: "一般", score: 8.4, hours: 30, courses: 7, progress: 65, lastActivity: "4時間前" },
+      { id: 33, name: "原田 理恵", position: "一般", score: 8.8, hours: 35, courses: 8, progress: 72, lastActivity: "1時間前" },
+      { id: 34, name: "平田 雅之", position: "係長", score: 8.9, hours: 37, courses: 9, progress: 75, lastActivity: "3時間前" },
+      { id: 35, name: "竹内 友子", position: "一般", score: 8.2, hours: 28, courses: 6, progress: 58, lastActivity: "5時間前" },
+      { id: 36, name: "西田 浩司", position: "一般", score: 7.9, hours: 25, courses: 5, progress: 49, lastActivity: "8時間前" },
+      { id: 37, name: "池田 智子", position: "主任", score: 8.7, hours: 33, courses: 8, progress: 69, lastActivity: "2時間前" },
+      { id: 38, name: "前田 光一", position: "一般", score: 8.0, hours: 27, courses: 6, progress: 55, lastActivity: "6時間前" },
+      { id: 39, name: "中川 まゆみ", position: "一般", score: 8.3, hours: 31, courses: 7, progress: 63, lastActivity: "4時間前" }
+    ]
+  },
+  4: {
+    name: "人事部",
+    manager: "佐藤 部長",
+    members: [
+      { id: 40, name: "坂本 誠", position: "主任", score: 8.5, hours: 32, courses: 7, progress: 68, lastActivity: "3時間前" },
+      { id: 41, name: "内田 春香", position: "一般", score: 8.1, hours: 28, courses: 6, progress: 61, lastActivity: "4時間前" },
+      { id: 42, name: "松田 亮", position: "係長", score: 8.7, hours: 34, courses: 8, progress: 71, lastActivity: "2時間前" },
+      { id: 43, name: "田村 彩", position: "一般", score: 7.8, hours: 24, courses: 5, progress: 52, lastActivity: "6時間前" },
+      { id: 44, name: "河野 宏", position: "一般", score: 8.0, hours: 26, courses: 6, progress: 58, lastActivity: "5時間前" },
+      { id: 45, name: "古川 優子", position: "主任", score: 8.4, hours: 30, courses: 7, progress: 64, lastActivity: "1時間前" },
+      { id: 46, name: "横山 正樹", position: "一般", score: 7.6, hours: 22, courses: 4, progress: 47, lastActivity: "8時間前" },
+      { id: 47, name: "宮本 直美", position: "一般", score: 8.2, hours: 29, courses: 6, progress: 60, lastActivity: "3時間前" },
+      { id: 48, name: "五十嵐 健", position: "一般", score: 7.9, hours: 25, courses: 5, progress: 54, lastActivity: "7時間前" }
+    ]
+  },
+  5: {
+    name: "総務部",
+    manager: "高橋 部長",
+    members: [
+      { id: 49, name: "小山 貴子", position: "主任", score: 8.0, hours: 27, courses: 6, progress: 59, lastActivity: "2時間前" },
+      { id: 50, name: "岩崎 伸二", position: "係長", score: 8.3, hours: 30, courses: 7, progress: 63, lastActivity: "4時間前" },
+      { id: 51, name: "菊地 恵", position: "一般", score: 7.7, hours: 23, courses: 5, progress: 50, lastActivity: "5時間前" },
+      { id: 52, name: "安田 武", position: "一般", score: 7.4, hours: 21, courses: 4, progress: 43, lastActivity: "9時間前" },
+      { id: 53, name: "谷口 美和", position: "一般", score: 7.8, hours: 24, courses: 5, progress: 51, lastActivity: "6時間前" },
+      { id: 54, name: "秋山 順一", position: "一般", score: 7.5, hours: 22, courses: 4, progress: 45, lastActivity: "8時間前" },
+      { id: 55, name: "今井 千春", position: "主任", score: 8.1, hours: 28, courses: 6, progress: 57, lastActivity: "3時間前" },
+      { id: 56, name: "柴田 康雄", position: "一般", score: 7.2, hours: 19, courses: 3, progress: 38, lastActivity: "12時間前" },
+      { id: 57, name: "上野 留美", position: "一般", score: 7.6, hours: 23, courses: 4, progress: 48, lastActivity: "7時間前" }
     ]
   }
 };
