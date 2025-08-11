@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { User, Clock, BookOpen, TrendingUp, Award, Calendar } from "react-feather";
 
 // Mock team data
@@ -76,7 +76,7 @@ export default function AdminTeamDetail() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="px-6 py-4">
+        <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button 
@@ -97,9 +97,9 @@ export default function AdminTeamDetail() {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Team Summary Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-white rounded-lg border border-gray-100 p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-2 bg-blue-50 rounded-lg">
@@ -150,8 +150,8 @@ export default function AdminTeamDetail() {
           <div className="p-6 border-b border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900">メンバー一覧</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full min-w-[800px] sm:min-w-0">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">名前</th>
@@ -204,11 +204,17 @@ export default function AdminTeamDetail() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.lastActivity}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button
-                        onClick={() => setSelectedMember(member)}
-                        className="text-blue-600 hover:text-blue-900"
+                      <Link
+                        to={`/admin/employee?employeeId=${member.id}&teamId=${teamId}`}
+                        className="text-blue-600 hover:text-blue-900 mr-3"
                       >
                         詳細表示
+                      </Link>
+                      <button
+                        onClick={() => setSelectedMember(member)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        ⓘ
                       </button>
                     </td>
                   </tr>
@@ -219,7 +225,7 @@ export default function AdminTeamDetail() {
         </div>
 
         {/* Action Items Section */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="mt-6 sm:mt-8 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <div className="bg-white rounded-lg border border-gray-100">
             <div className="p-6 border-b border-gray-100">
               <h3 className="text-lg font-semibold text-gray-900">要注意メンバー</h3>

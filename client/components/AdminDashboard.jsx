@@ -67,7 +67,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="px-6 py-4">
+        <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button 
@@ -85,14 +85,14 @@ export default function AdminDashboard() {
         </div>
         
         {/* Tab Navigation */}
-        <div className="flex border-b border-gray-200">
+        <div className="flex border-b border-gray-200 overflow-x-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id
                     ? "border-blue-500 text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700"
@@ -107,11 +107,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {activeTab === "overview" && (
           <div className="space-y-6">
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               <StatCard
                 title="総従業員数"
                 value={mockData.overallStats.totalEmployees}
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Charts and Tables */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Top Performers */}
               <div className="bg-white rounded-lg border border-gray-100">
                 <div className="p-6 border-b border-gray-100">
@@ -214,8 +214,8 @@ export default function AdminDashboard() {
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-semibold text-gray-900">部門別パフォーマンス</h3>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
+              <div className="overflow-x-auto -mx-4 sm:mx-0">
+                <table className="w-full min-w-[600px] sm:min-w-0">
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">部門名</th>
@@ -267,12 +267,12 @@ export default function AdminDashboard() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">コース効果測定</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
-                  { name: "顧客対応スキル向上", completions: 89, satisfaction: 4.7, roi: 125 },
-                  { name: "プレゼンテーション技法", completions: 67, satisfaction: 4.5, roi: 110 },
-                  { name: "リーダーシップ基礎", completions: 45, satisfaction: 4.8, roi: 140 },
-                  { name: "データ分析入門", completions: 34, satisfaction: 4.3, roi: 95 },
-                  { name: "チームマネジメント", completions: 28, satisfaction: 4.6, roi: 118 },
-                  { name: "デジタル変革基礎", completions: 52, satisfaction: 4.4, roi: 102 }
+                  { name: "顧客対応スキル向上", completions: 89, satisfaction: 4.7 },
+                  { name: "プレゼンテーション技法", completions: 67, satisfaction: 4.5 },
+                  { name: "リーダーシップ基礎", completions: 45, satisfaction: 4.8 },
+                  { name: "データ分析入門", completions: 34, satisfaction: 4.3 },
+                  { name: "チームマネジメント", completions: 28, satisfaction: 4.6 },
+                  { name: "デジタル変革基礎", completions: 52, satisfaction: 4.4 }
                 ].map((course, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-4">
                     <h4 className="font-medium text-gray-900 mb-2">{course.name}</h4>
@@ -284,12 +284,6 @@ export default function AdminDashboard() {
                       <div className="flex justify-between">
                         <span>満足度:</span>
                         <span className="font-medium">{course.satisfaction}/5.0</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>ROI:</span>
-                        <span className={`font-medium ${course.roi >= 100 ? 'text-green-600' : 'text-red-600'}`}>
-                          {course.roi}%
-                        </span>
                       </div>
                     </div>
                   </div>
