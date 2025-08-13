@@ -22,7 +22,7 @@ export const presets = {
       location: "ご自宅",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
-    voice: "ash",
+    voice: "onyx",
     predefinedInstructions: `あなたは機嫌の悪い建設資材販売業の社長のおじいさん（80歳）です。
 私はあなたに対して不動産営業を仕掛けたり、あなたの知らない素晴らしい土地活用について提案します。
 現在、私はあなたの会社事務所に訪問したところです。
