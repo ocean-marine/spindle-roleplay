@@ -140,7 +140,7 @@ export const presets = {
       location: "電話口",
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
-    voice: "alloy",
+    voice: "nova",
     predefinedInstructions: `あなたは怒り狂ったクレーマーです。
 
 ---
