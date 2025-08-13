@@ -8,6 +8,7 @@ export interface PersonaSettings {
   occupation: string;
   personality: string;
   additionalInfo: string;
+  image?: string;
 }
 
 export interface SceneSettings {
@@ -80,6 +81,7 @@ export interface ButtonProps {
   className?: string;
   children: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
+  icon?: React.ReactElement;
 }
 
 export interface VoiceInterfaceProps {
@@ -171,6 +173,7 @@ export interface PresetData {
   icon?: string;
   category?: string;
   description?: string;
+  predefinedInstructions?: string;
 }
 
 // API Response types
@@ -202,11 +205,15 @@ export interface CourseData {
 }
 
 export interface Activity {
+  id?: string | number;
   time: string;
   user: string;
   action: string;
   result?: string;
-  score?: number;
+  score?: number | null;
+  date?: string;
+  courseName?: string;
+  courseIcon?: string;
 }
 
 export interface StatCardProps {
@@ -290,5 +297,33 @@ export interface GroqResponse {
 }
 
 // Utility types
-export type ViewMode = 'setup' | 'session' | 'history' | 'settings';
+export type ViewMode = 'setup' | 'session' | 'history' | 'settings' | 'preset' | 'custom';
 export type SessionStatus = 'idle' | 'connecting' | 'active' | 'error';
+
+// App Component Types
+export type AudioElementRef = React.MutableRefObject<HTMLAudioElement | null>;
+export type PeerConnectionRef = React.MutableRefObject<RTCPeerConnection | null>;
+export type MediaStreamTrackRef = React.MutableRefObject<MediaStreamTrack | null>;
+export type HandleLogin = (accountName: string) => void;
+export type HandleLogout = () => void;
+export type HandleSessionStart = () => Promise<void>;
+export type HandleSessionStop = () => void;
+export type HandleMuteToggle = () => void;
+export type HandleTextMessage = (message: string) => void;
+export type DataChannelMessageHandler = (event: MessageEvent) => void;
+export type DataChannelOpenHandler = () => void;
+export type RTCTrackHandler = (event: RTCTrackEvent) => void;
+
+// Form types
+export type FormSubmitHandler = (e: React.FormEvent) => void;
+export type InputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => void;
+export type SelectChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => void;
+export type TextAreaChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+
+// Other types
+export type LoginResult = { success: boolean; accountName?: string; error?: string };
+export type AuthStatus = { isAuthenticated: boolean; accountName: string | null };
+export type LoginCredentials = { accountName: string; password: string };
+export type ExpandableSectionProps = { title: string; children: React.ReactNode; defaultExpanded?: boolean };
+export type ImmersionLevel = 'low' | 'medium' | 'high';
+export type PresetsByCategory = Record<string, PresetData[]>;

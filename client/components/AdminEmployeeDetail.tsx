@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
-import { User, Clock, BookOpen, TrendingUp, Award, Calendar, BarChart, ArrowLeft } from "react-feather";
+import { Clock, BookOpen, TrendingUp, Award, Calendar, BarChart, ArrowLeft } from "react-feather";
 
 // コース名からコースIDへのマッピング（従業員データとプリセットデータの紐付け）
 const courseNameToId: Record<string, string | null> = {

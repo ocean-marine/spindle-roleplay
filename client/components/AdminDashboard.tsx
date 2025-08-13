@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Users, BookOpen, TrendingUp, Clock, Star, BarChart, Play, Award, Activity, Target, Calendar } from "react-feather";
+import { Users, BookOpen, TrendingUp, Clock, Star, BarChart, Play } from "react-feather";
 import { Link, useNavigate } from "react-router-dom";
 import { getTopLevelPresets } from "../data/presets";
-import type { CourseData, StatCardProps, CourseCardProps } from "../types";
+import type { CourseData, StatCardProps, CourseCardProps, Activity } from "../types";
 
 // Mock data for dashboard
 const mockData = {
@@ -82,8 +82,6 @@ const mockCourseProgress: Record<string, CourseData> = {
   }
 };
 
-import { StatCardProps } from '../types';
-
 function StatCard({ title, value, subtitle, Icon, trend }: StatCardProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 p-6">
@@ -105,8 +103,6 @@ function StatCard({ title, value, subtitle, Icon, trend }: StatCardProps) {
     </div>
   );
 }
-
-import { CourseCardProps } from '../types';
 
 function CourseCard({ course, progress }: CourseCardProps) {
   return (

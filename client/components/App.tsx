@@ -1,12 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
-import logo from "../assets/openai-logomark.svg";
-import TabNavigation from "./TabNavigation";
-import SetupScreen from "./SetupScreen";
-import VoiceInterface from "./VoiceInterface";
-import ChatInterface from "./ChatInterface";
-import SessionControls from "./SessionControls";
-import ToolPanel from "./ToolPanel";
 import LoginScreen from "./LoginScreen";
 import AdminDashboard from "./AdminDashboard";
 import AdminTeamDetail from "./AdminTeamDetail";
@@ -34,7 +27,7 @@ import type {
   RTCTrackHandler
 } from "../types";
 
-export default function App(): JSX.Element {
+export default function App() {
   // 認証状態管理
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
@@ -187,7 +180,7 @@ export default function App(): JSX.Element {
       throw new Error(`無効なSDP応答: ${answerSdp.substring(0, 100)}`);
     }
 
-    const answer = {
+    const answer: RTCSessionDescriptionInit = {
       type: "answer",
       sdp: answerSdp,
     };
