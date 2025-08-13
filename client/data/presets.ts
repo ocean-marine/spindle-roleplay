@@ -1,5 +1,7 @@
 // プリセットデータ - 営業チーム向けに一般的なユースケースを定義
-export const presets = {
+import type { PresetData, PresetsByCategory } from "../types";
+
+export const presets: Record<string, PresetData> = {
   "real_estate_asset_hearing": {
     id: "real_estate_asset_hearing",
     category: "トップ",
@@ -515,8 +517,8 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
 };
 
 // カテゴリ別のプリセット取得
-export const getPresetsByCategory = () => {
-  const categories = {};
+export const getPresetsByCategory = (): PresetsByCategory => {
+  const categories: PresetsByCategory = {};
   Object.values(presets).forEach(preset => {
     if (!categories[preset.category]) {
       categories[preset.category] = [];
@@ -527,16 +529,16 @@ export const getPresetsByCategory = () => {
 };
 
 // プリセットIDでプリセット取得
-export const getPresetById = (id) => {
+export const getPresetById = (id: string): PresetData | null => {
   return presets[id] || null;
 };
 
 // 全カテゴリ名の取得
-export const getAllCategories = () => {
+export const getAllCategories = (): string[] => {
   return [...new Set(Object.values(presets).map(preset => preset.category))];
 };
 
 // トップレベルプリセットの取得（階層なし表示用）
-export const getTopLevelPresets = () => {
+export const getTopLevelPresets = (): PresetData[] => {
   return Object.values(presets).filter(preset => preset.category === "トップ");
 };

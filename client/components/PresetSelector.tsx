@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Zap, ChevronRight, Edit3, Settings, MoreVertical, X, Volume2 } from "react-feather";
 import { getPresetsByCategory, getPresetById, getTopLevelPresets } from "../data/presets";
 import Button from "./Button";
+import type { PresetSelectorProps, PresetData, VoiceOption } from "../types";
 
 export default function PresetSelector({ 
   onPresetSelect, 
@@ -9,32 +10,32 @@ export default function PresetSelector({
   onDirectStart,
   selectedPresetId,
   setSelectedPresetId 
-}) {
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const [selectedPresetForSettings, setSelectedPresetForSettings] = useState(null);
+}: PresetSelectorProps): JSX.Element {
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+  const [selectedPresetForSettings, setSelectedPresetForSettings] = useState<PresetData | null>(null);
   const topLevelPresets = getTopLevelPresets();
   const categorizedPresets = getPresetsByCategory();
   const categories = Object.keys(categorizedPresets).filter(category => category !== "トップ");
 
-  const handlePresetSelect = (presetId) => {
+  const handlePresetSelect = (presetId: string): void => {
     const preset = getPresetById(presetId);
     if (preset && preset.predefinedInstructions && onDirectStart) {
       onDirectStart(preset);
-    } else {
+    } else if (preset) {
       setSelectedPresetId(presetId);
       onPresetSelect(preset);
     }
   };
 
-  const handleCustomizeClick = (preset) => {
+  const handleCustomizeClick = (preset: PresetData): void => {
     if (preset) {
       setSelectedPresetForSettings(preset);
       setShowSettingsModal(true);
     }
   };
 
-  const handleTestVoice = (voice) => {
+  const handleTestVoice = (voice: VoiceOption): void => {
     // 音声テスト機能（実際の実装では音声再生APIを呼び出し）
     console.log(`Testing voice: ${voice}`);
     alert(`声色「${voice}」のテストを実行します。実際の実装では音声が再生されます。`);

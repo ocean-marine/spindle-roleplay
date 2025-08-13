@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { login } from "../utils/auth.js";
+import { login } from "../utils/auth";
+import type { LoginScreenProps, FormSubmitHandler, InputChangeHandler } from "../types";
 
-export default function LoginScreen({ onLogin }) {
-  const [accountName, setAccountName] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+export default function LoginScreen({ onLogin }: LoginScreenProps): JSX.Element {
+  const [accountName, setAccountName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit: FormSubmitHandler = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
@@ -20,7 +21,7 @@ export default function LoginScreen({ onLogin }) {
       } else {
         setError(result.error);
       }
-    } catch (error) {
+    } catch (error: any) {
       setError("予期しないエラーが発生しました");
     } finally {
       setIsLoading(false);
@@ -47,7 +48,7 @@ export default function LoginScreen({ onLogin }) {
                 id="accountName"
                 type="text"
                 value={accountName}
-                onChange={(e) => setAccountName(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountName(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="アカウント名を入力"
                 required
@@ -62,7 +63,7 @@ export default function LoginScreen({ onLogin }) {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="パスワードを入力"
                 required

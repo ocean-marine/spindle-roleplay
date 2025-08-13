@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Users, BookOpen, TrendingUp, Clock, Star, BarChart, Play } from "react-feather";
+import { Users, BookOpen, TrendingUp, Clock, Star, BarChart, Play, Award, Activity, Target, Calendar } from "react-feather";
 import { Link, useNavigate } from "react-router-dom";
 import { getTopLevelPresets } from "../data/presets";
+import type { CourseData, StatCardProps, CourseCardProps } from "../types";
 
 // Mock data for dashboard
 const mockData = {
@@ -33,7 +34,7 @@ const mockData = {
 };
 
 // コース進捗データ（モック）- CourseManagement.jsxから移植
-const mockCourseProgress = {
+const mockCourseProgress: Record<string, CourseData> = {
   "real_estate_asset_hearing": {
     completed: 45,
     inProgress: 12,
@@ -81,7 +82,9 @@ const mockCourseProgress = {
   }
 };
 
-function StatCard({ title, value, subtitle, icon: Icon, trend }) {
+import { StatCardProps } from '../types';
+
+function StatCard({ title, value, subtitle, Icon, trend }: StatCardProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 p-6">
       <div className="flex items-center justify-between mb-4">
@@ -90,9 +93,9 @@ function StatCard({ title, value, subtitle, icon: Icon, trend }) {
         </div>
         {trend && (
           <span className={`text-xs px-2 py-1 rounded-full ${
-            trend > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            trend.value > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
           }`}>
-            {trend > 0 ? '+' : ''}{trend}%
+            {trend.value > 0 ? '+' : ''}{trend.value}%
           </span>
         )}
       </div>
@@ -103,7 +106,9 @@ function StatCard({ title, value, subtitle, icon: Icon, trend }) {
   );
 }
 
-function CourseCard({ course, progress }) {
+import { CourseCardProps } from '../types';
+
+function CourseCard({ course, progress }: CourseCardProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-4">
@@ -169,7 +174,7 @@ function CourseCard({ course, progress }) {
       <div className="border-t border-gray-100 pt-4">
         <h4 className="text-sm font-medium text-gray-900 mb-2">最近のアクティビティ</h4>
         <div className="space-y-2">
-          {progress.activities.slice(0, 2).map((activity) => (
+          {progress.activities.slice(0, 2).map((activity: any) => (
             <div key={activity.id} className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -268,36 +273,36 @@ export default function AdminDashboard() {
                 title="総従業員数"
                 value={mockData.overallStats.totalEmployees}
                 subtitle="アクティブユーザー: 50名"
-                icon={Users}
-                trend={5}
+                Icon={Users}
+                trend={{ value: 5, isPositive: true }}
               />
               <StatCard
                 title="全体完了率"
                 value={`${mockData.overallStats.completionRate}%`}
                 subtitle="前月比 +8%"
-                icon={TrendingUp}
-                trend={8}
+                Icon={TrendingUp}
+                trend={{ value: 8, isPositive: true }}
               />
               <StatCard
                 title="平均スコア"
                 value={mockData.overallStats.averageScore}
                 subtitle="10点満点中"
-                icon={Star}
-                trend={3}
+                Icon={Star}
+                trend={{ value: 3, isPositive: true }}
               />
               <StatCard
                 title="総学習時間"
                 value={`${mockData.overallStats.totalLearningHours}h`}
                 subtitle="今月累計"
-                icon={Clock}
-                trend={12}
+                Icon={Clock}
+                trend={{ value: 12, isPositive: true }}
               />
               <StatCard
                 title="コース完了数"
                 value={mockData.overallStats.coursesCompleted}
                 subtitle="今月累計"
-                icon={BookOpen}
-                trend={15}
+                Icon={BookOpen}
+                trend={{ value: 15, isPositive: true }}
               />
             </div>
 
@@ -496,7 +501,7 @@ export default function AdminDashboard() {
                       title="コース総数"
                       value={overallCourseStats.totalCourses}
                       subtitle="営業ロールプレイコース"
-                      icon={BookOpen}
+                      Icon={BookOpen}
                     />
                     <StatCard
                       title="総受講者数"
@@ -509,22 +514,22 @@ export default function AdminDashboard() {
                       title="平均完了率"
                       value={`${overallCourseStats.averageCompletionRate}%`}
                       subtitle="全コース平均"
-                      icon={TrendingUp}
-                      trend={5}
+                      Icon={TrendingUp}
+                      trend={{ value: 5, isPositive: true }}
                     />
                     <StatCard
                       title="総セッション数"
                       value={overallCourseStats.totalSessions}
                       subtitle="累計実施回数"
-                      icon={Clock}
-                      trend={12}
+                      Icon={Clock}
+                      trend={{ value: 12, isPositive: true }}
                     />
                     <StatCard
                       title="平均スコア"
                       value={overallCourseStats.averageScore}
                       subtitle="10点満点中"
-                      icon={Star}
-                      trend={3}
+                      Icon={Star}
+                      trend={{ value: 3, isPositive: true }}
                     />
                   </div>
                 </div>

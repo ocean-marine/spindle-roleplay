@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { User, Clock, BookOpen, TrendingUp, Award, Calendar, BarChart, ArrowLeft } from "react-feather";
-import { getTopLevelPresets } from "../data/presets";
 
 // コース名からコースIDへのマッピング（従業員データとプリセットデータの紐付け）
-const courseNameToId = {
+const courseNameToId: Record<string, string | null> = {
   // 実際のプリセットコース
   "不動産営業の資産背景ヒアリング": "real_estate_asset_hearing",
   "カスタマーサポートのクレーム対応強化": "customer_support_complaint_training", 
@@ -28,12 +27,12 @@ const courseNameToId = {
 };
 
 // コース名からコースIDを取得する関数
-const getCourseIdFromName = (courseName) => {
+const getCourseIdFromName = (courseName: string) => {
   return courseNameToId[courseName] || null;
 };
 
 // Mock employee data - comprehensive data for all team members
-const employeeData = {
+const employeeData: Record<string, any> = {
   // 営業部
   1: { id: 1, name: "佐藤 花子", department: "営業部", position: "主任", score: 9.6, hours: 42, courses: 11, progress: 85, lastActivity: "2時間前", email: "sato.hanako@company.com", joinDate: "2021-04-01", completedCourses: ["顧客対応スキル向上", "プレゼンテーション技法", "営業基礎", "リーダーシップ入門"], currentCourses: ["チームマネジメント", "データ分析入門"], monthlyProgress: [65, 72, 78, 85], recentActivities: [
     { date: "2024-01-15", activity: "プレゼンテーション技法", type: "完了", score: 9.2 },
@@ -274,8 +273,8 @@ const employeeData = {
   ]}
 };
 
-function StatCard({ title, value, subtitle, icon: Icon, color = "blue" }) {
-  const colorClasses = {
+function StatCard({ title, value, subtitle, Icon, color = "blue" }: { title: string; value: string | number; subtitle?: string; Icon: any; color?: string }) {
+  const colorClasses: Record<string, string> = {
     blue: "bg-blue-50 text-blue-600",
     green: "bg-green-50 text-green-600", 
     purple: "bg-purple-50 text-purple-600",
@@ -358,28 +357,28 @@ export default function AdminEmployeeDetail() {
             title="現在のスコア"
             value={employee.score}
             subtitle="10点満点中"
-            icon={TrendingUp}
+            Icon={TrendingUp}
             color="blue"
           />
           <StatCard
             title="学習時間"
             value={`${employee.hours}h`}
             subtitle="今月累計"
-            icon={Clock}
+            Icon={Clock}
             color="green"
           />
           <StatCard
             title="完了コース数"
             value={employee.courses}
             subtitle="総コース数"
-            icon={BookOpen}
+            Icon={BookOpen}
             color="purple"
           />
           <StatCard
             title="現在の進捗"
             value={`${employee.progress}%`}
             subtitle="全体進捗率"
-            icon={Award}
+            Icon={Award}
             color="orange"
           />
         </div>

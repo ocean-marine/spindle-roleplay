@@ -1,14 +1,12 @@
 // 認証ユーティリティ関数
+import type { LoginResult, AuthStatus, LoginCredentials } from "../types";
 
 const API_BASE_URL = '/api';
 
 /**
  * ログイン処理
- * @param {string} accountName アカウント名
- * @param {string} password パスワード
- * @returns {Promise<Object>} ログイン結果
  */
-export async function login(accountName, password) {
+export async function login(accountName: string, password: string): Promise<LoginResult> {
   try {
     const response = await fetch(`${API_BASE_URL}/auth`, {
       method: 'POST',
@@ -22,7 +20,7 @@ export async function login(accountName, password) {
       })
     });
 
-    const data = await response.json();
+    const data: any = await response.json();
 
     if (response.ok && data.success) {
       // トークンをlocalStorageに保存
@@ -39,7 +37,7 @@ export async function login(accountName, password) {
         error: data.error || 'ログインに失敗しました'
       };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login error:', error);
     return {
       success: false,
@@ -50,9 +48,8 @@ export async function login(accountName, password) {
 
 /**
  * 現在の認証状態をチェック
- * @returns {Promise<Object|null>} 認証されている場合はユーザー情報、そうでなければnull
  */
-export async function checkAuthStatus() {
+export async function checkAuthStatus(): Promise<AuthStatus | null> {
   try {
     const token = localStorage.getItem('auth_token');
     if (!token) return null;
@@ -68,7 +65,7 @@ export async function checkAuthStatus() {
       })
     });
 
-    const data = await response.json();
+    const data: any = await response.json();
 
     if (response.ok && data.success) {
       return {
@@ -80,7 +77,7 @@ export async function checkAuthStatus() {
       localStorage.removeItem('auth_account');
       return null;
     }
-  } catch (error) {
+  } catch (error: any) {
     // エラーの場合は認証情報を削除
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_account');
@@ -91,7 +88,7 @@ export async function checkAuthStatus() {
 /**
  * ログアウト処理
  */
-export async function logout() {
+export async function logout(): Promise<void> {
   try {
     const token = localStorage.getItem('auth_token');
     if (token) {
@@ -107,7 +104,7 @@ export async function logout() {
         })
       });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.warn('Logout request failed:', error);
   } finally {
     // ローカルストレージをクリア

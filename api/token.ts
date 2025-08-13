@@ -1,5 +1,7 @@
 import "dotenv/config";
-import { selectVoiceByRules } from '../client/utils/voiceSelection.js';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { selectVoiceByRules } from '../client/utils/voiceSelection';
+import type { VoiceOption } from '../client/types';
 
 const apiKey = process.env.OPENAI_API_KEY;
 
@@ -8,7 +10,15 @@ console.log('OPENAI_API_KEY:', apiKey ? 'Set' : 'Missing');
 console.log('GROQ_API_KEY:', process.env.GROQ_API_KEY ? 'Set' : 'Missing');
 console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
 
-export default async function handler(req, res) {
+interface TokenRequest {
+  presetVoice?: string;
+  persona?: {
+    age?: string;
+    gender?: string;
+  };
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Handle CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -36,20 +46,21 @@ export default async function handler(req, res) {
       
       // If POST request with preset data, use preset voice; otherwise use persona-based selection
       if (req.method === 'POST' && req.body) {
-        const availableVoices = [
+        const body = req.body as TokenRequest;
+        const availableVoices: VoiceOption[] = [
           'alloy', 'ash', 'ballad', 'coral', 'echo', 'fable', 'nova', 
           'sage', 'shimmer', 'verse', 'juniper', 'breeze', 'maple', 
           'vale', 'ember', 'cove', 'sol', 'spruce', 'arbor'
         ];
         
         // Prioritize preset voice if provided
-        if (req.body.presetVoice && availableVoices.includes(req.body.presetVoice)) {
-          selectedVoice = req.body.presetVoice;
-        } else if (req.body.persona) {
+        if (body.presetVoice && availableVoices.includes(body.presetVoice as VoiceOption)) {
+          selectedVoice = body.presetVoice;
+        } else if (body.persona) {
           // Fallback to persona-based selection
           selectedVoice = selectVoiceByRules(
-            req.body.persona.age, 
-            req.body.persona.gender, 
+            body.persona.age || '', 
+            body.persona.gender || '', 
             availableVoices
           );
         }

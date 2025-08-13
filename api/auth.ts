@@ -1,5 +1,18 @@
 // 認証API - Vercel Functions
 import crypto from 'crypto';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+interface AuthRequest {
+  accountName?: string;
+  password?: string;
+  action?: 'login' | 'verify' | 'logout';
+}
+
+interface TokenData {
+  accountName: string;
+  timestamp: number;
+  expires: number;
+}
 
 // 環境変数から認証情報を取得（セキュア）
 const ACCOUNTS = [
@@ -19,7 +32,7 @@ const TOKEN_SECRET = process.env.TOKEN_SECRET || 'your-secret-key-here';
 // セッション有効期限（24時間）
 const SESSION_TIMEOUT = 24 * 60 * 60 * 1000; // milliseconds
 
-export default function handler(req, res) {
+export default function handler(req: VercelRequest, res: VercelResponse) {
   // CORSヘッダー設定
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -34,7 +47,7 @@ export default function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { accountName, password, action } = req.body;
+  const { accountName, password, action } = req.body as AuthRequest;
 
   try {
     switch (action) {
@@ -56,7 +69,7 @@ export default function handler(req, res) {
   }
 }
 
-function handleLogin(req, res, accountName, password) {
+function handleLogin(_req: VercelRequest, res: VercelResponse, accountName?: string, password?: string) {
   if (!accountName || !password) {
     return res.status(400).json({ error: 'アカウント名とパスワードが必要です' });
   }
@@ -87,7 +100,7 @@ function handleLogin(req, res, accountName, password) {
   });
 }
 
-function handleVerify(req, res) {
+function handleVerify(req: VercelRequest, res: VercelResponse) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'トークンが必要です' });
@@ -110,13 +123,13 @@ function handleVerify(req, res) {
   }
 }
 
-function handleLogout(req, res) {
+function handleLogout(_req: VercelRequest, res: VercelResponse) {
   // ステートレスなので、クライアント側でトークンを削除するだけ
   return res.status(200).json({ success: true });
 }
 
 // セキュアトークン生成関数
-function generateSecureToken(data) {
+function generateSecureToken(data: TokenData): string {
   const payload = JSON.stringify(data);
   const signature = crypto
     .createHmac('sha256', TOKEN_SECRET)
@@ -127,7 +140,7 @@ function generateSecureToken(data) {
 }
 
 // セキュアトークン検証関数
-function verifySecureToken(token) {
+function verifySecureToken(token: string): TokenData {
   try {
     const decoded = Buffer.from(token, 'base64').toString('utf8');
     const [payload, signature] = decoded.split('.');

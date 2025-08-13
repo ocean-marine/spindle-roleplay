@@ -6,9 +6,22 @@ import groqService from "../services/groq";
 import PromptModal from "./PromptModal";
 import { selectVoiceByRules } from "../utils/voiceSelection";
 import PresetSelector from "./PresetSelector";
+import type { 
+  SetupScreenProps, 
+  ExpandableSectionProps, 
+  ViewMode, 
+  ImmersionLevel,
+  VoiceOption,
+  PresetData,
+  PersonaSettings,
+  SceneSettings,
+  SelectChangeHandler,
+  InputChangeHandler,
+  TextAreaChangeHandler
+} from "../types";
 
-function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }) {
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }: ExpandableSectionProps) {
+  const [isExpanded, setIsExpanded] = useState<boolean>(defaultExpanded);
 
   return (
     <div className="bg-white rounded-lg border border-gray-100">
@@ -50,26 +63,26 @@ export default function SetupScreen({
   startSession,
   VOICE_OPTIONS,
   currentUser
-}) {
-  const [isStarting, setIsStarting] = useState(false);
-  const [showPromptModal, setShowPromptModal] = useState(false);
-  const [generatedPrompt, setGeneratedPrompt] = useState("");
-  const [viewMode, setViewMode] = useState("preset"); // "preset" | "custom"
-  const [selectedPresetId, setSelectedPresetId] = useState(null);
-  const immersionLevel = "high"; // Always set to high as requested
+}: SetupScreenProps): JSX.Element {
+  const [isStarting, setIsStarting] = useState<boolean>(false);
+  const [showPromptModal, setShowPromptModal] = useState<boolean>(false);
+  const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
+  const [viewMode, setViewMode] = useState<ViewMode>("preset");
+  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
+  const immersionLevel: ImmersionLevel = "high"; // Always set to high as requested
 
   // Check if persona and scene settings have been changed from defaults
-  const hasPersonaChanges = () => {
-    return personaSettings.age || personaSettings.gender || personaSettings.occupation || 
-           personaSettings.personality || personaSettings.additionalInfo;
+  const hasPersonaChanges = (): boolean => {
+    return !!(personaSettings.age || personaSettings.gender || personaSettings.occupation || 
+           personaSettings.personality || personaSettings.additionalInfo);
   };
 
-  const hasSceneChanges = () => {
-    return sceneSettings.appointmentBackground || sceneSettings.relationship || 
-           sceneSettings.timeOfDay || sceneSettings.location || sceneSettings.additionalInfo;
+  const hasSceneChanges = (): boolean => {
+    return !!(sceneSettings.appointmentBackground || sceneSettings.relationship || 
+           sceneSettings.timeOfDay || sceneSettings.location || sceneSettings.additionalInfo);
   };
 
-  const handleGeneratePrompt = async () => {
+  const handleGeneratePrompt = async (): Promise<void> => {
     setIsStarting(true);
     try {
       // Auto-select voice based on persona settings only if no preset voice is already set
@@ -137,7 +150,7 @@ export default function SetupScreen({
     }
   };
 
-  const handleStartSession = async (editedPrompt) => {
+  const handleStartSession = async (editedPrompt?: string): Promise<void> => {
     try {
       // Update instructions with the edited prompt before starting session
       if (editedPrompt !== undefined) {
@@ -152,7 +165,7 @@ export default function SetupScreen({
   };
 
   // プリセット選択時の処理
-  const handlePresetSelect = async (preset) => {
+  const handlePresetSelect = async (preset: PresetData): Promise<void> => {
     if (!preset) return;
     
     setIsStarting(true);
@@ -188,7 +201,7 @@ export default function SetupScreen({
   };
 
   // プリセットで直接開始（プロンプトモーダルを飛ばす）
-  const handleDirectStart = async (preset) => {
+  const handleDirectStart = async (preset: PresetData): Promise<void> => {
     if (!preset || !preset.predefinedInstructions) return;
     
     setIsStarting(true);
@@ -213,7 +226,7 @@ export default function SetupScreen({
   };
 
   // カスタマイズモードへの切り替え
-  const handleCustomize = (preset = null) => {
+  const handleCustomize = (preset: PresetData | null = null): void => {
     if (preset) {
       // プリセットを適用してからカスタマイズモードに
       setPurpose(preset.purpose);
@@ -307,7 +320,7 @@ export default function SetupScreen({
               </label>
               <select
                 value={personaSettings.age}
-                onChange={(e) => setPersonaSettings({...personaSettings, age: e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setPersonaSettings({...personaSettings, age: e.target.value})}
                 className="w-full p-3 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-gray-400 focus:border-gray-400 outline-none"
               >
                 <option value="">選択してください</option>

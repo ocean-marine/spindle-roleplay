@@ -1,4 +1,5 @@
 import { User, Mic, MicOff, X } from "react-feather";
+import type { ChatInterfaceProps } from "../types";
 
 export default function ChatInterface({ 
   isSessionActive,
@@ -8,7 +9,7 @@ export default function ChatInterface({
   sceneSettings = {},
   purpose = "",
   onStopSession
-}) {
+}: ChatInterfaceProps): JSX.Element {
 
   if (!isSessionActive) {
     return (
@@ -34,9 +35,13 @@ export default function ChatInterface({
               src={`/personas/${personaSettings.image}`} 
               alt="Persona" 
               className="w-full h-full rounded-full object-cover"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
+              onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                const target = e.target as HTMLImageElement;
+                const nextSibling = target.nextSibling as HTMLElement;
+                target.style.display = 'none';
+                if (nextSibling) {
+                  nextSibling.style.display = 'flex';
+                }
               }}
             />
           ) : null}

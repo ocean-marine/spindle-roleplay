@@ -7,7 +7,9 @@ const groqApiKey = process.env.GROQ_API_KEY;
 console.log('GROQ_API_KEY:', groqApiKey ? 'Set' : 'Missing');
 console.log('VERCEL_ENV:', process.env.VERCEL_ENV);
 
-export default async function handler(req, res) {
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Handle CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -84,7 +86,7 @@ ${context || '基本的なロールプレイ'}
       console.error('Groq API request failed:', error);
       res.status(500).json({ 
         error: 'Groq APIリクエストが失敗しました',
-        message: error.message 
+        message: error instanceof Error ? error.message : 'Unknown error' 
       });
     }
   } else {

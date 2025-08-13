@@ -1,9 +1,19 @@
 // Voice selection utilities based on age and gender according to research findings
+import type { VoiceOption } from "../types";
+
+type GenderCategory = 'masculine' | 'feminine' | 'neutral';
+type AgeCategory = 'young' | 'medium' | 'mature';
+
+interface VoiceCharacteristics {
+  gender: GenderCategory;
+  age: AgeCategory;
+  traits: string[];
+}
 
 /**
  * Voice characteristics mapping based on the research documentation provided
  */
-const VOICE_CHARACTERISTICS = {
+const VOICE_CHARACTERISTICS: Record<string, VoiceCharacteristics> = {
   // Feminine/young voices
   juniper: { gender: 'feminine', age: 'young', traits: ['open', 'upbeat'] },
   breeze: { gender: 'neutral', age: 'young', traits: ['animated', 'earnest'] },
@@ -32,12 +42,12 @@ const VOICE_CHARACTERISTICS = {
 
 /**
  * Rule-based voice selection based on persona age and gender
- * @param {string} age - Age range from persona settings
- * @param {string} gender - Gender from persona settings
- * @param {Array} availableVoices - List of available voice options
- * @returns {string} Selected voice name
  */
-export function selectVoiceByRules(age, gender, availableVoices = []) {
+export function selectVoiceByRules(
+  age: string, 
+  gender: string, 
+  availableVoices: readonly VoiceOption[] = []
+): VoiceOption {
   if (!age && !gender) {
     // Default fallback
     return availableVoices.includes('alloy') ? 'alloy' : availableVoices[0];
@@ -48,7 +58,7 @@ export function selectVoiceByRules(age, gender, availableVoices = []) {
   const genderCategory = getGenderCategory(gender);
 
   // Priority voice candidates based on age and gender
-  let candidates = [];
+  let candidates: string[] = [];
 
   if (genderCategory === 'feminine') {
     if (ageCategory === 'young') {
@@ -78,8 +88,8 @@ export function selectVoiceByRules(age, gender, availableVoices = []) {
 
   // Find first available candidate from priority list
   for (const candidate of candidates) {
-    if (availableVoices.includes(candidate)) {
-      return candidate;
+    if (availableVoices.includes(candidate as VoiceOption)) {
+      return candidate as VoiceOption;
     }
   }
 
@@ -95,10 +105,8 @@ export function selectVoiceByRules(age, gender, availableVoices = []) {
 
 /**
  * Get age category from Japanese age string
- * @param {string} age - Age string like "20代前半", "30代後半"
- * @returns {string} 'young', 'medium', or 'mature'
  */
-function getAgeCategory(age) {
+function getAgeCategory(age: string): AgeCategory {
   if (!age) return 'medium';
   
   if (age.includes('20代') || age.includes('10代')) {
@@ -112,10 +120,8 @@ function getAgeCategory(age) {
 
 /**
  * Get gender category from Japanese gender string
- * @param {string} gender - Gender string like "男性", "女性", "その他"
- * @returns {string} 'masculine', 'feminine', or 'neutral'
  */
-function getGenderCategory(gender) {
+function getGenderCategory(gender: string): GenderCategory {
   if (!gender) return 'neutral';
   
   if (gender === '女性') {
@@ -129,16 +135,16 @@ function getGenderCategory(gender) {
 
 /**
  * Get fallback voices by gender category
- * @param {string} genderCategory - 'masculine', 'feminine', or 'neutral'
- * @param {Array} availableVoices - Available voice options
- * @returns {Array} Array of suitable voice names
  */
-function getFallbackVoicesByGender(genderCategory, availableVoices) {
-  const feminineFallbacks = ['coral', 'nova', 'shimmer'];
-  const masculineFallbacks = ['echo', 'ash'];
-  const neutralFallbacks = ['alloy', 'fable', 'sage'];
+function getFallbackVoicesByGender(
+  genderCategory: GenderCategory, 
+  availableVoices: readonly VoiceOption[]
+): VoiceOption[] {
+  const feminineFallbacks: string[] = ['coral', 'nova', 'shimmer'];
+  const masculineFallbacks: string[] = ['echo', 'ash'];
+  const neutralFallbacks: string[] = ['alloy', 'fable', 'sage'];
 
-  let fallbacks;
+  let fallbacks: string[];
   if (genderCategory === 'feminine') {
     fallbacks = feminineFallbacks;
   } else if (genderCategory === 'masculine') {
@@ -147,15 +153,13 @@ function getFallbackVoicesByGender(genderCategory, availableVoices) {
     fallbacks = neutralFallbacks;
   }
 
-  return fallbacks.filter(voice => availableVoices.includes(voice));
+  return fallbacks.filter(voice => availableVoices.includes(voice as VoiceOption)) as VoiceOption[];
 }
 
 /**
  * Get voice description for UI display
- * @param {string} voiceName - Name of the voice
- * @returns {string} Description of the voice characteristics
  */
-export function getVoiceDescription(voiceName) {
+export function getVoiceDescription(voiceName: string): string {
   const characteristics = VOICE_CHARACTERISTICS[voiceName];
   if (!characteristics) return '';
 
