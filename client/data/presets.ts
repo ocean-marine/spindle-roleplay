@@ -142,7 +142,7 @@ export const presets: Record<string, PresetData> = {
       location: "電話口",
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
-    voice: "nova",
+    voice: "coral",
     predefinedInstructions: `あなたは怒り狂ったクレーマーです。
 
 ---
