@@ -1,18 +1,25 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, ReactNode } from "react";
 import { RefreshCw } from "react-feather";
+
+interface PullToRefreshProps {
+  onRefresh?: () => void | Promise<void>;
+  children: ReactNode;
+  threshold?: number;
+  className?: string;
+}
 
 export default function PullToRefresh({ 
   onRefresh, 
   children, 
   threshold = 80,
   className = ""
-}) {
-  const [pullDistance, setPullDistance] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [canPull, setCanPull] = useState(false);
-  const containerRef = useRef(null);
-  const startTouchRef = useRef(null);
-  const pullStartedRef = useRef(false);
+}: PullToRefreshProps) {
+  const [pullDistance, setPullDistance] = useState<number>(0);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [canPull, setCanPull] = useState<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const startTouchRef = useRef<number | null>(null);
+  const pullStartedRef = useRef<boolean>(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -21,7 +28,7 @@ export default function PullToRefresh({
     let startY = 0;
     let currentY = 0;
 
-    const handleTouchStart = (e) => {
+    const handleTouchStart = (e: TouchEvent) => {
       // Only start pull if we're at the top of the scrollable area
       if (container.scrollTop <= 0) {
         startY = e.touches[0].clientY;
@@ -31,7 +38,7 @@ export default function PullToRefresh({
       }
     };
 
-    const handleTouchMove = (e) => {
+    const handleTouchMove = (e: TouchEvent) => {
       if (!canPull || !startTouchRef.current) return;
 
       currentY = e.touches[0].clientY;

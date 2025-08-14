@@ -1,3 +1,7 @@
-export default function TabNavigation({ className = "" }) {
+interface TabNavigationProps {
+  className?: string;
+}
+
+export default function TabNavigation({ }: TabNavigationProps) {
   return null;
 }

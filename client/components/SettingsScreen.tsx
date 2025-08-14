@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, ReactNode, ChangeEvent } from "react";
 import { 
   Settings, 
   Volume2, 
-  Mic, 
   Bell, 
   Smartphone, 
   Info, 
@@ -15,7 +14,13 @@ import {
 } from "react-feather";
 import groqService from "../services/groq";
 
-function SettingSection({ title, children, icon: Icon }) {
+interface SettingSectionProps {
+  title: string;
+  children: ReactNode;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+}
+
+function SettingSection({ title, children, icon: Icon }: SettingSectionProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-3 sm:mb-4">
       <div className="p-3 sm:p-4 border-b border-gray-100">
@@ -31,7 +36,14 @@ function SettingSection({ title, children, icon: Icon }) {
   );
 }
 
-function SettingItem({ label, description, children, disabled = false }) {
+interface SettingItemProps {
+  label: string;
+  description?: string;
+  children: ReactNode;
+  disabled?: boolean;
+}
+
+function SettingItem({ label, description, children, disabled = false }: SettingItemProps) {
   return (
     <div className={`flex items-center justify-between ${disabled ? 'opacity-50' : ''}`}>
       <div className="flex-1 min-w-0 mr-4">
@@ -49,7 +61,13 @@ function SettingItem({ label, description, children, disabled = false }) {
   );
 }
 
-function ToggleSwitch({ enabled, onChange, disabled = false }) {
+interface ToggleSwitchProps {
+  enabled: boolean;
+  onChange: (enabled: boolean) => void;
+  disabled?: boolean;
+}
+
+function ToggleSwitch({ enabled, onChange, disabled = false }: ToggleSwitchProps) {
   return (
     <button
       onClick={() => !disabled && onChange(!enabled)}
@@ -69,13 +87,21 @@ function ToggleSwitch({ enabled, onChange, disabled = false }) {
   );
 }
 
+interface SettingsScreenProps {
+  selectedVoice: string;
+  setSelectedVoice: (voice: string) => void;
+  VOICE_OPTIONS: string[];
+  instructions?: string;
+  setInstructions?: (instructions: string) => void;
+}
+
 export default function SettingsScreen({ 
   selectedVoice, 
   setSelectedVoice, 
   VOICE_OPTIONS,
   instructions,
   setInstructions
-}) {
+}: SettingsScreenProps) {
   // Local settings state
   const [settings, setSettings] = useState({
     audioEnabled: true,
@@ -92,7 +118,7 @@ export default function SettingsScreen({
   const [isGeneratingInstructions, setIsGeneratingInstructions] = useState(false);
   const [instructionContext, setInstructionContext] = useState("");
 
-  const updateSetting = (key, value) => {
+  const updateSetting = (key: keyof typeof settings, value: boolean) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
@@ -140,7 +166,8 @@ export default function SettingsScreen({
         setInstructions(generatedInstructions);
       }
     } catch (error) {
-      alert(`指示文の生成に失敗しました: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`指示文の生成に失敗しました: ${errorMessage}`);
     } finally {
       setIsGeneratingInstructions(false);
     }
@@ -166,7 +193,7 @@ export default function SettingsScreen({
           >
             <select
               value={selectedVoice}
-              onChange={(e) => setSelectedVoice(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setSelectedVoice(e.target.value)}
               className="text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {VOICE_OPTIONS.map((voice) => (
@@ -303,7 +330,7 @@ export default function SettingsScreen({
           >
             <textarea
               value={instructionContext}
-              onChange={(e) => setInstructionContext(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setInstructionContext(e.target.value)}
               placeholder="例: ビジネス会話、カジュアルな対話、技術相談など..."
               className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               rows={3}

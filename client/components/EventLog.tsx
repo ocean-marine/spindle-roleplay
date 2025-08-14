@@ -1,7 +1,13 @@
 import { ArrowUp, ArrowDown } from "react-feather";
-import { useState } from "react";
+import { useState, ReactElement } from "react";
+import type { RealtimeEvent } from "../types";
 
-function Event({ event, timestamp }) {
+interface EventProps {
+  event: RealtimeEvent;
+  timestamp: string;
+}
+
+function Event({ event, timestamp }: EventProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const isClient = event.event_id && !event.event_id.startsWith("event_");
@@ -36,11 +42,15 @@ function Event({ event, timestamp }) {
   );
 }
 
-export default function EventLog({ events }) {
-  const eventsToDisplay = [];
-  let deltaEvents = {};
+interface EventLogProps {
+  events: RealtimeEvent[];
+}
 
-  events.forEach((event) => {
+export default function EventLog({ events }: EventLogProps) {
+  const eventsToDisplay: ReactElement[] = [];
+  let deltaEvents: Record<string, RealtimeEvent> = {};
+
+  events.forEach((event: RealtimeEvent) => {
     if (event.type.endsWith("delta")) {
       if (deltaEvents[event.type]) {
         // for now just log a single event per render pass
@@ -51,7 +61,7 @@ export default function EventLog({ events }) {
     }
 
     eventsToDisplay.push(
-      <Event key={event.event_id} event={event} timestamp={event.timestamp} />,
+      <Event key={event.event_id || `event-${Math.random()}`} event={event} timestamp={event.timestamp || 'unknown'} />,
     );
   });
 

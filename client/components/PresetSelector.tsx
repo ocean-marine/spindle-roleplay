@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Zap, ChevronRight, Edit3, Settings, MoreVertical, X, Volume2 } from "react-feather";
+import { Zap, ChevronRight, Edit3, Settings, X, Volume2 } from "react-feather";
 import { getPresetsByCategory, getPresetById, getTopLevelPresets } from "../data/presets";
 import Button from "./Button";
 import type { PresetSelectorProps, PresetData, VoiceOption } from "../types";
 
 export default function PresetSelector({ 
   onPresetSelect, 
-  onCustomize,
   onDirectStart,
   selectedPresetId,
   setSelectedPresetId 
@@ -115,7 +114,7 @@ export default function PresetSelector({
                 </p>
               </div>
               <button
-                onClick={() => handleTestVoice(selectedPresetForSettings.voice)}
+                onClick={() => handleTestVoice(selectedPresetForSettings.voice as VoiceOption)}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
               >
                 <Volume2 size={16} />
@@ -227,7 +226,7 @@ export default function PresetSelector({
                   const preset = getPresetById(selectedPresetId);
                   if (preset && preset.predefinedInstructions && onDirectStart) {
                     onDirectStart(preset);
-                  } else {
+                  } else if (preset) {
                     onPresetSelect(preset);
                   }
                 }}

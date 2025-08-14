@@ -17,9 +17,9 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
       const result = await login(accountName, password);
 
       if (result.success) {
-        onLogin(result.accountName);
+        onLogin(result.accountName || "");
       } else {
-        setError(result.error);
+        setError(result.error || "ログインに失敗しました");
       }
     } catch (error: any) {
       setError("予期しないエラーが発生しました");

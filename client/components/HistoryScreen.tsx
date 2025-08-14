@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { Clock, MessageSquare, Trash2, Search, Filter, ChevronRight } from "react-feather";
+import type { RealtimeEvent } from "../types";
 
-function EventCard({ event, onClick }) {
-  const getEventTypeColor = (type) => {
+interface EventCardProps {
+  event: RealtimeEvent;
+  onClick: () => void;
+}
+
+function EventCard({ event, onClick }: EventCardProps) {
+  const getEventTypeColor = (type: string) => {
     switch (type) {
       case 'conversation.item.create': return 'text-blue-600 bg-blue-50';
       case 'response.done': return 'text-green-600 bg-green-50';
@@ -12,7 +18,7 @@ function EventCard({ event, onClick }) {
     }
   };
 
-  const getEventIcon = (type) => {
+  const getEventIcon = (type: string) => {
     switch (type) {
       case 'conversation.item.create':
       case 'response.done':
@@ -22,7 +28,7 @@ function EventCard({ event, onClick }) {
     }
   };
 
-  const getEventDescription = (event) => {
+  const getEventDescription = (event: RealtimeEvent) => {
     switch (event.type) {
       case 'conversation.item.create':
         if (event.item?.content?.[0]?.text) {
@@ -55,7 +61,7 @@ function EventCard({ event, onClick }) {
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-medium text-gray-800 truncate">
-              {event.type.replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              {event.type.replace(/[._]/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
             </h3>
             <p className="text-sm text-gray-600 truncate">
               {getEventDescription(event)}
@@ -71,7 +77,12 @@ function EventCard({ event, onClick }) {
   );
 }
 
-function EventDetailModal({ event, onClose }) {
+interface EventDetailModalProps {
+  event: RealtimeEvent | null;
+  onClose: () => void;
+}
+
+function EventDetailModal({ event, onClose }: EventDetailModalProps) {
   if (!event) return null;
 
   return (
@@ -128,10 +139,15 @@ function EventDetailModal({ event, onClose }) {
   );
 }
 
-export default function HistoryScreen({ events = [], onClearHistory }) {
+interface HistoryScreenProps {
+  events?: RealtimeEvent[];
+  onClearHistory: () => void;
+}
+
+export default function HistoryScreen({ events = [], onClearHistory }: HistoryScreenProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEventType, setSelectedEventType] = useState("all");
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState<RealtimeEvent | null>(null);
 
   // Get unique event types for filter
   const eventTypes = ["all", ...new Set(events.map(e => e.type))];
