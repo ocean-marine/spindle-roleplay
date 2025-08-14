@@ -84,53 +84,12 @@ export interface ButtonProps {
   icon?: React.ReactElement;
 }
 
-export interface VoiceInterfaceProps {
-  isSessionActive: boolean;
-  isListening: boolean;
-  isSpeaking: boolean;
-  audioLevel: number;
-}
 
-export interface SessionControlsProps {
-  isSessionActive: boolean;
-  isListening: boolean;
-  isSpeaking: boolean;
-  onStartSession: () => void;
-  onStopSession: () => void;
-}
 
-export interface EventLogProps {
-  events: RealtimeEvent[];
-}
 
-export interface ToolPanelProps {
-  selectedVoice: string;
-  instructions: string;
-  personaSettings: PersonaSettings;
-  sceneSettings: SceneSettings;
-  purpose: string;
-}
 
-export interface TabNavigationProps {
-  tabs: Array<{
-    id: string;
-    label: string;
-    icon?: React.ComponentType;
-  }>;
-  activeTab: string;
-  onTabChange: (tabId: string) => void;
-}
 
-export interface SwipeHandlerProps {
-  onSwipeLeft?: () => void;
-  onSwipeRight?: () => void;
-  children: React.ReactNode;
-}
 
-export interface PullToRefreshProps {
-  onRefresh: () => Promise<void>;
-  children: React.ReactNode;
-}
 
 export interface PromptModalProps {
   isOpen: boolean;
@@ -141,21 +100,7 @@ export interface PromptModalProps {
   placeholder?: string;
 }
 
-export interface HistoryScreenProps {
-  sessions: Array<{
-    id: string;
-    date: string;
-    duration: string;
-    persona: PersonaSettings;
-    scene: SceneSettings;
-  }>;
-  onSelectSession: (sessionId: string) => void;
-}
 
-export interface SettingsScreenProps {
-  currentUser: string | null;
-  onLogout: () => void;
-}
 
 export interface PresetSelectorProps {
   onPresetSelect: (preset: PresetData) => void;
