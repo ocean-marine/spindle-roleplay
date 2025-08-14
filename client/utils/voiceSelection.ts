@@ -14,30 +14,15 @@ interface VoiceCharacteristics {
  * Voice characteristics mapping based on the research documentation provided
  */
 const VOICE_CHARACTERISTICS: Record<string, VoiceCharacteristics> = {
-  // Feminine/young voices
-  juniper: { gender: 'feminine', age: 'young', traits: ['open', 'upbeat'] },
-  breeze: { gender: 'neutral', age: 'young', traits: ['animated', 'earnest'] },
-  maple: { gender: 'feminine', age: 'medium', traits: ['cheerful', 'candid'] },
-  vale: { gender: 'feminine', age: 'young', traits: ['bright', 'inquisitive'] },
-  
-  // Masculine/neutral voices
-  ember: { gender: 'masculine', age: 'medium', traits: ['confident', 'optimistic'] },
-  cove: { gender: 'masculine', age: 'mature', traits: ['composed', 'direct'] },
-  sol: { gender: 'neutral', age: 'mature', traits: ['savvy', 'relaxed'] },
-  spruce: { gender: 'masculine', age: 'mature', traits: ['calm', 'affirming'] },
-  arbor: { gender: 'neutral', age: 'medium', traits: ['easygoing', 'versatile'] },
-  
-  // Fallback options (using available voices if research voices not available)
-  alloy: { gender: 'neutral', age: 'medium', traits: ['balanced'] },
-  ash: { gender: 'neutral', age: 'medium', traits: ['balanced'] },
-  ballad: { gender: 'neutral', age: 'medium', traits: ['balanced'] },
-  coral: { gender: 'feminine', age: 'medium', traits: ['warm'] },
-  echo: { gender: 'masculine', age: 'medium', traits: ['resonant'] },
-  fable: { gender: 'neutral', age: 'medium', traits: ['storytelling'] },
-  nova: { gender: 'feminine', age: 'young', traits: ['energetic'] },
-  sage: { gender: 'neutral', age: 'mature', traits: ['wise'] },
-  shimmer: { gender: 'feminine', age: 'young', traits: ['bright'] },
-  verse: { gender: 'neutral', age: 'medium', traits: ['rhythmic'] }
+  // OpenAI API supported voices only
+  alloy: { gender: 'neutral', age: 'medium', traits: ['balanced', 'versatile'] },
+  ash: { gender: 'neutral', age: 'medium', traits: ['calm', 'steady'] },
+  ballad: { gender: 'neutral', age: 'medium', traits: ['smooth', 'melodic'] },
+  coral: { gender: 'feminine', age: 'medium', traits: ['warm', 'friendly'] },
+  echo: { gender: 'masculine', age: 'medium', traits: ['resonant', 'clear'] },
+  sage: { gender: 'neutral', age: 'mature', traits: ['wise', 'thoughtful'] },
+  shimmer: { gender: 'feminine', age: 'young', traits: ['bright', 'energetic'] },
+  verse: { gender: 'neutral', age: 'medium', traits: ['rhythmic', 'expressive'] }
 };
 
 /**
@@ -62,27 +47,27 @@ export function selectVoiceByRules(
 
   if (genderCategory === 'feminine') {
     if (ageCategory === 'young') {
-      candidates = ['juniper', 'vale', 'nova', 'shimmer', 'breeze'];
+      candidates = ['shimmer', 'coral', 'ballad'];
     } else if (ageCategory === 'medium') {
-      candidates = ['maple', 'coral', 'juniper'];
+      candidates = ['coral', 'ballad', 'sage'];
     } else { // mature
-      candidates = ['maple', 'coral', 'sage'];
+      candidates = ['sage', 'coral', 'ballad'];
     }
   } else if (genderCategory === 'masculine') {
     if (ageCategory === 'young') {
-      candidates = ['ember', 'breeze', 'echo'];
+      candidates = ['echo', 'ash', 'alloy'];
     } else if (ageCategory === 'medium') {
-      candidates = ['ember', 'cove', 'echo'];
+      candidates = ['echo', 'ash', 'alloy'];
     } else { // mature
-      candidates = ['cove', 'spruce', 'sage'];
+      candidates = ['ash', 'echo', 'sage'];
     }
   } else { // neutral or other
     if (ageCategory === 'young') {
-      candidates = ['breeze', 'vale', 'arbor'];
+      candidates = ['alloy', 'verse', 'ballad'];
     } else if (ageCategory === 'medium') {
-      candidates = ['sol', 'arbor', 'alloy', 'fable'];
+      candidates = ['alloy', 'verse', 'sage'];
     } else { // mature
-      candidates = ['sol', 'spruce', 'sage'];
+      candidates = ['sage', 'alloy', 'verse'];
     }
   }
 
@@ -140,9 +125,9 @@ function getFallbackVoicesByGender(
   genderCategory: GenderCategory, 
   availableVoices: readonly VoiceOption[]
 ): VoiceOption[] {
-  const feminineFallbacks: string[] = ['coral', 'nova', 'shimmer'];
-  const masculineFallbacks: string[] = ['echo', 'ash'];
-  const neutralFallbacks: string[] = ['alloy', 'fable', 'sage'];
+  const feminineFallbacks: string[] = ['coral', 'shimmer', 'ballad'];
+  const masculineFallbacks: string[] = ['echo', 'ash', 'alloy'];
+  const neutralFallbacks: string[] = ['alloy', 'verse', 'sage'];
 
   let fallbacks: string[];
   if (genderCategory === 'feminine') {

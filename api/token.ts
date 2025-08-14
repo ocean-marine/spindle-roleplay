@@ -1,10 +1,8 @@
 import "dotenv/config";
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Voice options type definition (copied from client/types to avoid import issues)
-type VoiceOption = 'alloy' | 'ash' | 'ballad' | 'coral' | 'echo' | 'fable' | 'nova' | 
-                  'sage' | 'shimmer' | 'verse' | 'juniper' | 'breeze' | 'maple' | 
-                  'vale' | 'ember' | 'cove' | 'sol' | 'spruce' | 'arbor';
+// Voice options type definition - only OpenAI API supported voices
+type VoiceOption = 'alloy' | 'ash' | 'ballad' | 'coral' | 'echo' | 'sage' | 'shimmer' | 'verse';
 
 // Voice selection logic (inlined to avoid import issues in Vercel)
 function selectVoiceByRules(age: string, gender: string, availableVoices: readonly VoiceOption[] = []): VoiceOption {
@@ -33,27 +31,27 @@ function selectVoiceByRules(age: string, gender: string, availableVoices: readon
 
   if (genderCategory === 'feminine') {
     if (ageCategory === 'young') {
-      candidates = ['juniper', 'vale', 'nova', 'shimmer', 'breeze'];
+      candidates = ['shimmer', 'coral', 'ballad'];
     } else if (ageCategory === 'medium') {
-      candidates = ['maple', 'coral', 'juniper'];
+      candidates = ['coral', 'ballad', 'sage'];
     } else {
-      candidates = ['maple', 'coral', 'sage'];
+      candidates = ['sage', 'coral', 'ballad'];
     }
   } else if (genderCategory === 'masculine') {
     if (ageCategory === 'young') {
-      candidates = ['ember', 'breeze', 'echo'];
+      candidates = ['echo', 'ash', 'alloy'];
     } else if (ageCategory === 'medium') {
-      candidates = ['ember', 'cove', 'echo'];
+      candidates = ['echo', 'ash', 'alloy'];
     } else {
-      candidates = ['cove', 'spruce', 'sage'];
+      candidates = ['ash', 'echo', 'sage'];
     }
   } else {
     if (ageCategory === 'young') {
-      candidates = ['breeze', 'vale', 'arbor'];
+      candidates = ['alloy', 'verse', 'ballad'];
     } else if (ageCategory === 'medium') {
-      candidates = ['sol', 'arbor', 'alloy', 'fable'];
+      candidates = ['alloy', 'verse', 'sage'];
     } else {
-      candidates = ['sol', 'spruce', 'sage'];
+      candidates = ['sage', 'alloy', 'verse'];
     }
   }
 
@@ -137,9 +135,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log('POST request body received:', req.body);
         const body = req.body as TokenRequest;
         const availableVoices: VoiceOption[] = [
-          'alloy', 'ash', 'ballad', 'coral', 'echo', 'fable', 'nova', 
-          'sage', 'shimmer', 'verse', 'juniper', 'breeze', 'maple', 
-          'vale', 'ember', 'cove', 'sol', 'spruce', 'arbor'
+          'alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse'
         ];
         
         // Prioritize preset voice if provided

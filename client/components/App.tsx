@@ -61,11 +61,13 @@ export default function App() {
 
   const VOICE_OPTIONS: VoiceOption[] = [
     "alloy",
-    "nova",
+    "ash", 
+    "ballad",
+    "coral",
     "echo",
-    "fable",
-    "onyx",
-    "shimmer"
+    "sage",
+    "shimmer",
+    "verse"
   ] as const;
 
   // 認証関連の処理

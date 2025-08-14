@@ -1,5 +1,5 @@
 // Common types
-export type VoiceOption = 'alloy' | 'nova' | 'echo' | 'fable' | 'onyx' | 'shimmer' | 'verse' | 'ash' | 'ballad' | 'coral' | 'sage' | 'juniper' | 'breeze' | 'maple' | 'vale' | 'ember' | 'cove' | 'sol' | 'spruce' | 'arbor';
+export type VoiceOption = 'alloy' | 'ash' | 'ballad' | 'coral' | 'echo' | 'sage' | 'shimmer' | 'verse';
 
 // Persona and Scene Settings
 export interface PersonaSettings {
