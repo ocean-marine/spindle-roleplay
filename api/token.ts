@@ -1,7 +1,70 @@
 import "dotenv/config";
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { selectVoiceByRules } from '../client/utils/voiceSelection';
-import type { VoiceOption } from '../client/types';
+
+// Voice options type definition (copied from client/types to avoid import issues)
+type VoiceOption = 'alloy' | 'ash' | 'ballad' | 'coral' | 'echo' | 'fable' | 'nova' | 
+                  'sage' | 'shimmer' | 'verse' | 'juniper' | 'breeze' | 'maple' | 
+                  'vale' | 'ember' | 'cove' | 'sol' | 'spruce' | 'arbor';
+
+// Voice selection logic (inlined to avoid import issues in Vercel)
+function selectVoiceByRules(age: string, gender: string, availableVoices: readonly VoiceOption[] = []): VoiceOption {
+  if (!age && !gender) {
+    return availableVoices.includes('alloy') ? 'alloy' : availableVoices[0];
+  }
+
+  const getAgeCategory = (age: string) => {
+    if (!age) return 'medium';
+    if (age.includes('20代') || age.includes('10代')) return 'young';
+    if (age.includes('30代') || age.includes('40代前半')) return 'medium';
+    return 'mature';
+  };
+
+  const getGenderCategory = (gender: string) => {
+    if (!gender) return 'neutral';
+    if (gender === '女性') return 'feminine';
+    if (gender === '男性') return 'masculine';
+    return 'neutral';
+  };
+
+  const ageCategory = getAgeCategory(age);
+  const genderCategory = getGenderCategory(gender);
+
+  let candidates: string[] = [];
+
+  if (genderCategory === 'feminine') {
+    if (ageCategory === 'young') {
+      candidates = ['juniper', 'vale', 'nova', 'shimmer', 'breeze'];
+    } else if (ageCategory === 'medium') {
+      candidates = ['maple', 'coral', 'juniper'];
+    } else {
+      candidates = ['maple', 'coral', 'sage'];
+    }
+  } else if (genderCategory === 'masculine') {
+    if (ageCategory === 'young') {
+      candidates = ['ember', 'breeze', 'echo'];
+    } else if (ageCategory === 'medium') {
+      candidates = ['ember', 'cove', 'echo'];
+    } else {
+      candidates = ['cove', 'spruce', 'sage'];
+    }
+  } else {
+    if (ageCategory === 'young') {
+      candidates = ['breeze', 'vale', 'arbor'];
+    } else if (ageCategory === 'medium') {
+      candidates = ['sol', 'arbor', 'alloy', 'fable'];
+    } else {
+      candidates = ['sol', 'spruce', 'sage'];
+    }
+  }
+
+  for (const candidate of candidates) {
+    if (availableVoices.includes(candidate as VoiceOption)) {
+      return candidate as VoiceOption;
+    }
+  }
+
+  return availableVoices.includes('alloy') ? 'alloy' : availableVoices[0];
+}
 
 const apiKey = process.env.OPENAI_API_KEY;
 
