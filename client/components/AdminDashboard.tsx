@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Users, BookOpen, TrendingUp, Clock, Star, BarChart, Play } from "react-feather";
 import { Link, useNavigate } from "react-router-dom";
 import { getTopLevelPresets } from "../data/presets";
-import type { CourseData, StatCardProps, CourseCardProps, Activity } from "../types";
+import type { CourseData, StatCardProps, CourseCardProps } from "../types";
 
 // Mock data for dashboard
 const mockData = {
@@ -503,8 +503,8 @@ export default function AdminDashboard() {
                       title="総受講者数"
                       value={`${overallCourseStats.totalLearners}名`}
                       subtitle="全コース合計"
-                      icon={Users}
-                      trend={8}
+                      Icon={Users}
+                      trend={{ value: 8, isPositive: true }}
                     />
                     <StatCard
                       title="平均完了率"
@@ -617,7 +617,7 @@ export default function AdminDashboard() {
                           courseIcon: course.icon
                         }));
                       })
-                      .sort((a, b) => new Date(b.date) - new Date(a.date))
+                      .sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime())
                       .slice(0, 8)
                       .map((activity) => (
                         <div key={`${activity.courseName}-${activity.id}`} className="flex items-start gap-3">
@@ -635,7 +635,7 @@ export default function AdminDashboard() {
                               {activity.courseName}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
-                              {new Date(activity.date).toLocaleString('ja-JP')}
+                              {new Date(activity.date || 0).toLocaleString('ja-JP')}
                             </p>
                           </div>
                         </div>

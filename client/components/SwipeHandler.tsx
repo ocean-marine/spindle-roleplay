@@ -1,5 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 
+interface SwipeHandlerProps {
+  children: React.ReactNode;
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
+  onSwipeUp?: () => void;
+  onSwipeDown?: () => void;
+  minSwipeDistance?: number;
+  maxSwipeTime?: number;
+  className?: string;
+}
+
+interface TouchPosition {
+  x: number;
+  y: number;
+}
+
 export default function SwipeHandler({ 
   children, 
   onSwipeLeft, 
@@ -9,10 +25,10 @@ export default function SwipeHandler({
   minSwipeDistance = 50,
   maxSwipeTime = 300,
   className = ""
-}) {
-  const elementRef = useRef(null);
-  const touchStartRef = useRef(null);
-  const touchTimeRef = useRef(null);
+}: SwipeHandlerProps) {
+  const elementRef = useRef<HTMLDivElement | null>(null);
+  const touchStartRef = useRef<TouchPosition | null>(null);
+  const touchTimeRef = useRef<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
@@ -23,7 +39,7 @@ export default function SwipeHandler({
     let startY = 0;
     let startTime = 0;
 
-    const handleTouchStart = (e) => {
+    const handleTouchStart = (e: TouchEvent) => {
       const touch = e.touches[0];
       startX = touch.clientX;
       startY = touch.clientY;
@@ -33,7 +49,7 @@ export default function SwipeHandler({
       setIsDragging(true);
     };
 
-    const handleTouchMove = (e) => {
+    const handleTouchMove = (e: TouchEvent) => {
       if (!touchStartRef.current) return;
       
       // Prevent scrolling during swipe
@@ -47,7 +63,7 @@ export default function SwipeHandler({
       }
     };
 
-    const handleTouchEnd = (e) => {
+    const handleTouchEnd = (e: TouchEvent) => {
       if (!touchStartRef.current || !touchTimeRef.current) {
         setIsDragging(false);
         return;

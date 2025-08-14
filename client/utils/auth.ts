@@ -1,5 +1,5 @@
 // 認証ユーティリティ関数
-import type { LoginResult, AuthStatus, LoginCredentials } from "../types";
+import type { LoginResult, AuthStatus } from "../types";
 
 const API_BASE_URL = '/api';
 
@@ -69,6 +69,7 @@ export async function checkAuthStatus(): Promise<AuthStatus | null> {
 
     if (response.ok && data.success) {
       return {
+        isAuthenticated: true,
         accountName: data.accountName
       };
     } else {

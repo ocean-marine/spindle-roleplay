@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { User, Clock, BookOpen, TrendingUp, Award, Calendar } from "react-feather";
 
 // Mock team data
-const teamData = {
+const teamData: Record<string, any> = {
   1: {
     name: "営業部",
     manager: "山田 部長",
@@ -97,8 +97,8 @@ export default function AdminTeamDetail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const teamId = searchParams.get('teamId');
-  const [team, setTeam] = useState(null);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [team, setTeam] = useState<any>(null);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
 
   useEffect(() => {
     if (teamId && teamData[teamId]) {
@@ -123,10 +123,10 @@ export default function AdminTeamDetail() {
   }
 
   const teamAverage = {
-    score: (team.members.reduce((sum, m) => sum + m.score, 0) / team.members.length).toFixed(1),
-    hours: Math.round(team.members.reduce((sum, m) => sum + m.hours, 0) / team.members.length),
-    courses: Math.round(team.members.reduce((sum, m) => sum + m.courses, 0) / team.members.length),
-    progress: Math.round(team.members.reduce((sum, m) => sum + m.progress, 0) / team.members.length)
+    score: (team.members.reduce((sum: number, m: any) => sum + m.score, 0) / team.members.length).toFixed(1),
+    hours: Math.round(team.members.reduce((sum: number, m: any) => sum + m.hours, 0) / team.members.length),
+    courses: Math.round(team.members.reduce((sum: number, m: any) => sum + m.courses, 0) / team.members.length),
+    progress: Math.round(team.members.reduce((sum: number, m: any) => sum + m.progress, 0) / team.members.length)
   };
 
   return (
@@ -222,7 +222,7 @@ export default function AdminTeamDetail() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {team.members.map((member) => (
+                {team.members.map((member: any) => (
                   <tr key={member.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -293,7 +293,7 @@ export default function AdminTeamDetail() {
               <h3 className="text-lg font-semibold text-gray-900">要注意メンバー</h3>
             </div>
             <div className="p-6">
-              {team.members.filter(m => m.progress < 60 || m.score < 8).map((member) => (
+              {team.members.filter((m: any) => m.progress < 60 || m.score < 8).map((member: any) => (
                 <div key={member.id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg mb-3 last:mb-0">
                   <div>
                     <p className="font-medium text-gray-900">{member.name}</p>
@@ -308,7 +308,7 @@ export default function AdminTeamDetail() {
                   </span>
                 </div>
               ))}
-              {team.members.filter(m => m.progress >= 60 && m.score >= 8).length === team.members.length && (
+              {team.members.filter((m: any) => m.progress >= 60 && m.score >= 8).length === team.members.length && (
                 <div className="text-center py-4 text-gray-500">
                   <Award size={24} className="mx-auto mb-2 text-green-500" />
                   <p>全メンバーが良好なパフォーマンスです</p>

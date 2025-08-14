@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Play, Settings, User, MapPin, BarChart } from "react-feather";
+import { ChevronDown, ChevronUp, Play, User, MapPin, BarChart } from "react-feather";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import groqService from "../services/groq";
@@ -8,17 +8,17 @@ import { selectVoiceByRules } from "../utils/voiceSelection";
 import PresetSelector from "./PresetSelector";
 import type { 
   SetupScreenProps, 
-  ExpandableSectionProps, 
   ViewMode, 
   ImmersionLevel,
-  VoiceOption,
-  PresetData,
-  PersonaSettings,
-  SceneSettings,
-  SelectChangeHandler,
-  InputChangeHandler,
-  TextAreaChangeHandler
+  PresetData
 } from "../types";
+
+interface ExpandableSectionProps {
+  title: string;
+  children: React.ReactNode;
+  defaultExpanded?: boolean;
+  icon?: React.ComponentType<any>;
+}
 
 function ExpandableSection({ title, children, defaultExpanded = false, icon: Icon }: ExpandableSectionProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(defaultExpanded);
@@ -52,7 +52,7 @@ function ExpandableSection({ title, children, defaultExpanded = false, icon: Ico
 export default function SetupScreen({ 
   selectedVoice, 
   setSelectedVoice, 
-  instructions, 
+  instructions: _instructions, 
   setInstructions,
   purpose,
   setPurpose,
@@ -63,7 +63,7 @@ export default function SetupScreen({
   startSession,
   VOICE_OPTIONS,
   currentUser
-}: SetupScreenProps): JSX.Element {
+}: SetupScreenProps): React.JSX.Element {
   const [isStarting, setIsStarting] = useState<boolean>(false);
   const [showPromptModal, setShowPromptModal] = useState<boolean>(false);
   const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
@@ -144,7 +144,7 @@ export default function SetupScreen({
       setShowPromptModal(true);
     } catch (error) {
       console.error('Failed to generate prompt:', error);
-      alert(`プロンプトの生成に失敗しました: ${error.message}`);
+      alert(`プロンプトの生成に失敗しました: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsStarting(false);
     }
@@ -174,7 +174,7 @@ export default function SetupScreen({
       setPurpose(preset.purpose);
       setPersonaSettings(preset.persona);
       setSceneSettings(preset.scene);
-      setSelectedVoice(preset.voice);
+      setSelectedVoice(preset.voice || "alloy");
       
       // プリセットに predefinedInstructions がある場合はそれを使用、ない場合は従来通り生成
       let promptToUse = "";
@@ -194,7 +194,7 @@ export default function SetupScreen({
       setShowPromptModal(true);
     } catch (error) {
       console.error('Failed to process preset:', error);
-      alert(`プリセットの処理に失敗しました: ${error.message}`);
+      alert(`プリセットの処理に失敗しました: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsStarting(false);
     }
@@ -210,7 +210,7 @@ export default function SetupScreen({
       setPurpose(preset.purpose);
       setPersonaSettings(preset.persona);
       setSceneSettings(preset.scene);
-      setSelectedVoice(preset.voice);
+      setSelectedVoice(preset.voice || "alloy");
       
       // 事前定義されたインストラクションを直接使用
       setInstructions(preset.predefinedInstructions);
@@ -219,7 +219,7 @@ export default function SetupScreen({
       await startSession();
     } catch (error) {
       console.error('Failed to start direct session:', error);
-      alert(`セッションの開始に失敗しました: ${error.message}`);
+      alert(`セッションの開始に失敗しました: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsStarting(false);
     }
@@ -232,7 +232,7 @@ export default function SetupScreen({
       setPurpose(preset.purpose);
       setPersonaSettings(preset.persona);
       setSceneSettings(preset.scene);
-      setSelectedVoice(preset.voice);
+      setSelectedVoice(preset.voice || "alloy");
     }
     setViewMode("custom");
   };
@@ -288,7 +288,7 @@ export default function SetupScreen({
             onPresetSelect={handlePresetSelect}
             onCustomize={handleCustomize}
             onDirectStart={handleDirectStart}
-            selectedPresetId={selectedPresetId}
+            selectedPresetId={selectedPresetId || ""}
             setSelectedPresetId={setSelectedPresetId}
           />
         ) : (

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { login } from "../utils/auth";
-import type { LoginScreenProps, FormSubmitHandler, InputChangeHandler } from "../types";
+import type { LoginScreenProps, FormSubmitHandler } from "../types";
 
-export default function LoginScreen({ onLogin }: LoginScreenProps): JSX.Element {
+export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [accountName, setAccountName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");

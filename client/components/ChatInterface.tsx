@@ -5,11 +5,23 @@ export default function ChatInterface({
   isSessionActive,
   isMuted = false,
   toggleMute,
-  personaSettings = {},
-  sceneSettings = {},
-  purpose = "",
+  personaSettings = {
+    age: "",
+    gender: "",
+    occupation: "",
+    personality: "",
+    additionalInfo: ""
+  },
+  sceneSettings: _sceneSettings = {
+    appointmentBackground: "",
+    relationship: "",
+    timeOfDay: "",
+    location: "",
+    additionalInfo: ""
+  },
+  purpose: _purpose = "",
   onStopSession
-}: ChatInterfaceProps): JSX.Element {
+}: ChatInterfaceProps) {
 
   if (!isSessionActive) {
     return (

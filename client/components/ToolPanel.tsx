@@ -4,7 +4,7 @@ const functionDescription = `
 Call this function when a user asks for a color palette.
 `;
 
-function createSessionUpdate(voice) {
+function createSessionUpdate(voice: string) {
   return {
     type: "session.update",
     session: {
@@ -40,10 +40,14 @@ function createSessionUpdate(voice) {
   };
 }
 
-function FunctionCallOutput({ functionCallOutput }) {
+interface FunctionCallOutput {
+  arguments: string;
+}
+
+function FunctionCallOutput({ functionCallOutput }: { functionCallOutput: FunctionCallOutput }) {
   const { theme, colors } = JSON.parse(functionCallOutput.arguments);
 
-  const colorBoxes = colors.map((color) => (
+  const colorBoxes = colors.map((color: string) => (
     <div
       key={color}
       className="w-full h-16 rounded-md flex items-center justify-center border border-gray-200"
@@ -67,14 +71,21 @@ function FunctionCallOutput({ functionCallOutput }) {
 }
 
 
+interface ToolPanelProps {
+  isSessionActive: boolean;
+  sendClientEvent: (event: any) => void;
+  events: any[];
+  selectedVoice: string;
+}
+
 export default function ToolPanel({
   isSessionActive,
   sendClientEvent,
   events,
   selectedVoice,
-}) {
+}: ToolPanelProps) {
   const [functionAdded, setFunctionAdded] = useState(false);
-  const [functionCallOutput, setFunctionCallOutput] = useState(null);
+  const [functionCallOutput, setFunctionCallOutput] = useState<FunctionCallOutput | null>(null);
 
   useEffect(() => {
     if (!events || events.length === 0) return;
@@ -90,7 +101,7 @@ export default function ToolPanel({
       mostRecentEvent.type === "response.done" &&
       mostRecentEvent.response.output
     ) {
-      mostRecentEvent.response.output.forEach((output) => {
+      mostRecentEvent.response.output.forEach((output: any) => {
         if (
           output.type === "function_call" &&
           output.name === "display_color_palette"

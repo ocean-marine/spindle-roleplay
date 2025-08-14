@@ -10,7 +10,7 @@ export default function PresetSelector({
   onDirectStart,
   selectedPresetId,
   setSelectedPresetId 
-}: PresetSelectorProps): JSX.Element {
+}: PresetSelectorProps) {
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
   const [selectedPresetForSettings, setSelectedPresetForSettings] = useState<PresetData | null>(null);
@@ -46,7 +46,7 @@ export default function PresetSelector({
     setSelectedPresetForSettings(null);
   };
 
-  const handleStartWithPreset = (preset) => {
+  const handleStartWithPreset = (preset: PresetData) => {
     setShowSettingsModal(false);
     setSelectedPresetForSettings(null);
     if (preset && preset.predefinedInstructions && onDirectStart) {
@@ -246,7 +246,7 @@ export default function PresetSelector({
   }
 
   // 詳細プリセット選択画面（カテゴリ階層）
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   if (!selectedCategory) {
     // カテゴリ選択画面

@@ -101,3 +101,10 @@ spec-driven development は、以下の5つのフェーズからなる開発手�
 - コミット・プッシュする
 - PR作成する
 
+---
+追加の指示
+---
+
+使用可能な場合、次のツールを最大限活用する
+- Playwright MCP
+- Serena MCP

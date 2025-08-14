@@ -49,7 +49,7 @@ export interface SetupScreenProps {
   sceneSettings: SceneSettings;
   setSceneSettings: (settings: SceneSettings) => void;
   startSession: () => Promise<void>;
-  VOICE_OPTIONS: string[];
+  VOICE_OPTIONS: VoiceOption[];
   currentUser: string | null;
 }
 
@@ -158,7 +158,11 @@ export interface SettingsScreenProps {
 }
 
 export interface PresetSelectorProps {
-  onSelect: (preset: PresetData) => void;
+  onPresetSelect: (preset: PresetData) => void;
+  onCustomize?: (preset: PresetData) => void;
+  onDirectStart?: (preset: PresetData) => void;
+  selectedPresetId: string;
+  setSelectedPresetId: (id: string) => void;
   currentUser?: string | null;
 }
 
@@ -166,7 +170,7 @@ export interface PresetData {
   id: string;
   name: string;
   purpose: string;
-  instructions: string;
+  instructions?: string;
   persona: PersonaSettings;
   scene: SceneSettings;
   voice?: string;
@@ -206,7 +210,7 @@ export interface CourseData {
 
 export interface Activity {
   id?: string | number;
-  time: string;
+  time?: string;
   user: string;
   action: string;
   result?: string;
@@ -324,6 +328,6 @@ export type TextAreaChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) 
 export type LoginResult = { success: boolean; accountName?: string; error?: string };
 export type AuthStatus = { isAuthenticated: boolean; accountName: string | null };
 export type LoginCredentials = { accountName: string; password: string };
-export type ExpandableSectionProps = { title: string; children: React.ReactNode; defaultExpanded?: boolean };
+export type ExpandableSectionProps = { title: string; children: React.ReactNode; defaultExpanded?: boolean; icon?: React.ComponentType<any> };
 export type ImmersionLevel = 'low' | 'medium' | 'high';
 export type PresetsByCategory = Record<string, PresetData[]>;

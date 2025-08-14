@@ -1,30 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import LoginScreen from "./LoginScreen";
 import AdminDashboard from "./AdminDashboard";
 import AdminTeamDetail from "./AdminTeamDetail";
 import AdminEmployeeDetail from "./AdminEmployeeDetail";
 import CourseManagement from "./CourseManagement";
 import CourseDetail from "./CourseDetail";
+import SetupScreen from "./SetupScreen";
+import ChatInterface from "./ChatInterface";
 import { checkAuthStatus, logout } from "../utils/auth";
 import type { 
   PersonaSettings, 
   SceneSettings, 
   VoiceOption, 
   RealtimeEvent, 
-  TokenResponse,
-  AudioElementRef,
-  PeerConnectionRef,
-  MediaStreamTrackRef,
-  HandleLogin,
-  HandleLogout,
-  HandleSessionStart,
-  HandleSessionStop,
-  HandleMuteToggle,
-  HandleTextMessage,
-  DataChannelMessageHandler,
-  DataChannelOpenHandler,
-  RTCTrackHandler
+  TokenResponse
 } from "../types";
 
 export default function App() {
@@ -39,7 +29,7 @@ export default function App() {
   const [instructions, setInstructions] = useState<string>("自然な日本語で応対します。");
   
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   
   // Purpose setting
   const [purpose, setPurpose] = useState<string>("");
@@ -63,13 +53,13 @@ export default function App() {
   });
   const [isListening, setIsListening] = useState<boolean>(false);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
-  const [audioLevel, setAudioLevel] = useState<number>(0);
+  const [audioLevel] = useState<number>(0);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const peerConnection: PeerConnectionRef = useRef<RTCPeerConnection | null>(null);
-  const audioElement: AudioElementRef = useRef<HTMLAudioElement | null>(null);
-  const microphoneTrack: MediaStreamTrackRef = useRef<MediaStreamTrack | null>(null);
+  const peerConnection = useRef<RTCPeerConnection | null>(null);
+  const audioElement = useRef<HTMLAudioElement | null>(null);
+  const microphoneTrack = useRef<MediaStreamTrack | null>(null);
 
-  const VOICE_OPTIONS: readonly VoiceOption[] = [
+  const VOICE_OPTIONS: VoiceOption[] = [
     "alloy",
     "nova",
     "echo",
@@ -89,12 +79,12 @@ export default function App() {
     });
   }, []);
 
-  const handleLogin: HandleLogin = (accountName: string) => {
+  const handleLogin = (accountName: string) => {
     setIsAuthenticated(true);
     setCurrentUser(accountName);
   };
 
-  const handleLogout: HandleLogout = async () => {
+  const handleLogout = async () => {
     await logout();
     setIsAuthenticated(false);
     setCurrentUser(null);
@@ -104,7 +94,7 @@ export default function App() {
     }
   };
 
-  const startSession: HandleSessionStart = async () => {
+  const startSession = async () => {
     try {
       // Get a session token for OpenAI Realtime API, sending voice and persona data
       const tokenResponse = await fetch("/token", {
@@ -188,13 +178,13 @@ export default function App() {
     try {
       await pc.setRemoteDescription(answer);
     } catch (error) {
-      throw new Error(`セッションの開始に失敗しました: ${error.message}`);
+      throw new Error(`セッションの開始に失敗しました: ${(error as Error).message}`);
     }
 
     peerConnection.current = pc;
     } catch (error) {
       console.error('セッション開始エラー:', error);
-      alert(`セッションの開始に失敗しました: ${error.message}`);
+      alert(`セッションの開始に失敗しました: ${(error as Error).message}`);
       
       // クリーンアップ
       if (peerConnection.current) {
@@ -209,12 +199,12 @@ export default function App() {
   }
 
   // Stop current session, clean up peer connection and data channel
-  const stopSession: HandleSessionStop = () => {
+  const stopSession = () => {
     if (dataChannel) {
       dataChannel.close();
     }
 
-    peerConnection.current.getSenders().forEach((sender) => {
+    peerConnection.current?.getSenders().forEach((sender) => {
       if (sender.track) {
         sender.track.stop();
       }
@@ -254,7 +244,7 @@ export default function App() {
   }
 
   // Send a text message to the model
-  const sendTextMessage: HandleTextMessage = (message: string) => {
+  const sendTextMessage = (message: string) => {
     const event: RealtimeEvent = {
       type: "conversation.item.create",
       item: {
@@ -373,7 +363,7 @@ export default function App() {
   };
 
   // Toggle mute/unmute functionality
-  const toggleMute: HandleMuteToggle = () => {
+  const toggleMute = () => {
     if (microphoneTrack.current) {
       microphoneTrack.current.enabled = !microphoneTrack.current.enabled;
       setIsMuted(!microphoneTrack.current.enabled);
@@ -423,7 +413,7 @@ export default function App() {
             element={
               <SetupScreen
                 selectedVoice={selectedVoice}
-                setSelectedVoice={setSelectedVoice}
+                setSelectedVoice={(voice: string) => setSelectedVoice(voice as VoiceOption)}
                 instructions={instructions}
                 setInstructions={setInstructions}
                 purpose={purpose}

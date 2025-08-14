@@ -1,10 +1,24 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { BookOpen, Users, Star, Clock, TrendingUp, Play, Activity, Award, BarChart } from "react-feather";
+import { BookOpen, Users, Star, Clock, TrendingUp, Play, Activity as ActivityIcon, Award, BarChart } from "react-feather";
 import { getTopLevelPresets } from "../data/presets";
+import type { Activity } from "../types";
+
+// Interface for mock course progress data
+interface MockCourseProgress {
+  completed: number;
+  inProgress: number;
+  totalLearners: number;
+  averageScore: number;
+  completionRate: number;
+  totalSessions: number;
+  averageSessionTime: number;
+  lastCompleted: string;
+  activities: Activity[];
+}
 
 // コース進捗データ（モック）- CourseManagement.jsx と同じデータ
-const mockCourseProgress = {
+const mockCourseProgress: Record<string, MockCourseProgress> = {
   "real_estate_asset_hearing": {
     completed: 45,
     inProgress: 12,
@@ -58,7 +72,14 @@ const mockCourseProgress = {
   }
 };
 
-function StatCard({ title, value, subtitle, icon: Icon, trend, className = "" }) {
+function StatCard({ title, value, subtitle, icon: Icon, trend, className = "" }: {
+  title: string;
+  value: string | number;
+  subtitle: string;
+  icon: React.ComponentType<any>;
+  trend?: number;
+  className?: string;
+}) {
   return (
     <div className={`bg-white rounded-lg border border-gray-100 p-6 ${className}`}>
       <div className="flex items-center justify-between mb-4">
@@ -83,14 +104,14 @@ function StatCard({ title, value, subtitle, icon: Icon, trend, className = "" })
 }
 
 export default function CourseDetail() {
-  const { courseId } = useParams();
+  const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("overview");
   
   // コースデータを取得
   const topLevelPresets = getTopLevelPresets();
   const course = topLevelPresets.find(c => c.id === courseId);
-  const progress = mockCourseProgress[courseId];
+  const progress = courseId ? mockCourseProgress[courseId] : undefined;
   
   if (!course || !progress) {
     return (
@@ -111,7 +132,7 @@ export default function CourseDetail() {
   const tabs = [
     { id: "overview", label: "概要", icon: BookOpen },
     { id: "analytics", label: "分析", icon: BarChart },
-    { id: "activities", label: "アクティビティ", icon: Activity }
+    { id: "activities", label: "アクティビティ", icon: ActivityIcon }
   ];
 
   return (
@@ -265,7 +286,7 @@ export default function CourseDetail() {
                       <span className="text-sm font-medium text-green-900">高スコア達成者</span>
                     </div>
                     <span className="text-sm font-bold text-green-900">
-                      {progress.activities.filter(a => a.score && a.score >= 9.0).length}名
+                      {progress.activities.filter((a: Activity) => a.score && a.score >= 9.0).length}名
                     </span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
@@ -290,19 +311,19 @@ export default function CourseDetail() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="text-center p-4 bg-green-50 rounded-lg">
                     <div className="text-2xl font-bold text-green-600 mb-1">
-                      {progress.activities.filter(a => a.score && a.score >= 8.5).length}
+                      {progress.activities.filter((a: Activity) => a.score && a.score >= 8.5).length}
                     </div>
                     <div className="text-sm text-green-700">優秀 (8.5点以上)</div>
                   </div>
                   <div className="text-center p-4 bg-blue-50 rounded-lg">
                     <div className="text-2xl font-bold text-blue-600 mb-1">
-                      {progress.activities.filter(a => a.score && a.score >= 7.0 && a.score < 8.5).length}
+                      {progress.activities.filter((a: Activity) => a.score && a.score >= 7.0 && a.score < 8.5).length}
                     </div>
                     <div className="text-sm text-blue-700">良好 (7.0-8.4点)</div>
                   </div>
                   <div className="text-center p-4 bg-yellow-50 rounded-lg">
                     <div className="text-2xl font-bold text-yellow-600 mb-1">
-                      {progress.activities.filter(a => a.score && a.score < 7.0).length}
+                      {progress.activities.filter((a: Activity) => a.score && a.score < 7.0).length}
                     </div>
                     <div className="text-sm text-yellow-700">要改善 (7.0点未満)</div>
                   </div>
@@ -344,8 +365,8 @@ export default function CourseDetail() {
               <div className="p-6">
                 <div className="space-y-4">
                   {progress.activities
-                    .sort((a, b) => new Date(b.date) - new Date(a.date))
-                    .map((activity) => (
+                    .sort((a: Activity, b: Activity) => new Date(b.date || '').getTime() - new Date(a.date || '').getTime())
+                    .map((activity: Activity) => (
                       <div key={activity.id} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
                         <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                         <div className="flex-1">
@@ -365,7 +386,7 @@ export default function CourseDetail() {
                             )}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">
-                            {new Date(activity.date).toLocaleString('ja-JP')}
+                            {new Date(activity.date || '').toLocaleString('ja-JP')}
                           </p>
                         </div>
                         {activity.score && (

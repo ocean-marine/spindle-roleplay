@@ -2,6 +2,18 @@ import { useState, useEffect } from "react";
 import { X, Play, Volume2, Headphones } from "react-feather";
 import Button from "./Button";
 import { getVoiceDescription } from "../utils/voiceSelection";
+import type { VoiceOption } from "../types";
+
+interface PromptModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  promptText: string;
+  onStartSession: (editedPrompt?: string) => void;
+  hasSettingsChanges?: boolean;
+  selectedVoice: string;
+  setSelectedVoice: (voice: string) => void;
+  VOICE_OPTIONS?: VoiceOption[];
+}
 
 export default function PromptModal({ 
   isOpen, 
@@ -12,10 +24,10 @@ export default function PromptModal({
   selectedVoice,
   setSelectedVoice,
   VOICE_OPTIONS = []
-}) {
+}: PromptModalProps) {
   const [editedPrompt, setEditedPrompt] = useState("");
   const [isTestingVoice, setIsTestingVoice] = useState(false);
-  const [testAudio, setTestAudio] = useState(null);
+  const [testAudio, setTestAudio] = useState<HTMLAudioElement | null>(null);
 
   // Update edited prompt when promptText changes
   useEffect(() => {
@@ -73,7 +85,7 @@ export default function PromptModal({
     } catch (error) {
       console.error('Voice test error:', error);
       setIsTestingVoice(false);
-      alert('音声テストに失敗しました: ' + error.message);
+      alert('音声テストに失敗しました: ' + (error instanceof Error ? error.message : String(error)));
     }
   };
 

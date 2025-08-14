@@ -1,15 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { Mic, MicOff, Volume2, VolumeX } from "react-feather";
 
+interface VoiceInterfaceProps {
+  isSessionActive: boolean;
+  isListening?: boolean;
+  isSpeaking?: boolean;
+  audioLevel?: number;
+  isMuted?: boolean;
+}
+
 export default function VoiceInterface({ 
   isSessionActive, 
   isListening = false, 
   isSpeaking = false,
   audioLevel = 0,
   isMuted = false
-}) {
-  const canvasRef = useRef(null);
-  const animationRef = useRef(null);
+}: VoiceInterfaceProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const animationRef = useRef<number | null>(null);
   const [showVisualizer, setShowVisualizer] = useState(false);
 
   // Generate wave visualization
@@ -18,10 +26,14 @@ export default function VoiceInterface({
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
     const centerY = canvas.height / 2;
     let time = 0;
 
     function drawWave() {
+      if (!ctx) return;
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Create gradient
@@ -78,6 +90,7 @@ export default function VoiceInterface({
     if (!canvas) return;
 
     function resizeCanvas() {
+      if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       canvas.width = rect.width * window.devicePixelRatio;
       canvas.height = rect.height * window.devicePixelRatio;
@@ -85,7 +98,9 @@ export default function VoiceInterface({
       canvas.style.height = rect.height + 'px';
       
       const ctx = canvas.getContext('2d');
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      if (ctx) {
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      }
     }
 
     resizeCanvas();

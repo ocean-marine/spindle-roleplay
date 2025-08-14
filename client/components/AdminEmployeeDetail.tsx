@@ -300,7 +300,7 @@ export default function AdminEmployeeDetail() {
   const [searchParams] = useSearchParams();
   const employeeId = searchParams.get('employeeId');
   const teamId = searchParams.get('teamId');
-  const [employee, setEmployee] = useState(null);
+  const [employee, setEmployee] = useState<any>(null);
 
   useEffect(() => {
     if (employeeId && employeeData[employeeId]) {
@@ -392,7 +392,7 @@ export default function AdminEmployeeDetail() {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                {employee.monthlyProgress.map((progress, index) => (
+                {employee.monthlyProgress.map((progress: any, index: number) => (
                   <div key={index} className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">{index + 1}月</span>
                     <div className="flex items-center flex-1 mx-4">
@@ -419,7 +419,7 @@ export default function AdminEmployeeDetail() {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                {employee.recentActivities.map((activity, index) => {
+                {employee.recentActivities.map((activity: any, index: number) => {
                   const courseId = getCourseIdFromName(activity.activity);
                   return (
                     <div key={index} className="flex items-start gap-3">
@@ -477,7 +477,7 @@ export default function AdminEmployeeDetail() {
             </div>
             <div className="p-6">
               <div className="space-y-3">
-                {employee.completedCourses.map((course, index) => {
+                {employee.completedCourses.map((course: any, index: number) => {
                   const courseId = getCourseIdFromName(course);
                   return (
                     <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
@@ -512,7 +512,7 @@ export default function AdminEmployeeDetail() {
             <div className="p-6">
               <div className="space-y-3">
                 {employee.currentCourses.length > 0 ? (
-                  employee.currentCourses.map((course, index) => {
+                  employee.currentCourses.map((course: any, index: number) => {
                     const courseId = getCourseIdFromName(course);
                     return (
                       <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">

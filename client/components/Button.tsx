@@ -1,6 +1,6 @@
 import type { ButtonProps } from "../types";
 
-export default function Button({ icon, children, onClick, className = "", disabled = false, type = "button" }: ButtonProps): JSX.Element {
+export default function Button({ icon, children, onClick, className = "", disabled = false, type = "button" }: ButtonProps) {
   return (
     <button
       type={type}

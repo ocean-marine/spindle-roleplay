@@ -520,10 +520,11 @@ IT系の会社で働く30代前半の会社員。結婚したばかりで妻と�
 export const getPresetsByCategory = (): PresetsByCategory => {
   const categories: PresetsByCategory = {};
   Object.values(presets).forEach(preset => {
-    if (!categories[preset.category]) {
-      categories[preset.category] = [];
+    const category = preset.category || 'その他';
+    if (!categories[category]) {
+      categories[category] = [];
     }
-    categories[preset.category].push(preset);
+    categories[category].push(preset);
   });
   return categories;
 };
@@ -535,7 +536,7 @@ export const getPresetById = (id: string): PresetData | null => {
 
 // 全カテゴリ名の取得
 export const getAllCategories = (): string[] => {
-  return [...new Set(Object.values(presets).map(preset => preset.category))];
+  return [...new Set(Object.values(presets).map(preset => preset.category || 'その他'))];
 };
 
 // トップレベルプリセットの取得（階層なし表示用）

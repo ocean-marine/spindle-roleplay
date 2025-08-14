@@ -2,9 +2,23 @@ import { useState } from "react";
 import { BookOpen, Clock, Users, TrendingUp, Star, Play, BarChart } from "react-feather";
 import { Link, useNavigate } from "react-router-dom";
 import { getTopLevelPresets } from "../data/presets";
+import type { Activity } from "../types";
+
+// Interface for mock course progress data
+interface MockCourseProgress {
+  completed: number;
+  inProgress: number;
+  totalLearners: number;
+  averageScore: number;
+  completionRate: number;
+  totalSessions: number;
+  averageSessionTime: number;
+  lastCompleted: string;
+  activities: Activity[];
+}
 
 // コース進捗データ（モック）
-const mockCourseProgress = {
+const mockCourseProgress: Record<string, MockCourseProgress> = {
   "real_estate_asset_hearing": {
     completed: 45,
     inProgress: 12,
@@ -52,7 +66,14 @@ const mockCourseProgress = {
   }
 };
 
-function StatCard({ title, value, subtitle, icon: Icon, trend, className = "" }) {
+function StatCard({ title, value, subtitle, icon: Icon, trend, className = "" }: {
+  title: string;
+  value: string | number;
+  subtitle: string;
+  icon: React.ComponentType<any>;
+  trend?: number;
+  className?: string;
+}) {
   return (
     <div className={`bg-white rounded-lg border border-gray-100 p-6 ${className}`}>
       <div className="flex items-center justify-between mb-4">
@@ -76,7 +97,15 @@ function StatCard({ title, value, subtitle, icon: Icon, trend, className = "" })
   );
 }
 
-function CourseCard({ course, progress }) {
+function CourseCard({ course, progress }: {
+  course: {
+    id: string;
+    name: string;
+    description?: string;
+    icon?: string;
+  };
+  progress: MockCourseProgress;
+}) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-4">
@@ -142,7 +171,7 @@ function CourseCard({ course, progress }) {
       <div className="border-t border-gray-100 pt-4">
         <h4 className="text-sm font-medium text-gray-900 mb-2">最近のアクティビティ</h4>
         <div className="space-y-2">
-          {progress.activities.slice(0, 2).map((activity) => (
+          {progress.activities.slice(0, 2).map((activity: Activity) => (
             <div key={activity.id} className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -150,7 +179,7 @@ function CourseCard({ course, progress }) {
                 <span className="text-gray-500">{activity.action}</span>
               </div>
               <div className="text-xs text-gray-500">
-                {new Date(activity.date).toLocaleString('ja-JP', { 
+                {new Date(activity.date || '').toLocaleString('ja-JP', { 
                   month: 'short', 
                   day: 'numeric',
                   hour: '2-digit',
@@ -388,7 +417,7 @@ export default function CourseManagement() {
                       courseIcon: course.icon
                     }));
                   })
-                  .sort((a, b) => new Date(b.date) - new Date(a.date))
+                  .sort((a, b) => new Date(b.date || '').getTime() - new Date(a.date || '').getTime())
                   .slice(0, 8)
                   .map((activity) => (
                     <div key={`${activity.courseName}-${activity.id}`} className="flex items-start gap-3">
@@ -406,7 +435,7 @@ export default function CourseManagement() {
                           {activity.courseName}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {new Date(activity.date).toLocaleString('ja-JP')}
+                          {new Date(activity.date || '').toLocaleString('ja-JP')}
                         </p>
                       </div>
                     </div>
