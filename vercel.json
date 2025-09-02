@@ -13,6 +13,10 @@
       "destination": "/api/token"
     },
     {
+      "source": "/api/custom-prompts",
+      "destination": "/api/custom-prompts"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

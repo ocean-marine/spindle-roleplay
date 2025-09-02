@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { X, Play, Volume2, Headphones } from "react-feather";
+import { X, Play, Volume2, Headphones, Save, Download, AlertCircle } from "react-feather";
 import Button from "./Button";
 import { getVoiceDescription } from "../utils/voiceSelection";
+import customPromptsService from "../services/customPrompts";
 import type { VoiceOption } from "../types";
+import type { CustomPromptData } from "../services/customPrompts";
 
 interface PromptModalProps {
   isOpen: boolean;
@@ -28,6 +30,10 @@ export default function PromptModal({
   const [editedPrompt, setEditedPrompt] = useState("");
   const [isTestingVoice, setIsTestingVoice] = useState(false);
   const [testAudio, setTestAudio] = useState<HTMLAudioElement | null>(null);
+  const [savedPrompt, setSavedPrompt] = useState<CustomPromptData | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   // Update edited prompt when promptText changes
   useEffect(() => {
@@ -41,6 +47,53 @@ export default function PromptModal({
       setTestAudio(null);
     }
   }, [isOpen, testAudio]);
+
+  // Load saved prompt when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      loadSavedPrompt();
+    }
+  }, [isOpen]);
+
+  // Load saved custom prompt
+  const loadSavedPrompt = async () => {
+    setIsLoading(true);
+    try {
+      const prompt = await customPromptsService.getCustomPrompt();
+      setSavedPrompt(prompt);
+    } catch (error) {
+      console.error('Error loading saved prompt:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Save current prompt to Edge Config
+  const savePrompt = async () => {
+    if (!editedPrompt.trim()) return;
+    
+    setIsSaving(true);
+    setSaveStatus('idle');
+    try {
+      const savedData = await customPromptsService.saveOrUpdateCustomPrompt(editedPrompt);
+      setSavedPrompt(savedData);
+      setSaveStatus('success');
+      setTimeout(() => setSaveStatus('idle'), 3000);
+    } catch (error) {
+      console.error('Error saving prompt:', error);
+      setSaveStatus('error');
+      setTimeout(() => setSaveStatus('idle'), 5000);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Load saved prompt into editor
+  const loadPrompt = () => {
+    if (savedPrompt) {
+      setEditedPrompt(savedPrompt.content);
+    }
+  };
 
   // Function to test voice
   const testVoice = async () => {
@@ -152,6 +205,64 @@ export default function PromptModal({
               </div>
             </div>
           )}
+
+          {/* Custom Prompt Management */}
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Save size={16} className="text-gray-600" />
+                <span className="text-sm font-medium text-gray-800">カスタムプロンプト</span>
+              </div>
+              {isLoading && (
+                <div className="text-xs text-gray-500">読み込み中...</div>
+              )}
+            </div>
+
+            {/* Save/Load Status */}
+            {saveStatus === 'success' && (
+              <div className="mb-2 p-2 bg-green-50 border border-green-200 rounded-md">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-xs text-green-700">プロンプトが保存されました</span>
+                </div>
+              </div>
+            )}
+            {saveStatus === 'error' && (
+              <div className="mb-2 p-2 bg-red-50 border border-red-200 rounded-md">
+                <div className="flex items-center gap-2">
+                  <AlertCircle size={12} className="text-red-500" />
+                  <span className="text-xs text-red-700">保存に失敗しました</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                onClick={savePrompt}
+                disabled={isSaving || !editedPrompt.trim()}
+                className="flex items-center gap-2 px-3 py-2 text-xs bg-gray-600 text-white rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <Save size={12} />
+                {isSaving ? '保存中...' : '保存'}
+              </button>
+              
+              {savedPrompt && (
+                <button
+                  onClick={loadPrompt}
+                  className="flex items-center gap-2 px-3 py-2 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  <Download size={12} />
+                  読み込み
+                </button>
+              )}
+            </div>
+
+            {savedPrompt && (
+              <div className="mt-2 text-xs text-gray-500">
+                最終更新: {new Date(savedPrompt.updatedAt).toLocaleString('ja-JP')}
+              </div>
+            )}
+          </div>
           
           <div className="mb-4 sm:mb-6">
             <textarea
