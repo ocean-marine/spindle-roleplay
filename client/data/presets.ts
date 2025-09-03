@@ -192,15 +192,15 @@ export const presets: Record<string, PresetData> = {
       gender: "男性",
       occupation: "会社員",
       personality: "明るく前向き、新しいものに興味を持ち、家族思い",
-      additionalInfo: "新婚で妻と二人暮らし、健康的な生活に積極的"
+      additionalInfo: "新婚で妻と二人暮らし、健康的な生活に積極的",
+      image: "D94535CF-BA41-4B55-AD6D-F6BEB606F2B9.png"
     },
     scene: {
       appointmentBackground: "育毛剤の解約引き止め",
       relationship: "営業担当者（初対面）",
       timeOfDay: "夜",
       location: "オフィス",
-      additionalInfo: "妻の勧めで話を聞くことになった営業場面",
-      image: "D94535CF-BA41-4B55-AD6D-F6BEB606F2B9.png"
+      additionalInfo: "妻の勧めで話を聞くことになった営業場面"
     },
     voice: "echo",
     predefinedInstructions: `あなたは育毛剤の定期購買を6ヶ月続けたが、解約を申し出る顧客です。
