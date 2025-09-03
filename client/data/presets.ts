@@ -188,7 +188,7 @@ export const presets: Record<string, PresetData> = {
     icon: "🫷",
     purpose: "ウォーターサーバー営業の商品説明と質疑応答の練習",
     persona: {
-      age: "30代前半",
+      age: "50代後半",
       gender: "男性",
       occupation: "会社員",
       personality: "明るく前向き、新しいものに興味を持ち、家族思い",
@@ -198,7 +198,7 @@ export const presets: Record<string, PresetData> = {
       appointmentBackground: "育毛剤の解約引き止め",
       relationship: "営業担当者（初対面）",
       timeOfDay: "夜",
-      location: "自宅リビング",
+      location: "オフィス",
       additionalInfo: "妻の勧めで話を聞くことになった営業場面"
     },
     voice: "alloy",
