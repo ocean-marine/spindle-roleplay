@@ -200,7 +200,7 @@ export const presets: Record<string, PresetData> = {
       timeOfDay: "夜",
       location: "オフィス",
       additionalInfo: "妻の勧めで話を聞くことになった営業場面",
-      image: "oji.jpg"
+      image: "D94535CF-BA41-4B55-AD6D-F6BEB606F2B9.png"
     },
     voice: "echo",
     predefinedInstructions: `あなたは育毛剤の定期購買を6ヶ月続けたが、解約を申し出る顧客です。
