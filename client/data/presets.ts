@@ -184,7 +184,7 @@ export const presets: Record<string, PresetData> = {
     id: "water_server_sales_training",
     category: "トップ",
     name: "育毛剤の解約引き止め",
-    description: "育毛剤定期購入の解約を引き止めるロールプレイ",
+    description: "育毛剤の定期購入の解約を引き止めるロールプレイ",
     icon: "🫷",
     purpose: "ウォーターサーバー営業の商品説明と質疑応答の練習",
     persona: {
@@ -199,7 +199,7 @@ export const presets: Record<string, PresetData> = {
       appointmentBackground: "育毛剤の解約引き止め",
       relationship: "営業担当者（初対面）",
       timeOfDay: "夜",
-      location: "オフィス",
+      location: "ビジネスホテル",
       additionalInfo: "妻の勧めで話を聞くことになった営業場面"
     },
     voice: "echo",
