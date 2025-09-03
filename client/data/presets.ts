@@ -199,7 +199,8 @@ export const presets: Record<string, PresetData> = {
       relationship: "営業担当者（初対面）",
       timeOfDay: "夜",
       location: "オフィス",
-      additionalInfo: "妻の勧めで話を聞くことになった営業場面"
+      additionalInfo: "妻の勧めで話を聞くことになった営業場面",
+      image: "oji.jpg"
     },
     voice: "echo",
     predefinedInstructions: `あなたは育毛剤の定期購買を6ヶ月続けたが、解約を申し出る顧客です。
