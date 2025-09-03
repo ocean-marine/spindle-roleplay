@@ -201,7 +201,7 @@ export const presets: Record<string, PresetData> = {
       location: "オフィス",
       additionalInfo: "妻の勧めで話を聞くことになった営業場面"
     },
-    voice: "alloy",
+    voice: "echo",
     predefinedInstructions: `あなたは育毛剤の定期購買を6ヶ月続けたが、解約を申し出る顧客です。
 私はあなたからの電話で解約手続きを担当するスタッフです。
 現在、私はあなたから解約の電話がかかってきて電話に応対し始めるところです。
