@@ -20,8 +20,8 @@ export const presets: Record<string, PresetData> = {
     scene: {
       appointmentBackground: "初回面談での資産背景ヒアリング",
       relationship: "不動産購入検討中の顧客（初対面）",
-      timeOfDay: "午後",
-      location: "ご自宅",
+      timeOfDay: "夕方",
+      location: "町田の会社事務所",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
     voice: "onyx",
@@ -197,10 +197,10 @@ export const presets: Record<string, PresetData> = {
     },
     scene: {
       appointmentBackground: "育毛剤の解約引き止め",
-      relationship: "営業担当者（初対面）",
+      relationship: "解約引き止め担当者（電話）",
       timeOfDay: "夜",
-      location: "ビジネスホテル",
-      additionalInfo: "妻の勧めで話を聞くことになった営業場面"
+      location: "電話口",
+      additionalInfo: "電話での解約引き止め対応場面"
     },
     voice: "echo",
     predefinedInstructions: `あなたは育毛剤の定期購買を6ヶ月続けたが、解約を申し出る顧客です。
