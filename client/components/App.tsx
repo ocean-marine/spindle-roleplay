@@ -97,6 +97,12 @@ export default function App() {
   };
 
   const startSession = async () => {
+    // Prevent multiple sessions from starting simultaneously
+    if (isSessionActive) {
+      console.warn('Session is already active, stopping previous session first');
+      stopSession();
+    }
+
     try {
       // Get a session token for OpenAI Realtime API, sending voice and persona data
       const tokenResponse = await fetch("/token", {
@@ -124,6 +130,12 @@ export default function App() {
       }
 
     // Create a peer connection
+    // Clean up any existing connection first to prevent conflicts
+    if (peerConnection.current) {
+      peerConnection.current.close();
+      peerConnection.current = null;
+    }
+    
     const pc = new RTCPeerConnection();
 
     // Set up to play remote audio from the model
@@ -136,6 +148,12 @@ export default function App() {
     };
 
     // Add local audio track for microphone input in the browser
+    // Stop any existing microphone track first to prevent duplicates
+    if (microphoneTrack.current) {
+      microphoneTrack.current.stop();
+      microphoneTrack.current = null;
+    }
+    
     const ms = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
@@ -214,6 +232,13 @@ export default function App() {
 
     if (peerConnection.current) {
       peerConnection.current.close();
+    }
+
+    // Clean up audio element to prevent audio doubling
+    if (audioElement.current) {
+      audioElement.current.pause();
+      audioElement.current.srcObject = null;
+      audioElement.current = null;
     }
 
     setIsSessionActive(false);
