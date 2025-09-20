@@ -6,7 +6,6 @@ import groqService from "../services/groq";
 import PromptModal from "./PromptModal";
 import { selectVoiceByRules } from "../utils/voiceSelection";
 import PresetSelector from "./PresetSelector";
-import { getPresetsByTab } from "../data/presets";
 import type { 
   SetupScreenProps, 
   ViewMode, 
