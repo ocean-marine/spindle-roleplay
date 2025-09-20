@@ -86,7 +86,7 @@ export default function PresetSelector({
                 {selectedPresetForSettings.description}
               </p>
               <div className="flex flex-wrap gap-2 text-xs">
-                <span className="px-3 py-1 bg-black bg-opacity-60 text-white rounded-full">
+                <span className="px-3 py-1 bg-gray-800 bg-opacity-30 text-white rounded-full">
                   {selectedPresetForSettings.persona.age} {selectedPresetForSettings.persona.gender}
                 </span>
                 <span className="px-3 py-1 bg-black bg-opacity-60 text-white rounded-full">
