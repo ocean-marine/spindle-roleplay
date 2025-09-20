@@ -75,7 +75,7 @@ export default function PresetSelector({
         </div>
 
         {/* プリセット基本情報 */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-6 border-b border-gray-100 bg-gray-50">
           <div className="flex items-start gap-4">
             <span className="text-3xl">{selectedPresetForSettings.icon}</span>
             <div className="flex-1">
