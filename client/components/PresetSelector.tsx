@@ -86,13 +86,13 @@ export default function PresetSelector({
                 {selectedPresetForSettings.description}
               </p>
               <div className="flex flex-wrap gap-2 text-xs">
-                <span className="px-3 py-1 bg-blue text-white rounded-full">
+                <span className="px-3 py-1 bg-gray-500 text-white rounded-full">
                   {selectedPresetForSettings.persona.age} {selectedPresetForSettings.persona.gender}
                 </span>
-                <span className="px-3 py-1 bg-gray-100 text-white rounded-full">
+                <span className="px-3 py-1 bg-gray-500 text-white rounded-full">
                   {selectedPresetForSettings.persona.occupation}
                 </span>
-                <span className="px-3 py-1 bg-gray-400 text-white rounded-full">
+                <span className="px-3 py-1 bg-gray-500 text-white rounded-full">
                   {selectedPresetForSettings.scene.location}
                 </span>
               </div>
@@ -204,13 +204,13 @@ export default function PresetSelector({
                           {preset.description}
                         </p>
                         <div className="flex flex-wrap gap-2 text-xs">
-                          <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
+                          <span className="px-2 py-1 bg-gray-500 text-white rounded-full">
                             {preset.persona.age} {preset.persona.gender}
                           </span>
-                          <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
+                          <span className="px-2 py-1 bg-gray-500 text-white rounded-full">
                             {preset.persona.occupation}
                           </span>
-                          <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
+                          <span className="px-2 py-1 bg-gray-500 text-white rounded-full">
                             {preset.scene.location}
                           </span>
                         </div>
@@ -351,13 +351,13 @@ export default function PresetSelector({
                       {preset.description}
                     </p>
                     <div className="flex flex-wrap gap-2 text-xs">
-                      <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
+                      <span className="px-2 py-1 bg-gray-500 text-white rounded-full">
                         {preset.persona.age} {preset.persona.gender}
                       </span>
-                      <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
+                      <span className="px-2 py-1 bg-gray-500 text-white rounded-full">
                         {preset.persona.occupation}
                       </span>
-                      <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
+                      <span className="px-2 py-1 bg-gray-500 text-white rounded-full">
                         {preset.scene.location}
                       </span>
                     </div>
