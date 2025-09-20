@@ -563,7 +563,7 @@ export const presets: Record<string, PresetData> = {
     category: "CS",
     name: "口座開設の状況説明",
     description: "急いでいる顧客に対して、口座開設の進捗を丁寧に説明し、不満や不安を取り除く",
-    icon: "🏡",
+    icon: "🏦",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
     persona: {
       age: "50代前半",
