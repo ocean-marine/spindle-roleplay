@@ -806,7 +806,7 @@ export const presets: Record<string, PresetData> = {
     category: "CS",
     name: "ログインに関する問い合わせ",
     description: "原因（ID・パスワードの入力間違い）を案内し、解決につなげる",
-    icon: "🔐",
+    icon: "🔒",
     purpose: "原因（ID・パスワードの入力間違い）を案内し、解決につなげる",
     persona: {
       age: "60代後半",
