@@ -123,7 +123,7 @@ export const presets: Record<string, PresetData> = {
   "customer_support_complaint_training": {
     id: "customer_support_complaint_training",
     category: "デモ",
-    name: "カスタマーサポートのクレーム対応強化",
+    name: "カスタマーサポートのクレーム対応",
     description: "難しいクレーム対応を通じて、顧客満足度向上とスキルアップを図る",
     icon: "📞",
     purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
