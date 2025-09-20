@@ -6,7 +6,7 @@ export const presets: Record<string, PresetData> = {
     id: "real_estate_asset_hearing",
     category: "デモ",
     name: "不動産営業の資産背景ヒアリング",
-    description: "顧客の資産背景を詳しくヒアリングし、最適な物件提案につなげる営業",
+    description: "顧客の資産背景を詳しくヒアリングし最適な物件提案につなげる",
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
     persona: {
@@ -124,7 +124,7 @@ export const presets: Record<string, PresetData> = {
     id: "customer_support_complaint_training",
     category: "デモ",
     name: "カスタマーサポートのクレーム対応",
-    description: "難しいクレーム対応を通じて、顧客満足度向上とスキルアップを図る",
+    description: "商品配送に関する理不尽なクレームに丁寧に対応する",
     icon: "📞",
     purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
     persona: {
@@ -184,7 +184,7 @@ export const presets: Record<string, PresetData> = {
     id: "water_server_sales_training",
     category: "デモ",
     name: "育毛剤の解約引き止め",
-    description: "育毛剤の定期購入の解約を引き止めるロールプレイ",
+    description: "お客様に寄り添い育毛剤の定期購入の解約を引き止める",
     icon: "🫷",
     purpose: "ウォーターサーバー営業の商品説明と質疑応答の練習",
     persona: {
