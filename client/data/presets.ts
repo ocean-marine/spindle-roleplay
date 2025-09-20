@@ -734,7 +734,7 @@ export const presets: Record<string, PresetData> = {
       appointmentBackground: "育毛剤の解約引き止め",
       relationship: "営業担当者（初対面）",
       timeOfDay: "夜",
-      location: "主婦",
+      location: "自宅",
       additionalInfo: "妻の勧めで話を聞くことになった営業場面"
     },
     voice: "echo",
@@ -804,10 +804,10 @@ export const presets: Record<string, PresetData> = {
   "real_estate_asset_hearing_3": {
     id: "real_estate_asset_hearing_3",
     category: "CS",
-    name: "複製の4件目",
-    description: "顧客の資産背景を詳しくヒアリングし、最適な物件提案につなげる営業",
-    icon: "🏡",
-    purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
+    name: "ログインに関する問い合わせ",
+    description: "原因（ID・パスワードの入力間違い）を案内し、解決につなげる",
+    icon: "🔐",
+    purpose: "原因（ID・パスワードの入力間違い）を案内し、解決につなげる",
     persona: {
       age: "70代前半",
       gender: "男性",
@@ -922,10 +922,10 @@ export const presets: Record<string, PresetData> = {
   "customer_support_complaint_training_3": {
     id: "customer_support_complaint_training_3",
     category: "CS",
-    name: "複製の5件目",
-    description: "難しいクレーム対応を通じて、顧客満足度向上とスキルアップを図る",
-    icon: "📞",
-    purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
+    name: "パスワード再設定方法の案内",
+    description: "パスワードは口頭で伝えられないことを説明しウェブからの再設定方法を案内する",
+    icon: "🗝️",
+    purpose: "パスワードは口頭で伝えられないことを説明しウェブからの再設定方法を案内する",
     persona: {
       age: "50代後半",
       gender: "女性",
