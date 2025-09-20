@@ -577,7 +577,7 @@ export const presets: Record<string, PresetData> = {
       appointmentBackground: "初回面談での資産背景ヒアリング",
       relationship: "不動産購入検討中の顧客（初対面）",
       timeOfDay: "午後",
-      location: "ご自宅",
+      location: "オフィス",
       additionalInfo: "信頼関係構築が重要な初回ヒアリングの場面"
     },
     voice: "onyx",
