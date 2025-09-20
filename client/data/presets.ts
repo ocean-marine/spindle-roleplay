@@ -12,7 +12,7 @@ export const presets: Record<string, PresetData> = {
     persona: {
       age: "70代前半",
       gender: "男性",
-      occupation: "不動産営業",
+      occupation: "経営者",
       personality: "親身で誠実、質問上手で聞き上手、数字に強い",
       additionalInfo: "豊富な市場知識を持ち、顧客の立場に立って考える営業スタイル",
       image: "real_estate.jpg"
@@ -130,7 +130,7 @@ export const presets: Record<string, PresetData> = {
     persona: {
       age: "50代後半",
       gender: "女性",
-      occupation: "カスタマーサポート",
+      occupation: "主婦",
       personality: "冷静で忍耐強い、共感力が高く解決志向",
       additionalInfo: "経験2年、難しいクレーム対応も前向きに取り組む姿勢",
       image: "call_center.jpg"
@@ -139,7 +139,7 @@ export const presets: Record<string, PresetData> = {
       appointmentBackground: "商品に不満を持つ顧客からのクレーム電話",
       relationship: "不満を抱いた顧客（電話での初回接触）",
       timeOfDay: "午前",
-      location: "電話口",
+      location: "ご自宅",
       additionalInfo: "顧客の怒りを理解し、適切な解決策を提示する必要がある場面"
     },
     voice: "coral",
@@ -190,7 +190,7 @@ export const presets: Record<string, PresetData> = {
     persona: {
       age: "50代後半",
       gender: "男性",
-      occupation: "カスタマーサポート",
+      occupation: "会社員",
       personality: "明るく前向き、新しいものに興味を持ち、家族思い",
       additionalInfo: "新婚で妻と二人暮らし、健康的な生活に積極的",
       image: "D94535CF-BA41-4B55-AD6D-F6BEB606F2B9.png"
