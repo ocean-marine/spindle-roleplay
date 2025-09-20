@@ -562,7 +562,7 @@ export const presets: Record<string, PresetData> = {
     id: "real_estate_asset_hearing_2",
     category: "CS",
     name: "口座開設の状況説明",
-    description: "口座開設が遅延している状況について、急いでいる顧客に対して適切に進捗を説明し、不満や不安を緩和したうえで納得を得ること。",
+    description: "急いでいる顧客に対して、口座開設の進捗を丁寧に説明し、不満や不安を取り除く",
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
     persona: {
@@ -571,7 +571,7 @@ export const presets: Record<string, PresetData> = {
       occupation: "会社員",
       personality: "親身で誠実、質問上手で聞き上手、数字に強い",
       additionalInfo: "豊富な市場知識を持ち、顧客の立場に立って考える営業スタイル",
-      image: "dial.png"
+      image: "accept-call-icon.png"
     },
     scene: {
       appointmentBackground: "初回面談での資産背景ヒアリング",
