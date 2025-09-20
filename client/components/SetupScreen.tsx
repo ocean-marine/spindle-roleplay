@@ -18,7 +18,6 @@ export default function SetupScreen({
   setSelectedVoice, 
   instructions: _instructions, 
   setInstructions,
-  purpose,
   setPurpose,
   personaSettings,
   setPersonaSettings,
