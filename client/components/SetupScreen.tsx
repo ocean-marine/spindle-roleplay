@@ -255,7 +255,7 @@ export default function SetupScreen({
               </Link>
             </div>
           )}
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロールプレイ</h1>
+          <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロープレ</h1>
         </div>
 
         {/* Mode Toggle - Apple-inspired segmented control */}
