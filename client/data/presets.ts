@@ -4,7 +4,7 @@ import type { PresetData, PresetsByCategory } from "../types";
 export const presets: Record<string, PresetData> = {
   "real_estate_asset_hearing": {
     id: "real_estate_asset_hearing",
-    category: "トップ",
+    category: "デモ",
     name: "不動産営業の資産背景ヒアリング",
     description: "顧客の資産背景を詳しくヒアリングし、最適な物件提案につなげる営業",
     icon: "🏡",
@@ -122,7 +122,7 @@ export const presets: Record<string, PresetData> = {
   
   "customer_support_complaint_training": {
     id: "customer_support_complaint_training",
-    category: "トップ",
+    category: "デモ",
     name: "カスタマーサポートのクレーム対応強化",
     description: "難しいクレーム対応を通じて、顧客満足度向上とスキルアップを図る",
     icon: "📞",
@@ -182,7 +182,7 @@ export const presets: Record<string, PresetData> = {
   
   "water_server_sales_training": {
     id: "water_server_sales_training",
-    category: "トップ",
+    category: "デモ",
     name: "育毛剤の解約引き止め",
     description: "育毛剤の定期購入の解約を引き止めるロールプレイ",
     icon: "🫷",
@@ -560,8 +560,8 @@ export const presets: Record<string, PresetData> = {
   // 5つの追加プリセット（既存の複製）
   "real_estate_asset_hearing_2": {
     id: "real_estate_asset_hearing_2",
-    category: "トップ",
-    name: "不動産営業の資産背景ヒアリング（複製1）",
+    category: "CS",
+    name: "複製の1件目",
     description: "顧客の資産背景を詳しくヒアリングし、最適な物件提案につなげる営業",
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
@@ -678,8 +678,8 @@ export const presets: Record<string, PresetData> = {
 
   "customer_support_complaint_training_2": {
     id: "customer_support_complaint_training_2",
-    category: "トップ",
-    name: "カスタマーサポートのクレーム対応強化（複製1）",
+    category: "CS",
+    name: "複製の2件目",
     description: "難しいクレーム対応を通じて、顧客満足度向上とスキルアップを図る",
     icon: "📞",
     purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
@@ -738,8 +738,8 @@ export const presets: Record<string, PresetData> = {
 
   "water_server_sales_training_2": {
     id: "water_server_sales_training_2",
-    category: "トップ",
-    name: "育毛剤の解約引き止め（複製1）",
+    category: "CS",
+    name: "複製の3件目",
     description: "育毛剤の定期購入の解約を引き止めるロールプレイ",
     icon: "🫷",
     purpose: "ウォーターサーバー営業の商品説明と質疑応答の練習",
@@ -828,8 +828,8 @@ export const presets: Record<string, PresetData> = {
 
   "real_estate_asset_hearing_3": {
     id: "real_estate_asset_hearing_3",
-    category: "トップ",
-    name: "不動産営業の資産背景ヒアリング（複製2）",
+    category: "CS",
+    name: "複製の4件目",
     description: "顧客の資産背景を詳しくヒアリングし、最適な物件提案につなげる営業",
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
@@ -946,8 +946,8 @@ export const presets: Record<string, PresetData> = {
 
   "customer_support_complaint_training_3": {
     id: "customer_support_complaint_training_3",
-    category: "トップ",
-    name: "カスタマーサポートのクレーム対応強化（複製2）",
+    category: "CS",
+    name: "複製の5件目",
     description: "難しいクレーム対応を通じて、顧客満足度向上とスキルアップを図る",
     icon: "📞",
     purpose: "クレーム対応のスキル向上を図り、怒っている顧客を満足させる対応力を身につける",
@@ -1031,4 +1031,9 @@ export const getAllCategories = (): string[] => {
 // トップレベルプリセットの取得（階層なし表示用）
 export const getTopLevelPresets = (): PresetData[] => {
   return Object.values(presets).filter(preset => preset.category === "トップ");
+};
+
+// カテゴリ別プリセット取得（新しいタブ用）
+export const getPresetsByTab = (tabName: string): PresetData[] => {
+  return Object.values(presets).filter(preset => preset.category === tabName);
 };

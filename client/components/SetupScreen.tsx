@@ -6,6 +6,7 @@ import groqService from "../services/groq";
 import PromptModal from "./PromptModal";
 import { selectVoiceByRules } from "../utils/voiceSelection";
 import PresetSelector from "./PresetSelector";
+import { getPresetsByTab } from "../data/presets";
 import type { 
   SetupScreenProps, 
   ViewMode, 
@@ -68,6 +69,7 @@ export default function SetupScreen({
   const [showPromptModal, setShowPromptModal] = useState<boolean>(false);
   const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
   const [viewMode, setViewMode] = useState<ViewMode>("preset");
+  const [activeTab, setActiveTab] = useState<string>("デモ");
   const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
   const immersionLevel: ImmersionLevel = "high"; // Always set to high as requested
 
@@ -282,6 +284,42 @@ export default function SetupScreen({
           </button>
         </div>
 
+        {/* Preset Tab Selection */}
+        {viewMode === "preset" && (
+          <div className="bg-gray-100 rounded-lg p-1 flex">
+            <button
+              onClick={() => setActiveTab("デモ")}
+              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                activeTab === "デモ"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              デモ
+            </button>
+            <button
+              onClick={() => setActiveTab("CS")}
+              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                activeTab === "CS"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              CS
+            </button>
+            <button
+              onClick={() => setActiveTab("プリセット")}
+              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                activeTab === "プリセット"
+                  ? "bg-white text-gray-900 shadow-sm"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              プリセット
+            </button>
+          </div>
+        )}
+
         {/* Content based on view mode */}
         {viewMode === "preset" ? (
           <PresetSelector
@@ -290,6 +328,7 @@ export default function SetupScreen({
             onDirectStart={handleDirectStart}
             selectedPresetId={selectedPresetId || ""}
             setSelectedPresetId={setSelectedPresetId}
+            activeTab={activeTab}
           />
         ) : (
           <>

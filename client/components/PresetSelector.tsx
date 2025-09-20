@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Zap, ChevronRight, Edit3, Settings, X, Volume2 } from "react-feather";
-import { getPresetsByCategory, getPresetById, getTopLevelPresets } from "../data/presets";
+import { getPresetsByCategory, getPresetById, getTopLevelPresets, getPresetsByTab } from "../data/presets";
 import Button from "./Button";
 import type { PresetSelectorProps, PresetData, VoiceOption } from "../types";
 
@@ -8,12 +8,15 @@ export default function PresetSelector({
   onPresetSelect, 
   onDirectStart,
   selectedPresetId,
-  setSelectedPresetId 
-}: PresetSelectorProps) {
+  setSelectedPresetId,
+  activeTab
+}: PresetSelectorProps & { activeTab?: string }) {
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
   const [selectedPresetForSettings, setSelectedPresetForSettings] = useState<PresetData | null>(null);
-  const topLevelPresets = getTopLevelPresets();
+  
+  // Get presets based on active tab or fall back to top level presets
+  const currentPresets = activeTab ? getPresetsByTab(activeTab) : getTopLevelPresets();
   const categorizedPresets = getPresetsByCategory();
   const categories = Object.keys(categorizedPresets).filter(category => category !== "トップ");
 
@@ -163,9 +166,9 @@ export default function PresetSelector({
       <>
         <div className="space-y-4">
 
-          {/* トップレベルプリセット一覧 */}
+          {/* 現在のタブのプリセット一覧 */}
           <div className="space-y-3">
-            {topLevelPresets.map((preset) => (
+            {currentPresets.map((preset) => (
               <div key={preset.id} className="space-y-2">
                 <div className={`relative w-full p-4 rounded-xl border-2 transition-all duration-200 ${
                   selectedPresetId === preset.id
