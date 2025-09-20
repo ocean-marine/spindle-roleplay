@@ -109,6 +109,7 @@ export interface PresetSelectorProps {
   selectedPresetId: string;
   setSelectedPresetId: (id: string) => void;
   currentUser?: string | null;
+  activeTab?: string;
 }
 
 export interface PresetData {
