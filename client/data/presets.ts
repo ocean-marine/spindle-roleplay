@@ -734,7 +734,7 @@ export const presets: Record<string, PresetData> = {
       appointmentBackground: "育毛剤の解約引き止め",
       relationship: "営業担当者（初対面）",
       timeOfDay: "夜",
-      location: "ビジネスホテル",
+      location: "主婦",
       additionalInfo: "妻の勧めで話を聞くことになった営業場面"
     },
     voice: "echo",
