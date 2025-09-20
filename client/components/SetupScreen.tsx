@@ -7,7 +7,6 @@ import PromptModal from "./PromptModal";
 import PresetSelector from "./PresetSelector";
 import type { 
   SetupScreenProps, 
-  ViewMode, 
   ImmersionLevel,
   PresetData
 } from "../types";
@@ -30,7 +29,6 @@ export default function SetupScreen({
   const [isStarting, setIsStarting] = useState<boolean>(false);
   const [showPromptModal, setShowPromptModal] = useState<boolean>(false);
   const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
-  const [viewMode, setViewMode] = useState<ViewMode>("preset");
   const [activeTab, setActiveTab] = useState<string>("デモ");
   const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
   const [customInstructions, setCustomInstructions] = useState<string>("");
@@ -143,7 +141,7 @@ export default function SetupScreen({
         image: "👤" // 適当なアイコン
       });
     }
-    setViewMode("custom");
+    setActiveTab("カスタマイズ");
   };
 
   // カスタマイズモードでの開始処理
@@ -187,22 +185,32 @@ export default function SetupScreen({
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">AIロープレ</h1>
         </div>
 
-        {/* Mode Toggle - Apple-inspired segmented control */}
+        {/* Main Tab Selection */}
         <div className="bg-gray-100 rounded-lg p-1 flex">
           <button
-            onClick={() => setViewMode("preset")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              viewMode === "preset"
+            onClick={() => setActiveTab("デモ")}
+            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+              activeTab === "デモ"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            プリセット
+            デモ
           </button>
           <button
-            onClick={() => setViewMode("custom")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-              viewMode === "custom"
+            onClick={() => setActiveTab("CS")}
+            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+              activeTab === "CS"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            CS
+          </button>
+          <button
+            onClick={() => setActiveTab("カスタマイズ")}
+            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+              activeTab === "カスタマイズ"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
             }`}
@@ -211,53 +219,8 @@ export default function SetupScreen({
           </button>
         </div>
 
-        {/* Preset Tab Selection */}
-        {viewMode === "preset" && (
-          <div className="bg-gray-100 rounded-lg p-1 flex">
-            <button
-              onClick={() => setActiveTab("デモ")}
-              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                activeTab === "デモ"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              デモ
-            </button>
-            <button
-              onClick={() => setActiveTab("CS")}
-              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                activeTab === "CS"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              CS
-            </button>
-            <button
-              onClick={() => setActiveTab("プリセット")}
-              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                activeTab === "プリセット"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              プリセット
-            </button>
-          </div>
-        )}
-
-        {/* Content based on view mode */}
-        {viewMode === "preset" ? (
-          <PresetSelector
-            onPresetSelect={handlePresetSelect}
-            onCustomize={handleCustomize}
-            onDirectStart={handleDirectStart}
-            selectedPresetId={selectedPresetId || ""}
-            setSelectedPresetId={setSelectedPresetId}
-            activeTab={activeTab}
-          />
-        ) : (
+        {/* Content based on active tab */}
+        {activeTab === "カスタマイズ" ? (
           <>
             {/* カスタマイズモード - シンプルなテキストエリアと開始ボタンのみ */}
             <div className="bg-white rounded-lg border border-gray-100 p-4">
@@ -285,6 +248,15 @@ export default function SetupScreen({
               </Button>
             </div>
           </>
+        ) : (
+          <PresetSelector
+            onPresetSelect={handlePresetSelect}
+            onCustomize={handleCustomize}
+            onDirectStart={handleDirectStart}
+            selectedPresetId={selectedPresetId || ""}
+            setSelectedPresetId={setSelectedPresetId}
+            activeTab={activeTab}
+          />
         )}
 
         {/* Prompt Modal */}
