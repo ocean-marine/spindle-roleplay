@@ -190,7 +190,7 @@ export const presets: Record<string, PresetData> = {
     persona: {
       age: "50代後半",
       gender: "男性",
-      occupation: "会社員",
+      occupation: "カスタマーサポート",
       personality: "明るく前向き、新しいものに興味を持ち、家族思い",
       additionalInfo: "新婚で妻と二人暮らし、健康的な生活に積極的",
       image: "D94535CF-BA41-4B55-AD6D-F6BEB606F2B9.png"
