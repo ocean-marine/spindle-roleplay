@@ -561,7 +561,7 @@ export const presets: Record<string, PresetData> = {
   "real_estate_asset_hearing_2": {
     id: "real_estate_asset_hearing_2",
     category: "CS",
-    name: "複製の1件目",
+    name: "口座開設遅延の理由説明",
     description: "口座開設が遅延している状況について、急いでいる顧客に対して適切に進捗を説明し、不満や不安を緩和したうえで納得を得ること。",
     icon: "🏡",
     purpose: "顧客の資産状況、投資経験、購入動機を深くヒアリングし、信頼関係を築きながら最適な不動産提案を行う",
