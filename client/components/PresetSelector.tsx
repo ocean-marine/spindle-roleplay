@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Zap, ChevronRight, Edit3, Settings, X, Volume2 } from "react-feather";
+import { Zap, ChevronRight, Edit3, MoreHorizontal, X, Volume2 } from "react-feather";
 import { getPresetsByCategory, getPresetById, getTopLevelPresets, getPresetsByTab } from "../data/presets";
 import Button from "./Button";
 import type { PresetSelectorProps, PresetData, VoiceOption } from "../types";
@@ -86,13 +86,13 @@ export default function PresetSelector({
                 {selectedPresetForSettings.description}
               </p>
               <div className="flex flex-wrap gap-2 text-xs">
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
+                <span className="px-3 py-1 bg-black bg-opacity-80 text-white rounded-full">
                   {selectedPresetForSettings.persona.age} {selectedPresetForSettings.persona.gender}
                 </span>
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                <span className="px-3 py-1 bg-black bg-opacity-80 text-white rounded-full">
                   {selectedPresetForSettings.persona.occupation}
                 </span>
-                <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full">
+                <span className="px-3 py-1 bg-black bg-opacity-80 text-white rounded-full">
                   {selectedPresetForSettings.scene.location}
                 </span>
               </div>
@@ -184,7 +184,7 @@ export default function PresetSelector({
                     className="absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition-colors z-10"
                     title="声色・プロンプト設定"
                   >
-                    <Settings size={16} className="text-gray-500 hover:text-gray-700" />
+                    <MoreHorizontal size={16} className="text-gray-500 hover:text-gray-700" />
                   </button>
                   
                   {/* Main preset button */}
@@ -204,13 +204,13 @@ export default function PresetSelector({
                           {preset.description}
                         </p>
                         <div className="flex flex-wrap gap-2 text-xs">
-                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                          <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
                             {preset.persona.age} {preset.persona.gender}
                           </span>
-                          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                          <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
                             {preset.persona.occupation}
                           </span>
-                          <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
+                          <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
                             {preset.scene.location}
                           </span>
                         </div>
@@ -331,7 +331,7 @@ export default function PresetSelector({
                 className="absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition-colors z-10"
                 title="声色・プロンプト設定"
               >
-                <Settings size={16} className="text-gray-500 hover:text-gray-700" />
+                <MoreHorizontal size={16} className="text-gray-500 hover:text-gray-700" />
               </button>
               
               {/* Main preset button */}
@@ -351,13 +351,13 @@ export default function PresetSelector({
                       {preset.description}
                     </p>
                     <div className="flex flex-wrap gap-2 text-xs">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                      <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
                         {preset.persona.age} {preset.persona.gender}
                       </span>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                      <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
                         {preset.persona.occupation}
                       </span>
-                      <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">
+                      <span className="px-2 py-1 bg-black bg-opacity-80 text-white rounded-full">
                         {preset.scene.location}
                       </span>
                     </div>
