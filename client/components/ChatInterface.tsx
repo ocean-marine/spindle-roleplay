@@ -5,6 +5,7 @@ export default function ChatInterface({
   isSessionActive,
   isMuted = false,
   toggleMute,
+  isSpeaking = false,
   personaSettings = {
     age: "",
     gender: "",
@@ -100,6 +101,16 @@ export default function ChatInterface({
           <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg z-20 flex items-center gap-2">
             <MicOff size={16} />
             <span className="text-sm font-medium">マイクミュート中</span>
+          </div>
+        )}
+
+        {/* AI Speaking indicator overlay */}
+        {isSessionActive && isSpeaking && (
+          <div className={`fixed left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-lg z-20 flex items-center gap-2 animate-pulse ${
+            isMuted ? 'top-32' : 'top-20'
+          }`}>
+            <div className="w-3 h-3 bg-white rounded-full animate-ping"></div>
+            <span className="text-sm font-medium">AIが発話中</span>
           </div>
         )}
       </div>
