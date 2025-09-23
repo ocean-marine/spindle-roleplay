@@ -58,6 +58,7 @@ export default function App() {
   const peerConnection = useRef<RTCPeerConnection | null>(null);
   const audioElement = useRef<HTMLAudioElement | null>(null);
   const microphoneTrack = useRef<MediaStreamTrack | null>(null);
+  const speakingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const VOICE_OPTIONS: VoiceOption[] = [
     "alloy",
@@ -241,6 +242,12 @@ export default function App() {
       audioElement.current = null;
     }
 
+    // Clean up speaking timeout
+    if (speakingTimeoutRef.current) {
+      clearTimeout(speakingTimeoutRef.current);
+      speakingTimeoutRef.current = null;
+    }
+
     setIsSessionActive(false);
     setDataChannel(null);
     peerConnection.current = null;
@@ -340,14 +347,28 @@ export default function App() {
         if (event.type === 'input_audio_buffer.speech_started') {
           setIsListening(true);
           setIsSpeaking(false);
+          // Clear any pending speaking timeout when user starts speaking
+          if (speakingTimeoutRef.current) {
+            clearTimeout(speakingTimeoutRef.current);
+            speakingTimeoutRef.current = null;
+          }
         } else if (event.type === 'input_audio_buffer.speech_stopped') {
           setIsListening(false);
         } else if (event.type === 'response.audio.delta' || event.type === 'response.audio_transcript.delta') {
           setIsSpeaking(true);
           setIsListening(false);
+          // Clear any pending speaking timeout when AI starts speaking again
+          if (speakingTimeoutRef.current) {
+            clearTimeout(speakingTimeoutRef.current);
+            speakingTimeoutRef.current = null;
+          }
         } else if (event.type === 'response.done') {
-          setIsSpeaking(false);
           setIsListening(false);
+          // Add delay before removing speaking indicator
+          speakingTimeoutRef.current = setTimeout(() => {
+            setIsSpeaking(false);
+            speakingTimeoutRef.current = null;
+          }, 1000); // 1 second delay
         }
 
         setEvents((prev) => [event, ...prev]);
