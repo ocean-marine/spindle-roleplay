@@ -337,19 +337,23 @@ export default function App() {
           event.timestamp = new Date().toLocaleTimeString();
         }
 
-        // Update UI states based on events
+        // Update UI states based on events - WebRTC mode
         if (event.type === 'input_audio_buffer.speech_started') {
           setIsListening(true);
           setIsSpeaking(false);
         } else if (event.type === 'input_audio_buffer.speech_stopped') {
           setIsListening(false);
-        } else if (event.type === 'response.audio.delta' || event.type === 'response.audio_transcript.delta') {
+        } else if (event.type === 'output_audio_buffer.started') {
+          // WebRTC: Server starts audio buffer output - AI begins speaking
           setIsSpeaking(true);
           setIsListening(false);
-        } else if (event.type === 'response.audio.done' || event.type === 'response.audio_transcript.done') {
-          // AI finished speaking - use specific audio completion events
+        } else if (event.type === 'output_audio_buffer.stopped') {
+          // WebRTC: Server audio buffer empty - AI finished speaking
           setIsSpeaking(false);
           setIsListening(false);
+        } else if (event.type === 'output_audio_buffer.cleared') {
+          // WebRTC: Audio output interrupted (user spoke or manual stop)
+          setIsSpeaking(false);
         } else if (event.type === 'response.done') {
           // Response completed - ensure states are clean
           setIsListening(false);
