@@ -21,8 +21,24 @@ const ACCOUNTS = [
     password: process.env.AUTH_ADMIN_PASS || "admin123" 
   },
   { 
-    name: process.env.AUTH_USER_USER || "user", 
-    password: process.env.AUTH_USER_PASS || "user123" 
+    name: process.env.AUTH_USER_USER || "user1", 
+    password: process.env.AUTH_USER_PASS || "dummy" 
+  },  
+  { 
+    name: process.env.AUTH_USER1_USER || "user1", 
+    password: process.env.AUTH_USER1_PASS || "dummy" 
+  },
+  { 
+    name: process.env.AUTH_USER2_USER || "user2", 
+    password: process.env.AUTH_USER2_PASS || "dummy" 
+  },
+  { 
+    name: process.env.AUTH_USER3_USER || "user3", 
+    password: process.env.AUTH_USER3_PASS || "dummy" 
+  },
+  { 
+    name: process.env.AUTH_USER4_USER || "user4", 
+    password: process.env.AUTH_USER4_PASS || "dummy" 
   }
 ];
 
